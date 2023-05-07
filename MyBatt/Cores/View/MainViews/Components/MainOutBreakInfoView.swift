@@ -77,9 +77,11 @@ struct MainOutBreakInfoView: View {
         VStack(alignment:.leading,spacing:10){
             ForEach(datas,id:\.self){ data in
                 HStack{
-                    Text(data).fontWeight(.semibold)
-                    Spacer()
-                }
+                    Text(data).fontWeight(.medium).font(.system(size: 14,design: .rounded))
+                    if data != datas.last{
+                        Spacer()
+                    }
+                }.padding(.leading,14)
             }
         }.padding(.vertical)
         .background(

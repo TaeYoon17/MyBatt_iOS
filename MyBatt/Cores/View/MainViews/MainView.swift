@@ -116,22 +116,10 @@ struct MainView: View {
     }
     var naviLinkController: some View{
         NavigationLink(isActive:appManager.getBindingStack(idx: naviStackIdx)){
-//            if isCameraActive{
-//
-//                CameraView()
-//                    .transition(.move(edge: .bottom))
-//                    .animation(.default, value: isCameraActive)
-//                    .onAppear(){
-//                        print("if문에서 작동")
-//                    }
-//                    .onDisappear(){
-//                    self.isCameraActive = false
-//                    appManager.isTabbarHidden = false
-//                }
-//            }else{
                 switch linkView {
                 case .OutBreakInfo:
-                    Text("OutBreak View")
+//                    Text("OutBreak View")
+                    CoinImageView(coin: globalCoinDemo)
                 case .Map:
                     MapMainView()
                 case .CropManage:
@@ -143,8 +131,10 @@ struct MainView: View {
                 case .none:
                     Text("None View")
                 }
-//            }
-        } label: { Text(self.naviStackIdx.description) }
+        } label: {
+//            Text(self.naviStackIdx.description)
+            EmptyView()
+        }
             .isDetailLink(false)
             .fullScreenCover(isPresented: $appManager.isCameraActive) {
                 CameraView()
@@ -162,8 +152,8 @@ extension MainView{
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView(isCameraActive: .constant(false)
+        MainView(isCameraActive: .constant(false))
+            .environmentObject(AppManager())
 //                 , naviStackIdx: .constant(0)
-        )
     }
 }

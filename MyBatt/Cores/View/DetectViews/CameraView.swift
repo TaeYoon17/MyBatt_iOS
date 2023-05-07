@@ -79,6 +79,7 @@ struct CameraView: View {
         HStack(spacing:60) {
             Spacer()
             //MARK: -- 사진첩
+            /*
             NavigationLink {
                 //                    PhotoCollectionView(photoCollection: model.photoCollection)
                 //                        .onAppear {
@@ -99,6 +100,8 @@ struct CameraView: View {
                         .scaledToFit()
                 }.foregroundColor(.blue)
             }
+             */
+//            Spacer()
             //MARK: -- 사진 셔터
             NavigationLink(isActive:$isPhotoTaken) {
                 TakenPhotoView(image: $model.takenImage)
@@ -123,7 +126,7 @@ struct CameraView: View {
                 }
             }
             
-            
+            /*
             Button {
                 model.camera.switchCaptureDevice()
             } label: {
@@ -132,6 +135,7 @@ struct CameraView: View {
                     .foregroundColor(.white)
                     .scaledToFit()
             }
+             */
             Spacer()
             
         }
