@@ -6,19 +6,25 @@
 //
 
 import SwiftUI
-
+import Foundation
 struct TakenPhotoView: View {
+    @EnvironmentObject var vm: CameraModel
     @Binding var image: Image?
     var body: some View {
-        GeometryReader{ proxy in
-            if let image = image{
-                image
-                    .resizable()
-//                    .frame(width: proxy.size.width, height: proxy.size.width)
-                    .scaledToFill()
-                    
+        ZStack{
+            GeometryReader{ proxy in
+                if let image = image{
+                    image
+                        .resizable().scaledToFill()
+                        .frame(width: proxy.size.width, height: proxy.size.width)
+                        .clipped()
+                }
             }
-            
+            Button{
+
+            }label:{
+                Text("save!!")
+            }
         }
     }
 }

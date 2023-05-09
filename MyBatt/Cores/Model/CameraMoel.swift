@@ -6,16 +6,18 @@
 //
 
 import Foundation
-import AVFoundation
 import SwiftUI
 import os.log
-
+import AVFoundation
 final class CameraModel:ObservableObject{
     let camera = Camera()
     
     @Published var viewFinderImage: Image?
     @Published var thumbnailImage: Image?
     @Published var takenImage: Image?
+    @Published var viewFinderUIImage: UIImage?
+    var takenUIImage: UIImage?
+    var takenCIImage: CIImage?
     
     var isPhothosLoaded = false
     init(){
@@ -23,17 +25,31 @@ final class CameraModel:ObservableObject{
         Task{ await handleCameraPhotos() }
     }
     func handleCameraPreviews() async{
-//        : AsyncMapSequence<AsyncStream<CIImage>,Image?>
+        //        : AsyncMapSequence<AsyncStream<CIImage>,Image?>
         let imageStream = camera.previewStream
-            .map{$0.image}
+            .map{
+                $0
+            }
         //        { (it:CIImage)->Image? in it.image }
         for await image in imageStream{
             Task{ @MainActor in
-                // 실제 뷰 파인더 뷰에 이미지를 투영시킨다
-                viewFinderImage = image
+                viewFinderImage = image.image!
+                takenCIImage = image
             }
         }
     }
+    
+    //viewFinderImage = Image(uiImage: image)
+    //// 실제 뷰 파인더 뷰에 이미지를 투영시킨다
+    //let width = image.size.width
+    //let height = image.size.height
+    //let croppedRect = CGRect(x:0,y:0,width: width, height:width)
+    ////                print(croppedRect)
+    //if let croppedCGImage = image.cgImage?.cropping(to: croppedRect){
+    //    let croppedImage = UIImage(cgImage: croppedCGImage,scale: 1,orientation: .right)
+    //    viewFinderUIImage = croppedImage
+    ////                    viewFinderImage = Image(uiImage: croppedImage)
+    
     
     func handleCameraPhotos() async {
         let unpackedPhotoStream = camera.photoStream
@@ -41,7 +57,12 @@ final class CameraModel:ObservableObject{
         for await photoData in unpackedPhotoStream{
             Task{ @MainActor in
                 //thumbnailImage = photoData.thumbnailImage
-                takenImage = Image(uiImage: UIImage(data: photoData.imageData) ?? UIImage())
+                takenUIImage = UIImage(data: photoData.imageData)
+                let ciimage = CIImage(data: photoData.imageData,
+                                      options: [.applyOrientationProperty: true])!
+                let width = ciimage.extent.width
+                let cropCIImage = ciimage.cropped(to: CGRect(x: 0, y: 0, width: width,height:width))
+                takenImage = cropCIImage.image!
             }
             savePhoto(imageData: photoData.imageData)
         }
@@ -49,6 +70,7 @@ final class CameraModel:ObservableObject{
     // Device Camera에서 가져온 AVCapturePhoto를 Image로 바꾸기
     fileprivate func unpackPhoto(_ photo:AVCapturePhoto)-> PhotoData?{
         // AVCapturePhoto 타입을 Data 타입으로 바꾼다.
+        print(photo.description)
         guard let imageData: Data = photo.fileDataRepresentation() else { return nil }
         
         guard let previewCGImage = photo.previewCGImageRepresentation(),

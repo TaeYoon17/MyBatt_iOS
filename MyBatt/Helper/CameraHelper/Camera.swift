@@ -77,8 +77,9 @@ class Camera: NSObject {
     }
 
     private var addToPhotoStream: ((AVCapturePhoto) -> Void)?
-    
+    //MARK: -- PreviewStream
     private var addToPreviewStream: ((CIImage) -> Void)?
+//    private var addToPreviewStream: ((UIImage) -> Void)?
     
     var isPreviewPaused = false
     
@@ -91,6 +92,15 @@ class Camera: NSObject {
             }
         }
     }()
+//        lazy var previewStream: AsyncStream<UIImage> = {
+//            AsyncStream { continuation in
+//                addToPreviewStream = { ciImage in
+//                    if !self.isPreviewPaused {
+//                        continuation.yield(ciImage)
+//                    }
+//                }
+//            }
+//        }()
     
     lazy var photoStream: AsyncStream<AVCapturePhoto> = {
         AsyncStream { continuation in
@@ -230,6 +240,7 @@ class Camera: NSObject {
         if let videoOutput = videoOutput, let videoOutputConnection = videoOutput.connection(with: .video) {
             if videoOutputConnection.isVideoMirroringSupported {
                 videoOutputConnection.isVideoMirrored = isUsingFrontCaptureDevice
+
             }
         }
     }
@@ -352,7 +363,6 @@ extension Camera: AVCapturePhotoCaptureDelegate {
             logger.error("Error capturing photo: \(error.localizedDescription)")
             return
         }
-        
         addToPhotoStream?(photo)
     }
 }
@@ -366,8 +376,12 @@ extension Camera: AVCaptureVideoDataOutputSampleBufferDelegate {
            let videoOrientation = videoOrientationFor(deviceOrientation) {
             connection.videoOrientation = videoOrientation
         }
-
-        addToPreviewStream?(CIImage(cvPixelBuffer: pixelBuffer))
+        let ciImage = CIImage(cvImageBuffer: pixelBuffer)
+        
+        let newciImage = ciImage.cropped(to: CGRect(x: 0, y: 0, width: ciImage.extent.size.width, height: ciImage.extent.size.width))
+        addToPreviewStream?(newciImage)
+        
+//        addToPreviewStream?(UIImage(ciImage: CIImage(cvPixelBuffer: pixelBuffer)))
     }
 }
 

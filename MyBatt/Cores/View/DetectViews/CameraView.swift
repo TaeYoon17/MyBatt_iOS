@@ -104,11 +104,24 @@ struct CameraView: View {
 //            Spacer()
             //MARK: -- 사진 셔터
             NavigationLink(isActive:$isPhotoTaken) {
-                TakenPhotoView(image: $model.takenImage)
+                TakenPhotoView(image: $model.takenImage).environmentObject(model)
             } label: {
                 Button {
                     model.camera.takePhoto()
                     isPhotoTaken = true
+                    
+//                    if let inputImage = vm.takenUIImage{
+//                        //3024 3024
+//                        print(inputImage.size)
+//                        let ciImage = CIImage(image: inputImage)
+//                        let width = ciImage!.extent.height
+//                        print(width)
+////                                width*0.4 - height*0.5
+//                        let croppedRect = CGRect(x:0,y:0,width: width, height:width)
+//                        let croppedImage = UIImage(ciImage: (ciImage?.cropped(to: croppedRect))!)
+//                        resultImage = Image(uiImage: croppedImage)
+//                    }
+                     
                 } label: {
                     Label {
                         Text("Take Photo")

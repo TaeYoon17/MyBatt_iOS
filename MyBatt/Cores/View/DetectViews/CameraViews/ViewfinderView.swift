@@ -9,22 +9,24 @@ import SwiftUI
 
 struct ViewfinderView: View {
     @EnvironmentObject var cameraModel: CameraModel
-    
+    @State private var image : Image = Image("")
     var body: some View {
+//        let image: Image? = Image("picture_demo")
+//        return
         GeometryReader{ proxy in
-            if let image = cameraModel.viewFinderImage{
+            if let image = cameraModel.viewFinderImage
+            {
                 image
                     .resizable()
-                    .frame(width: proxy.size.width, height: proxy.size.width)
-                    .scaledToFill()
-                    
+                    .scaledToFit()
+//                    .clipped()
                     .gesture(MagnificationGesture().onChanged({ val in
                         cameraModel.zoom(factor: val)
                     }).onEnded({ _ in
                         cameraModel.zoomInitialize()
                     })
                     )
-                    .offset(y:proxy.size.height*0.4-proxy.size.width*0.5)
+//                    .offset(y:proxy.size.height*0.4-proxy.size.width*0.5)
             }
         }
     }
