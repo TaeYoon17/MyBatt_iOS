@@ -11,3 +11,4 @@ struct UserInfo{
     let id: Int
 }
 typealias UserCoordinate = (lontitude:Float,latitude:Float)
+

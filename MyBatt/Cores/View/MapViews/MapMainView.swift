@@ -44,13 +44,7 @@ struct MapMainView: View {
         .onDisappear(){
             withAnimation(.easeOut(duration: 0.2)) {
                 appManager.isTabbarHidden = false
-                
             }
-            let isPresented = false
-            guard let window = UIApplication.shared.keyWindow else { return }
-            guard let rootViewController = window.rootViewController else { return }
-            let presentedViewController = rootViewController.presentedViewController
-            rootViewController.dismiss(animated: false)
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -80,3 +74,11 @@ struct MapMainView_Previews: PreviewProvider {
         }
     }
 }
+
+
+
+//            let isPresented = false
+//            guard let window = UIApplication.shared.keyWindow else { return }
+//            guard let rootViewController = window.rootViewController else { return }
+//            let presentedViewController = rootViewController.presentedViewController
+//            rootViewController.dismiss(animated: false)

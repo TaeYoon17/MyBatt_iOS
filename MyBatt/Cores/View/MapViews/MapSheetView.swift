@@ -7,7 +7,12 @@
 
 import SwiftUI
 
+enum LocationType{
+    case Stop
+    case Searching
+}
 struct MapSheetView: View {
+    @StateObject private var vm = MapSheetVM()
     @State var isCustom: Bool = false
     @State var selectionIdx:Int = 2 {
         didSet {
@@ -29,128 +34,23 @@ struct MapSheetView: View {
                                 .foregroundColor(.white)
                         }
                         .foregroundColor(.gray)
-                    Button{}label: {
-                        Image(systemName: "location")
+                    Button{
+                        vm.isGPSOn.toggle()
+                    }label: {
+                        Image(systemName: vm.isGPSOn ? "location.fill" : "location")
                     }.buttonBorderShape(.roundedRectangle)
-                        .padding()
-                        .background(.white)
-                        .clipShape(Circle())
+                    .padding()
+                    .background(vm.isGPSOn ? Color.secondary : .white)
+                    .clipShape(Circle())
                 }
                 GroupBox {
-                    VStack{
-                        Toggle(isOn: $isPepper) {
-                            HStack{
-                                Text("고추")
-                                    .font(.body)
-                                    .fontWeight(.semibold)
-                                Spacer()
-                                if isPepper{
-                                    Text("최소 정확도: \(Int(slider))%")
-                                        .font(.callout)
-                                        .padding(.trailing,5)
-                                }
-                            }
-                        }
-                        if isPepper{
-                            Slider(value: $slider,in:80.0...90.0) {
-                                Text("최소 정확도")
-                            } minimumValueLabel: {
-                                Text("80%")
-                            } maximumValueLabel: {
-                                Text("90%")
-                            }.padding(.leading)
-                                .font(.subheadline)
-                        }
+                    ForEach(vm.crops.indices,id:\.self){ idx in
+                        CropSelectView(pageSheetCrop: $vm.crops[idx])
                     }
-                    .padding(.horizontal)
-                    .padding(.vertical,8)
-                    .background(.ultraThinMaterial)
-                    VStack{
-                        Toggle(isOn: $isPepper) {
-                            HStack{
-                                Text("고추")
-                                    .font(.body)
-                                    .fontWeight(.semibold)
-                                Spacer()
-                                if isPepper{
-                                    Text("최소 정확도: \(Int(slider))%")
-                                        .font(.callout)
-                                        .padding(.trailing,5)
-                                }
-                            }
-                        }
-                        if isPepper{
-                            Slider(value: $slider,in:80.0...90.0) {
-                                Text("최소 정확도")
-                            } minimumValueLabel: {
-                                Text("80%")
-                            } maximumValueLabel: {
-                                Text("90%")
-                            }.padding(.leading)
-                                .font(.subheadline)
-                        }
-                    }
-                    .padding(.horizontal)
-                    .padding(.vertical,8)
-                    .background(.ultraThinMaterial)
-                    VStack{
-                        Toggle(isOn: $isPepper) {
-                            HStack{
-                                Text("고추")
-                                    .font(.body)
-                                    .fontWeight(.semibold)
-                                Spacer()
-                                if isPepper{
-                                    Text("최소 정확도: \(Int(slider))%")
-                                        .font(.callout)
-                                        .padding(.trailing,5)
-                                }
-                            }
-                        }
-                        if isPepper{
-                            Slider(value: $slider,in:80.0...90.0) {
-                                Text("최소 정확도")
-                            } minimumValueLabel: {
-                                Text("80%")
-                            } maximumValueLabel: {
-                                Text("90%")
-                            }.padding(.leading)
-                                .font(.subheadline)
-                        }
-                    }
-                    .padding(.horizontal)
-                    .padding(.vertical,8)
-                    .background(.ultraThinMaterial)
                 } label: {
                     Text("작물 이름")
-                }
-                //                .groupBoxStyle(CustomGroupBoxStyle())
-                GroupBox{
-                    if selectionIdx == 4{
-                        DatePicker(selection: $data,
-                                   label: { Text("Date")
-                        }
-                        )
-                    }
-                } label:{
-                    HStack(alignment: .center){
-                        Text("검색 기간")
-                        Spacer()
-                        Picker("설정", selection:$selectionIdx) {
-                            ForEach(1...4,id:\.self) { idx in
-                                if(idx == 4 ){
-                                    Text("자체 설정")
-                                }else{
-                                    Text("\(idx)")
-                                }
-                            }
-                        }
-                        .id(selectionIdx)
-                        .pickerStyle(.menu)
-                        .background(.white)
-                    }
-                }
-                //                .groupBoxStyle(CustomGroupBoxStyle())
+                }.bgColor(.white)
+                CropDurationView().environmentObject(vm)
             }.padding()
         }
         .background(.thickMaterial)

@@ -8,7 +8,7 @@
 import SwiftUI
 import Foundation
 
-struct CropType:Identifiable,Hashable{
+struct CropTypePhoto:Identifiable,Hashable{
     var id = UUID()
     let icon: String
     let name: String
@@ -24,7 +24,7 @@ struct TakenPhotoView: View {
         GridItem(.adaptive(minimum: 170)),GridItem(.adaptive(minimum: 170))
     ]
     let crops =
-    [CropType(icon:"🍓",name:"딸기"),CropType(icon:"🥬",name:"상추"),CropType(icon:"🍅",name:"토마토"),CropType(icon:"🌶️",name:"고추")]
+    [CropTypePhoto(icon:"🍓",name:"딸기"),CropTypePhoto(icon:"🥬",name:"상추"),CropTypePhoto(icon:"🍅",name:"토마토"),CropTypePhoto(icon:"🌶️",name:"고추")]
     var body: some View {
          if let image = cameraModel.takenImage{
                 imageAppearView(image: image)
