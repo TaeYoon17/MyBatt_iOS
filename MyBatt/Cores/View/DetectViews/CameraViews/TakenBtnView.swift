@@ -9,11 +9,14 @@ import SwiftUI
 
 struct TakenBtnView: View {
     let screenWidth = UIScreen.main.bounds.width
+    @EnvironmentObject var appManager: AppManager
+    @Binding var takenPhotoPage: Bool
     var body: some View {
-            //            GeometryReader{proxy in
             HStack{
                 Spacer()
-                Button{ }label:{
+                Button{
+                    takenPhotoPage = false
+                }label:{
                     Label {
                         Text("다시 촬영하기").fontWeight(.bold)
                     } icon: {
@@ -21,7 +24,6 @@ struct TakenBtnView: View {
                     }.font(.headline)
                         .frame(width:
                                 screenWidth/3
-                               //                               100
                         )
                         .padding()
                         .foregroundColor(.red)
@@ -34,7 +36,12 @@ struct TakenBtnView: View {
                         )
                 }
                 Spacer()
-                Button{ }label:{
+                Button{
+                    takenPhotoPage = false
+                    DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                        appManager.cameraRunning(isRun: false)
+                    }
+                }label:{
                     Label {
                         Text("전송하기").fontWeight(.bold)
                     } icon: {
@@ -52,22 +59,13 @@ struct TakenBtnView: View {
                 }
                 Spacer()
             }
-            //            }
-            //            .edgesIgnoringSafeArea(.all)
-            
-            //            .frame(width: proxy.size.width,
-            //                    height: (proxy.size.height-proxy.size.width) / 2)
-            //            .offset(y: proxy.size.height / 2)
-            //            .background(Color.lightGray.opacity)
-            //        }
-        
     }
 }
 
 
 struct TakenBtnView_Previews: PreviewProvider {
     static var previews: some View {
-        TakenBtnView()
+        TakenBtnView(takenPhotoPage: .constant(true)).environmentObject(AppManager())
     }
 }
 

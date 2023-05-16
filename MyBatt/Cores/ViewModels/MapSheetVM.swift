@@ -8,17 +8,10 @@
 import Foundation
 import SwiftUI
 
-enum CropType:String,CaseIterable{
-    case Pepper = "pepper"
-    case Lettuce = "lettuce"
-    case StrawBerry = "strawberry"
-    case Tomato = "tomato"
-}
-struct PageSheetCrop{
-    static let koreanTable:[CropType:String] = [.Lettuce:"상추",                                            .Pepper:"고추",.StrawBerry:"딸기",.Tomato:"토마토"]
+struct MapSheetCrop{
     let cropType: CropType
     var cropKorean: String{
-        Self.koreanTable[cropType] ?? "아직 이름 없음"
+        Crop.koreanTable[cropType] ?? "아직 이름 없음"
     }
     var accuracy: Double
     var isOn: Bool
@@ -26,7 +19,7 @@ struct PageSheetCrop{
 typealias AccRange = (start:Double,end:Double)
 final class MapSheetVM:ObservableObject{
     static let accRange: AccRange = (start:85,end:95)
-    @Published var crops: [PageSheetCrop]
+    @Published var crops: [MapSheetCrop]
 //    @Published var dates: [DurationType]
     @Published var isGPSOn: Bool = false
     @Published var durationType: DurationType = .day
@@ -40,7 +33,7 @@ final class MapSheetVM:ObservableObject{
     }
     init(){
         crops = CropType.allCases.map { type in
-            PageSheetCrop(cropType: type, accuracy: Self.accRange.start > 80.0 ? Self.accRange.start : 80,isOn: false)
+            MapSheetCrop(cropType: type, accuracy: Self.accRange.start > 80.0 ? Self.accRange.start : 80,isOn: false)
         }
 //        dates = DurationType.allCases
     }

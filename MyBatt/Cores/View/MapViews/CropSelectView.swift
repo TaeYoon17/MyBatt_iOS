@@ -7,7 +7,7 @@
 
 import SwiftUI
 struct CropSelectView: View {
-    @Binding var pageSheetCrop:PageSheetCrop
+    @Binding var pageSheetCrop:MapSheetCrop
     let accRange: AccRange = MapSheetVM.accRange
     var body: some View {
         VStack{
@@ -49,6 +49,6 @@ struct CropSelectView: View {
 
 struct CropSelectView_Previews: PreviewProvider {
     static var previews: some View {
-        CropSelectView(pageSheetCrop: .constant(PageSheetCrop(cropType: .Lettuce, accuracy: 85,isOn: false)))
+        CropSelectView(pageSheetCrop: .constant(MapSheetCrop(cropType: .Lettuce, accuracy: 85,isOn: false)))
     }
 }

@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 final class AppManager:ObservableObject{
+    lazy var lastCropType: CropType = .Lettuce
     @Published private var viewStacks:[Bool] = []{
         didSet{
             print("\(oldValue) \(viewStacks)")

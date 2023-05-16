@@ -114,7 +114,7 @@ struct CameraView: View {
                     model.camera.takePhoto()
                     model.locationService.updateCurrent()
                     isPhotoTaken = true
-                    DispatchQueue.global(qos: .default).asyncAfter(deadline: .now()+3){
+                    DispatchQueue.global(qos: .default).asyncAfter(deadline:.now()+1){
                         model.camera.stop()
                     }
                 } label: {
