@@ -9,68 +9,72 @@ import Foundation
 import SwiftUI
 import os.log
 import AVFoundation
-final class CameraModel:ObservableObject{
+import CoreLocation
+import Combine
+final class CameraViewModel:ObservableObject{
     let camera = Camera()
-    
+    lazy var locationService = LocationService()
     @Published var viewFinderImage: Image?
     @Published var thumbnailImage: Image?
     @Published var takenImage: Image?
-    @Published var viewFinderUIImage: UIImage?
-    var takenUIImage: UIImage?
     var takenCIImage: CIImage?
-    
     var isPhothosLoaded = false
+    
+    @Published var coordinate: CLLocationCoordinate2D? = nil
+    @Published var isLocated: Bool = false
+    private var cancellable = Set<AnyCancellable>()
+    
     init(){
         Task{ await handleCameraPreviews() }
         Task{ await handleCameraPhotos() }
+        self.addLocationSubscribers()
     }
-    func handleCameraPreviews() async{
-        //        : AsyncMapSequence<AsyncStream<CIImage>,Image?>
-        let imageStream = camera.previewStream
-            .map{
-                $0
-            }
-        //        { (it:CIImage)->Image? in it.image }
+    deinit{
+        cancellable.forEach { can in
+            can.cancel()
+        }
+    }
+    private func addLocationSubscribers(){ // 의존성 주입
+        let locationPublisher: Published<CLLocationCoordinate2D?>.Publisher = locationService.$coordinate
+        let loadingPublisher: Published<Bool>.Publisher = locationService.$isLoading
+        locationPublisher.sink{[weak self] output in
+            print("locationService.$coordinate")
+            self?.coordinate = output
+        }.store(in: &cancellable)
+        loadingPublisher.sink { [weak self] output in
+            self?.isLocated = output
+        }.store(in: &cancellable)
+    }
+    
+    private func handleCameraPreviews() async{
+        let imageStream = camera.previewStream.map{ $0 }
         for await image in imageStream{
             Task{ @MainActor in
                 viewFinderImage = image.image!
-                takenCIImage = image
+                print("view change!!")
             }
         }
     }
     
-    //viewFinderImage = Image(uiImage: image)
-    //// 실제 뷰 파인더 뷰에 이미지를 투영시킨다
-    //let width = image.size.width
-    //let height = image.size.height
-    //let croppedRect = CGRect(x:0,y:0,width: width, height:width)
-    ////                print(croppedRect)
-    //if let croppedCGImage = image.cgImage?.cropping(to: croppedRect){
-    //    let croppedImage = UIImage(cgImage: croppedCGImage,scale: 1,orientation: .right)
-    //    viewFinderUIImage = croppedImage
-    ////                    viewFinderImage = Image(uiImage: croppedImage)
-    
-    
-    func handleCameraPhotos() async {
+    private func handleCameraPhotos() async {
         let unpackedPhotoStream = camera.photoStream
             .compactMap { self.unpackPhoto($0) }
         for await photoData in unpackedPhotoStream{
             Task{ @MainActor in
                 //thumbnailImage = photoData.thumbnailImage
-                takenUIImage = UIImage(data: photoData.imageData)
-                let ciimage = CIImage(data: photoData.imageData,
-                                      options: [.applyOrientationProperty: true])!
-                let width = ciimage.extent.width
-                let cropCIImage = ciimage.cropped(to: CGRect(x: 0, y: 0, width: width,height:width))
-                takenImage = cropCIImage.image!
+                let ciimage = CIImage(data: photoData.imageData, options: [.applyOrientationProperty: true])!
+                let cropCiImage = ciimage.cropImage
+                print(cropCiImage.description)
+                takenImage = cropCiImage.image!
+                takenCIImage = cropCiImage
             }
-            savePhoto(imageData: photoData.imageData)
+//            savePhoto(imageData: photoData.imageData)
         }
     }
     // Device Camera에서 가져온 AVCapturePhoto를 Image로 바꾸기
     fileprivate func unpackPhoto(_ photo:AVCapturePhoto)-> PhotoData?{
         // AVCapturePhoto 타입을 Data 타입으로 바꾼다.
-        print(photo.description)
+//        print(photo.description)
         guard let imageData: Data = photo.fileDataRepresentation() else { return nil }
         
         guard let previewCGImage = photo.previewCGImageRepresentation(),
@@ -102,7 +106,6 @@ final class CameraModel:ObservableObject{
     func zoom(factor: CGFloat){
         let delta = factor / lastScale
         lastScale = factor
-        
         let newScale = min(max(currentZoomFactor * delta,2),5)
         camera.zoom(newScale)
         currentZoomFactor = newScale
@@ -112,6 +115,11 @@ final class CameraModel:ObservableObject{
     }
 }
 
+extension CameraViewModel{
+    
+}
+
+
 // MARK: -- AVCaputureVideo 데이터 형식에서 추출한 사용할 데이터 들
 fileprivate struct PhotoData {
     var thumbnailImage: Image
@@ -120,18 +128,7 @@ fileprivate struct PhotoData {
     var imageSize: (width: Int, height: Int)
 }
 
-// 코어 이미지에서 SwiftUI용 이미지 뷰로 바꿔주는 getter 프로퍼티
-fileprivate extension CIImage{
-    var image: Image?{
-        let ciContext = CIContext()
-        guard let cgImage = ciContext.createCGImage(self, from: self.extent) else {return nil}
-        return Image(decorative: cgImage, scale: 1, orientation: .up)
-    }
-}
-
-
 fileprivate extension Image.Orientation {
-    
     init(_ cgImageOrientation: CGImagePropertyOrientation) {
         switch cgImageOrientation {
         case .up: self = .up

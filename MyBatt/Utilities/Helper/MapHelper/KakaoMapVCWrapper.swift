@@ -13,7 +13,6 @@ struct KakaoMapVCWrapper: UIViewControllerRepresentable{
         return KakaoMapVC()
     }
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-
     }
 }
 struct KakaoMapViewWrapper: UIViewRepresentable{
@@ -22,7 +21,6 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
     }
     
     typealias UIViewType = KakaoMapUIView
-    
     
     func makeCoordinator() -> Coordinator {
         

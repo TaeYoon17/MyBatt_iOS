@@ -43,4 +43,11 @@ final class NetworkingManager{
             print(error.localizedDescription)
         }
     }
+    static func upload(request: URLRequest) -> AnyPublisher<Data,Error>{
+        URLSession.shared.dataTaskPublisher(for: request)
+            .receive(on: DispatchQueue.global(qos: .default))
+            .tryMap { try handleURLResponse(output: $0)  }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
 }

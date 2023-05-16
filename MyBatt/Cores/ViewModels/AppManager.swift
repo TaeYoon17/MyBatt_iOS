@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 final class AppManager:ObservableObject{
-    @Published public var viewStacks:[Bool] = []{
+    @Published private var viewStacks:[Bool] = []{
         didSet{
             print("\(oldValue) \(viewStacks)")
             guard !isAction else {return}
@@ -26,16 +26,16 @@ final class AppManager:ObservableObject{
     }
     @Published var isTabbarHidden: Bool = false
     @Published var isCameraActive: Bool = false
-    var stackIdx: Int{
+    
+    init(){
+        viewStacks.append(false)
+    }
+    public var stackIdx: Int{
         get{
             self.viewStacks.count - 1
         }
     }
     public private(set) var isAction: Bool = false
-    
-    init(){
-        viewStacks.append(false)
-    }
     public func getBindingStack(idx:Int)->Binding<Bool>{
         let lastCount = (self.viewStacks.count - 1)
 //        print(lastCount,idx)

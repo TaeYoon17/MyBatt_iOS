@@ -122,6 +122,7 @@ struct MainView: View {
                     CoinImageView(coin: globalCoinDemo)
                 case .Map:
                     MapMainView()
+//                    Text("MapMainView")
                 case .CropManage:
                     Text("Crop Manage View")
                 case .Camera:

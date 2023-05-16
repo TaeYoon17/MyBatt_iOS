@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import UIKit
 import SwiftUI
-class CoinImageDataService{
+final class CoinImageDataService{
     @Published var image: UIImage? = nil
     var imageSubscription: AnyCancellable?
     init(urlString: String){
@@ -21,7 +21,6 @@ class CoinImageDataService{
             print("There is no ulr string")
             return
         }
-//        URLSession.shared.dataTaskPublisher(for: url)
         imageSubscription = NetworkingManager.download(url: url)
             .tryMap({ (data) -> UIImage in
                 guard let image = UIImage(data: data) else {

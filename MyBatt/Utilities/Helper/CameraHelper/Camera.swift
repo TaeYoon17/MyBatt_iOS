@@ -87,6 +87,7 @@ class Camera: NSObject {
         AsyncStream { continuation in
             addToPreviewStream = { ciImage in
                 if !self.isPreviewPaused {
+                    print("isYield addToPreviewStream")
                     continuation.yield(ciImage)
                 }
             }
@@ -177,7 +178,7 @@ class Camera: NSObject {
         isCaptureSessionConfigured = true
         
         success = true
-        
+        print("configureCaptureSession success")
     }
     
     private func checkAuthorization() async -> Bool {
@@ -259,11 +260,13 @@ class Camera: NSObject {
                 }
             }
             return
+        }else{
+            print("isCaptureSessionConfigured not")
         }
         
         sessionQueue.async { [self] in
             self.configureCaptureSession { success in
-                guard success else { return }
+                guard success else { print("configureCaptureSession not success"); return }
                 self.captureSession.startRunning()
             }
         }
@@ -363,7 +366,11 @@ extension Camera: AVCapturePhotoCaptureDelegate {
             logger.error("Error capturing photo: \(error.localizedDescription)")
             return
         }
-        addToPhotoStream?(photo)
+        if let addToPhotoStream = addToPhotoStream{
+            addToPhotoStream(photo)
+        }else{
+            print("addToPhotoStream not send")
+        }
     }
 }
 
@@ -379,9 +386,10 @@ extension Camera: AVCaptureVideoDataOutputSampleBufferDelegate {
         let ciImage = CIImage(cvImageBuffer: pixelBuffer)
         
         let newciImage = ciImage.cropped(to: CGRect(x: 0, y: 0, width: ciImage.extent.size.width, height: ciImage.extent.size.width))
-        addToPreviewStream?(newciImage)
-        
-//        addToPreviewStream?(UIImage(ciImage: CIImage(cvPixelBuffer: pixelBuffer)))
+        print("\(newciImage.description)")
+        if let addToPreviewStream = addToPreviewStream{
+            addToPreviewStream(newciImage)
+        }
     }
 }
 

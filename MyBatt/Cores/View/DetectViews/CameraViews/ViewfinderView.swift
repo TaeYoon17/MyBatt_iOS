@@ -8,11 +8,8 @@
 import SwiftUI
 
 struct ViewfinderView: View {
-    @EnvironmentObject var cameraModel: CameraModel
-    @State private var image : Image = Image("")
+    @EnvironmentObject var cameraModel: CameraViewModel
     var body: some View {
-//        let image: Image? = Image("picture_demo")
-//        return
         GeometryReader{ proxy in
             if let image = cameraModel.viewFinderImage
             {
@@ -26,7 +23,7 @@ struct ViewfinderView: View {
                         cameraModel.zoomInitialize()
                     })
                     )
-//                    .offset(y:proxy.size.height*0.4-proxy.size.width*0.5)
+                    .offset(y:proxy.size.height*0.4-proxy.size.width*0.5)
             }
         }
     }

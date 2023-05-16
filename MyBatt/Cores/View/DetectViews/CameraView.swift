@@ -9,14 +9,13 @@ import SwiftUI
 
 struct CameraView: View {
     @EnvironmentObject var appManager: AppManager
-    @StateObject private var model = CameraModel()
+    @StateObject private var model = CameraViewModel()
     @State private var isPhotoTaken = false
     private static let barHeightFactor = 0.15
     var body: some View {
         NavigationView {
             cameraView
                 .navigationBarTitleDisplayMode(.inline)
-            //                .navigationTitle("작물을 찍으세요!!")
                 .toolbar(content: {
                     ToolbarItem(id: "BackButton",placement: .navigationBarLeading) {
                         //여기 폰트 수정
@@ -26,23 +25,26 @@ struct CameraView: View {
                             Image(systemName: "xmark").imageScale(.large).foregroundColor(.white)
                         }
                     }
-                    ToolbarItem(id: "CenterText",placement: .navigation) {
+                    ToolbarItem(id: "CenterText",placement: .principal) {
                         //여기 폰트 수정
-                        Text("작물을 촬영하세요!").foregroundColor(.white)
+                        Text("작물을 촬영하세요").foregroundColor(.white)
                     }
                 })
-            
                 .task {
                     await model.camera.start() // 카메라 실행하는 메서드
+                    print("start")
                 }
-            //                .ignoresSafeArea()
-            //                .statusBarHidden()
         }
+        .background(Color.white)
         .onAppear(){
             Appearances.navigationBarClear()
             //            UINavigationBar.applyCustomAppearance()
+//            Task{
+//                await model.camera.start()
+//            }
         }.onDisappear(){
             Appearances.navigationBarWhite()
+            model.camera.stop()
         }
     }
     private var cameraView: some View{
@@ -50,11 +52,7 @@ struct CameraView: View {
             ViewfinderView()
                 .environmentObject(model)
                 .overlay(
-                    Color.white.opacity(0.5)
-                        .frame(height: 0
-                               //                                (proxy.size.height-proxy.size.width) / 2
-                               //                                proxy.size.height * Self.barHeightFactor
-                              )
+                    Color.white.opacity(0.5).frame(height: 0)
                     ,alignment: .top
                 )
                 .overlay(buttonsView()
@@ -104,24 +102,21 @@ struct CameraView: View {
 //            Spacer()
             //MARK: -- 사진 셔터
             NavigationLink(isActive:$isPhotoTaken) {
-                TakenPhotoView(image: $model.takenImage).environmentObject(model)
+                TakenPhotoView(takenView: $isPhotoTaken)
+                    .environmentObject(model)
+                    .onAppear(){
+//                        model.camera.isPreviewPaused = true
+                    }.onDisappear(){
+//                        model.camera.isPreviewPaused = false
+                    }
             } label: {
                 Button {
                     model.camera.takePhoto()
+                    model.locationService.updateCurrent()
                     isPhotoTaken = true
-                    
-//                    if let inputImage = vm.takenUIImage{
-//                        //3024 3024
-//                        print(inputImage.size)
-//                        let ciImage = CIImage(image: inputImage)
-//                        let width = ciImage!.extent.height
-//                        print(width)
-////                                width*0.4 - height*0.5
-//                        let croppedRect = CGRect(x:0,y:0,width: width, height:width)
-//                        let croppedImage = UIImage(ciImage: (ciImage?.cropped(to: croppedRect))!)
-//                        resultImage = Image(uiImage: croppedImage)
-//                    }
-                     
+                    DispatchQueue.global(qos: .default).asyncAfter(deadline: .now()+3){
+                        model.camera.stop()
+                    }
                 } label: {
                     Label {
                         Text("Take Photo")

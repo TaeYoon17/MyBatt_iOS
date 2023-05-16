@@ -7,30 +7,93 @@
 
 import SwiftUI
 import Foundation
+
+struct CropType:Identifiable,Hashable{
+    var id = UUID()
+    let icon: String
+    let name: String
+}
 struct TakenPhotoView: View {
-    @EnvironmentObject var vm: CameraModel
-    @Binding var image: Image?
+    let screenWidth = UIScreen.main.bounds.width
+    @EnvironmentObject var cameraModel: CameraViewModel
+    @EnvironmentObject var appManager: AppManager
+    //    @Binding var image: Image?
+    @Binding var takenView: Bool
+    //    @Binding var cameraView: Bool
+    private let adaptiveColumns = [
+        GridItem(.adaptive(minimum: 170)),GridItem(.adaptive(minimum: 170))
+    ]
+    let crops =
+    [CropType(icon:"🍓",name:"딸기"),CropType(icon:"🥬",name:"상추"),CropType(icon:"🍅",name:"토마토"),CropType(icon:"🌶️",name:"고추")]
     var body: some View {
-        ZStack{
-            GeometryReader{ proxy in
-                if let image = image{
-                    image
-                        .resizable().scaledToFill()
-                        .frame(width: proxy.size.width, height: proxy.size.width)
-                        .clipped()
+         if let image = cameraModel.takenImage{
+                imageAppearView(image: image)
+//                 .onDisappear(){
+//                    cameraModel.takenImage = nil
+//                }
+         }else{
+             ProgressView()
+         }
+//        imageAppearView(image: Image("picture_demo"))
+    }
+    func imageAppearView(image:Image)-> some View{
+        VStack{
+            VStack(spacing:10){
+                image.resizable().scaledToFill()
+                ScrollView{
+                    LazyVGrid(columns: adaptiveColumns,spacing: 15) {
+                        ForEach(crops, id:\.self){ crop in
+                            if crop.name == "고추"{
+                                Label {
+                                    Text(crop.name)
+                                        .font(.title3)
+                                } icon: {
+                                    Text(crop.icon)
+                                        .imageScale(.large)
+                                        .font(.title3)
+                                }
+                                .frame(width: screenWidth/3)
+                                .padding(.vertical,10)
+                                .foregroundColor(.accentColor)
+                                .background(.ultraThinMaterial)
+                                .cornerRadius(15)
+                                .background(RoundedRectangle(cornerRadius: 15).stroke(lineWidth:5).foregroundColor(.accentColor))
+                            }else{
+                                Label {
+                                    Text(crop.name)
+                                        .font(.title3)
+                                } icon: {
+                                    Text(crop.icon)
+                                        .imageScale(.large)
+                                        .font(.title3)
+                                }
+                                .frame(width: screenWidth/3)
+                                .padding(.vertical,10)
+                                .foregroundColor(
+                                    .black
+                                )
+                                .background(Color.white)
+                                .cornerRadius(15)
+                                .background(RoundedRectangle(cornerRadius: 15).stroke(
+                                    lineWidth:3
+                                ).foregroundColor(.black))
+                            }
+                            
+                        }
+                    }
+                    .padding(.vertical)
                 }
             }
-            Button{
-
-            }label:{
-                Text("save!!")
-            }
+            Spacer()
+            TakenBtnView().padding(.vertical)
         }
     }
 }
 
 struct TakenPhotoView_Previews: PreviewProvider {
     static var previews: some View {
-        TakenPhotoView(image: .constant(Image(systemName: "xmark")))
+        TakenPhotoView(takenView: .constant(true))
+            .environmentObject(CameraViewModel())
+            .environmentObject(AppManager())
     }
 }
