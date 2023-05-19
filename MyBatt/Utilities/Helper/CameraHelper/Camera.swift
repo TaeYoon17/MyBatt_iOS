@@ -87,7 +87,7 @@ class Camera: NSObject {
         AsyncStream { continuation in
             addToPreviewStream = { ciImage in
                 if !self.isPreviewPaused {
-                    print("isYield addToPreviewStream")
+//                    print("isYield addToPreviewStream")
                     continuation.yield(ciImage)
                 }
             }
@@ -386,7 +386,7 @@ extension Camera: AVCaptureVideoDataOutputSampleBufferDelegate {
         let ciImage = CIImage(cvImageBuffer: pixelBuffer)
         
         let newciImage = ciImage.cropped(to: CGRect(x: 0, y: 0, width: ciImage.extent.size.width, height: ciImage.extent.size.width))
-        print("\(newciImage.description)")
+
         if let addToPreviewStream = addToPreviewStream{
             addToPreviewStream(newciImage)
         }

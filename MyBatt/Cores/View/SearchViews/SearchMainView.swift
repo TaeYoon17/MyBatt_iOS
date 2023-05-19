@@ -6,28 +6,6 @@
 //
 
 import SwiftUI
-
-
-//struct SearchMainView: View  {
-//    @State private var queryStr:String = ""
-//    @State private var numbers = Array(repeating: 0, count: 100).enumerated().map{$0.offset}
-//    var body: some View{
-//        SearchNavigationView(searchQuery: $queryStr) {
-//            LazyVStack(spacing:15) {
-//                ForEach(numbers,id:\.self){idx in
-//                    Text("\(idx) 입니다.")
-//                        .swipeActions {
-//                            Text("hello world")
-//                        }
-//                }
-//                .onDelete(perform: { offset in
-//                    numbers.remove(atOffsets: offset)
-//                })
-//                .padding(.top,10)
-//            }
-//        }
-//    }
-//}
 struct SearchMainView: View{
     @State private var queryStr: String = ""
     @State private var numbers = Array(repeating: 0, count: 100).enumerated().map{$0.offset}

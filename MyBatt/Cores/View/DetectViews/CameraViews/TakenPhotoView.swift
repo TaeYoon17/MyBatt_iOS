@@ -23,16 +23,15 @@ struct TakenPhotoView: View {
     private let adaptiveColumns = [
         GridItem(.adaptive(minimum: 170)),GridItem(.adaptive(minimum: 170))
     ]
+    
     var body: some View {
         ZStack{
-            if let image = cameraModel.takenImage{
-                imageAppearView(image:
-                                    image
-                                //                                Image("picture_demo")
+            if let image = cameraModel.takenImage {
+                imageAppearView(image:image
+                                //Image("picture_demo")
                 )
                 .onAppear(){
                     takenVM.selectedCropType = appManager.lastCropType
-                    
                 }
                 .onDisappear(){
                     // 여기 유저 모델로 수정할 필요 있음
@@ -57,7 +56,9 @@ struct TakenPhotoView: View {
                     .disabled(stopToTaking)
             }
             ToolbarItem(placement: .principal) {
-                Text("경기도 구리시 인창동")
+//                Text(cameraModel.coordinate?.longitude.description)
+//                Text("\(cameraModel.coordinate?.latitude.description ?? "")")
+                Text("\(cameraModel.address ?? "")")
                     .fontWeight(.semibold)
             }
         }
@@ -66,6 +67,9 @@ struct TakenPhotoView: View {
             DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                 stopToTaking = false
             }
+        }
+        .onDisappear(){
+            cameraModel.locationService.address = nil
         }
     }
     func imageAppearView(image:Image)-> some View{

@@ -7,14 +7,22 @@
 
 import SwiftUI
 import NativePartialSheet
+import CoreLocation
 struct MapMainView: View {
     @EnvironmentObject var appManager: AppManager
     @State var isPresent = false
     @State var detent: Detent = .height(70)
+    @State var zoomLevel:Int = 1
+    @State var center: Geo = (37.603406,127.142995)
+    @State var address: String? = ""
     var body: some View {
         ZStack{
-            KakaoMapViewWrapper()
+            KakaoMapViewWrapper(zoomLevel: $zoomLevel,center: $center,address: $address)
                 .ignoresSafeArea()
+                .overlay(alignment: .top, content: {
+                    Text(zoomLevel.description)
+                        .background(.white)
+                })
                 .sheet(isPresented: $isPresent){
                     MapSheetView()
                 }
@@ -60,7 +68,9 @@ struct MapMainView: View {
                 }.padding(.horizontal, -8)
             }
             ToolbarItem(placement: .principal) {
-                Text("경기도 구리시 인창동")
+//                Text("경기도 구리시 인창동")
+//                Text("\(self.center.latitude) - \(self.center.longtitude)")
+                Text("\(self.address ?? "")")
                     .fontWeight(.semibold)
             }
         }

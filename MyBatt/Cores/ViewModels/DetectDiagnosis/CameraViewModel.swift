@@ -22,6 +22,7 @@ final class CameraViewModel:ObservableObject{
     
     @Published var coordinate: CLLocationCoordinate2D? = nil
     @Published var isLocated: Bool = false
+    @Published var address: String? = nil
     private var cancellable = Set<AnyCancellable>()
     
     init(){
@@ -37,12 +38,17 @@ final class CameraViewModel:ObservableObject{
     private func addLocationSubscribers(){ // 의존성 주입
         let locationPublisher: Published<CLLocationCoordinate2D?>.Publisher = locationService.$coordinate
         let loadingPublisher: Published<Bool>.Publisher = locationService.$isLoading
+        let addressPublisher: Published<String?>.Publisher = locationService.$address
         locationPublisher.sink{[weak self] output in
-            print("locationService.$coordinate")
+            print("locationService.$coordinate \(output)")
             self?.coordinate = output
         }.store(in: &cancellable)
         loadingPublisher.sink { [weak self] output in
             self?.isLocated = output
+        }.store(in: &cancellable)
+        addressPublisher.sink { [weak self] output in
+            print("locationService.$address \(output)")
+            self?.address = output
         }.store(in: &cancellable)
     }
     
@@ -51,7 +57,7 @@ final class CameraViewModel:ObservableObject{
         for await image in imageStream{
             Task{ @MainActor in
                 viewFinderImage = image.image!
-                print("view change!!")
+//                print("view change!!")
             }
         }
     }
