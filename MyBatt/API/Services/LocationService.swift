@@ -65,7 +65,6 @@ final class LocationService: NSObject, ObservableObject, CLLocationManagerDelega
                 print("에러 발생")
                 return
             }
-        
             self.geocoder = geoCoder
             self.geocoder?.startFindingAddress()
         }

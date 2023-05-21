@@ -77,6 +77,20 @@
 		63F096FD2A135B52005DA59C /* MapSheetVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F096FC2A135B52005DA59C /* MapSheetVM.swift */; };
 		63F096FF2A135B82005DA59C /* MapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F096FE2A135B82005DA59C /* MapModel.swift */; };
 		63F097012A135BA2005DA59C /* GroupBoxExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F097002A135BA2005DA59C /* GroupBoxExtension.swift */; };
+		63F20AAB2A175F6E00896597 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 63F20AAA2A175F6E00896597 /* Alamofire */; };
+		63F20AAE2A17614400896597 /* UserDefaultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F20AAD2A17614400896597 /* UserDefaultManager.swift */; };
+		63F20AB22A17622000896597 /* ApiLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F20AB12A17622000896597 /* ApiLogger.swift */; };
+		63F20AB42A17625400896597 /* ApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F20AB32A17625400896597 /* ApiClient.swift */; };
+		63F20AB72A17629600896597 /* BaseInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F20AB62A17629600896597 /* BaseInterceptor.swift */; };
+		63F20ABA2A17635A00896597 /* AuthAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F20AB92A17635A00896597 /* AuthAuthenticator.swift */; };
+		63F20ABC2A17638700896597 /* AuthCredential.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F20ABB2A17638700896597 /* AuthCredential.swift */; };
+		63F20ABE2A17642E00896597 /* AuthRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F20ABD2A17642E00896597 /* AuthRouter.swift */; };
+		63F20AC02A17644500896597 /* UserRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F20ABF2A17644500896597 /* UserRouter.swift */; };
+		63F20AC32A1764E900896597 /* TokenData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F20AC22A1764E900896597 /* TokenData.swift */; };
+		63F20AC52A17650100896597 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F20AC42A17650100896597 /* UserData.swift */; };
+		63F20AC72A17652400896597 /* TokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F20AC62A17652400896597 /* TokenResponse.swift */; };
+		63F20ACB2A17664000896597 /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F20ACA2A17664000896597 /* LogInView.swift */; };
+		63F20ACE2A177AEC00896597 /* DiagnosisInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F20ACD2A177AEC00896597 /* DiagnosisInfoView.swift */; };
 		63F7E2D52A040C90006E8B3E /* InfoMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F7E2D42A040C90006E8B3E /* InfoMainView.swift */; };
 /* End PBXBuildFile section */
 
@@ -153,6 +167,19 @@
 		63F096FC2A135B52005DA59C /* MapSheetVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSheetVM.swift; sourceTree = "<group>"; };
 		63F096FE2A135B82005DA59C /* MapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapModel.swift; sourceTree = "<group>"; };
 		63F097002A135BA2005DA59C /* GroupBoxExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupBoxExtension.swift; sourceTree = "<group>"; };
+		63F20AAD2A17614400896597 /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
+		63F20AB12A17622000896597 /* ApiLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiLogger.swift; sourceTree = "<group>"; };
+		63F20AB32A17625400896597 /* ApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiClient.swift; sourceTree = "<group>"; };
+		63F20AB62A17629600896597 /* BaseInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseInterceptor.swift; sourceTree = "<group>"; };
+		63F20AB92A17635A00896597 /* AuthAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthAuthenticator.swift; sourceTree = "<group>"; };
+		63F20ABB2A17638700896597 /* AuthCredential.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCredential.swift; sourceTree = "<group>"; };
+		63F20ABD2A17642E00896597 /* AuthRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRouter.swift; sourceTree = "<group>"; };
+		63F20ABF2A17644500896597 /* UserRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRouter.swift; sourceTree = "<group>"; };
+		63F20AC22A1764E900896597 /* TokenData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenData.swift; sourceTree = "<group>"; };
+		63F20AC42A17650100896597 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		63F20AC62A17652400896597 /* TokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenResponse.swift; sourceTree = "<group>"; };
+		63F20ACA2A17664000896597 /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
+		63F20ACD2A177AEC00896597 /* DiagnosisInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosisInfoView.swift; sourceTree = "<group>"; };
 		63F7E2D42A040C90006E8B3E /* InfoMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoMainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -166,6 +193,7 @@
 				6345E9432A0BD7D50023CB4F /* Lottie in Frameworks */,
 				632D3FA72A03897200DC1783 /* libsqlite3.tbd in Frameworks */,
 				632D3FA52A03896800DC1783 /* libxml2.tbd in Frameworks */,
+				63F20AAB2A175F6E00896597 /* Alamofire in Frameworks */,
 				632D3FA32A03895C00DC1783 /* libc++.tbd in Frameworks */,
 				632D3FA12A03894F00DC1783 /* QuartzCore.framework in Frameworks */,
 				633E650F2A123E9C00E50EC5 /* NativePartialSheet in Frameworks */,
@@ -279,7 +307,6 @@
 			isa = PBXGroup;
 			children = (
 				63F096F32A134DE3005DA59C /* UserVM.swift */,
-				6347CBF929F6E325001B99B6 /* AppManager.swift */,
 				63A4BABA2A13E7EB0018E891 /* DetectDiagnosis */,
 				63517A1A2A079FFC006DA928 /* OutBreakViewMoel.swift */,
 				6385AE392A07C56F00D6CA76 /* CoinImageViewModel.swift */,
@@ -354,6 +381,7 @@
 		638E118C29E3F89F005CA2EA /* View */ = {
 			isa = PBXGroup;
 			children = (
+				63F20AA82A175E6800896597 /* LogInView */,
 				63F7E2D32A040C7E006E8B3E /* InfoViews */,
 				63325A5129F101C100CF3A48 /* TabViews */,
 				63325A4E29F1004C00CF3A48 /* MapViews */,
@@ -369,6 +397,7 @@
 		638E118D29E3F8A9005CA2EA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				63F20AC12A1764DF00896597 /* AuthModel */,
 				638E118E29E3F8C3005CA2EA /* UserObject.swift */,
 				63517A1C2A07A6AF006DA928 /* CoinModel.swift */,
 				63B8D93F2A0B3B7D004EC7FC /* DiagnosisModel.swift */,
@@ -390,7 +419,7 @@
 		638E119429E3FF0F005CA2EA /* DetectViews */ = {
 			isa = PBXGroup;
 			children = (
-				63B8D93B2A0B35E0004EC7FC /* DiagnosisView.swift */,
+				63F20ACC2A177AD300896597 /* DiagnosisViews */,
 				63E3A8BF29F3C8B800C5F24D /* CameraView.swift */,
 				63E3A8BE29F3C8A700C5F24D /* CameraViews */,
 			);
@@ -448,10 +477,11 @@
 		63DC15E629D180ED0062691D /* MyBatt */ = {
 			isa = PBXGroup;
 			children = (
+				63F20AAF2A17620700896597 /* API */,
+				63F20AAC2A17612E00896597 /* Manager */,
 				638E119229E3FE77005CA2EA /* Info.plist */,
 				631332C42A03A0AB00CDE9B3 /* Config.xcconfig */,
 				6385AE342A07B87B00D6CA76 /* Utilities */,
-				6385AE322A07B84300D6CA76 /* Services */,
 				6385AE332A07B85400D6CA76 /* Cores */,
 				6354344429E851E30037D6CD /* LottieFiles */,
 				63DC15E729D180ED0062691D /* MyBattApp.swift */,
@@ -478,6 +508,81 @@
 				634AE16B2A0B9A86005811FB /* TakenBtnView.swift */,
 			);
 			path = CameraViews;
+			sourceTree = "<group>";
+		};
+		63F20AA82A175E6800896597 /* LogInView */ = {
+			isa = PBXGroup;
+			children = (
+				63F20ACA2A17664000896597 /* LogInView.swift */,
+			);
+			path = LogInView;
+			sourceTree = "<group>";
+		};
+		63F20AAC2A17612E00896597 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				6347CBF929F6E325001B99B6 /* AppManager.swift */,
+				63F20AAD2A17614400896597 /* UserDefaultManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		63F20AAF2A17620700896597 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				63F20AB12A17622000896597 /* ApiLogger.swift */,
+				63F20AB32A17625400896597 /* ApiClient.swift */,
+				63F20AB82A17634C00896597 /* Auth */,
+				63F20AB52A17628C00896597 /* Interceptor */,
+				63F20AB02A17621600896597 /* Router */,
+				6385AE322A07B84300D6CA76 /* Services */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		63F20AB02A17621600896597 /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				63F20ABD2A17642E00896597 /* AuthRouter.swift */,
+				63F20ABF2A17644500896597 /* UserRouter.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		63F20AB52A17628C00896597 /* Interceptor */ = {
+			isa = PBXGroup;
+			children = (
+				63F20AB62A17629600896597 /* BaseInterceptor.swift */,
+			);
+			path = Interceptor;
+			sourceTree = "<group>";
+		};
+		63F20AB82A17634C00896597 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				63F20AB92A17635A00896597 /* AuthAuthenticator.swift */,
+				63F20ABB2A17638700896597 /* AuthCredential.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		63F20AC12A1764DF00896597 /* AuthModel */ = {
+			isa = PBXGroup;
+			children = (
+				63F20AC22A1764E900896597 /* TokenData.swift */,
+				63F20AC42A17650100896597 /* UserData.swift */,
+				63F20AC62A17652400896597 /* TokenResponse.swift */,
+			);
+			path = AuthModel;
+			sourceTree = "<group>";
+		};
+		63F20ACC2A177AD300896597 /* DiagnosisViews */ = {
+			isa = PBXGroup;
+			children = (
+				63B8D93B2A0B35E0004EC7FC /* DiagnosisView.swift */,
+				63F20ACD2A177AEC00896597 /* DiagnosisInfoView.swift */,
+			);
+			path = DiagnosisViews;
 			sourceTree = "<group>";
 		};
 		63F7E2D32A040C7E006E8B3E /* InfoViews */ = {
@@ -507,6 +612,7 @@
 			packageProductDependencies = (
 				6345E9422A0BD7D50023CB4F /* Lottie */,
 				633E650E2A123E9C00E50EC5 /* NativePartialSheet */,
+				63F20AAA2A175F6E00896597 /* Alamofire */,
 			);
 			productName = MyBatt;
 			productReference = 63DC15E429D180ED0062691D /* MyBatt.app */;
@@ -539,6 +645,7 @@
 			packageReferences = (
 				6345E9412A0BD7D50023CB4F /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				633E650D2A123E9C00E50EC5 /* XCRemoteSwiftPackageReference "NativePartialSheet" */,
+				63F20AA92A175F6E00896597 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 63DC15E529D180ED0062691D /* Products */;
 			projectDirPath = "";
@@ -576,16 +683,20 @@
 				635AD49C29E7CA14006F3685 /* UIColorExtension.swift in Sources */,
 				633CACA72A0B61A000D23033 /* DiagnosisDataService.swift in Sources */,
 				63A4BABE2A13EB280018E891 /* TakenPhotoVM.swift in Sources */,
+				63F20ABE2A17642E00896597 /* AuthRouter.swift in Sources */,
 				636001C129F3C50500BC1F7F /* Appearances.swift in Sources */,
 				63DC15EA29D180ED0062691D /* ContentView.swift in Sources */,
 				63F096F92A135B1A005DA59C /* CropSelectView.swift in Sources */,
+				63F20AC02A17644500896597 /* UserRouter.swift in Sources */,
 				63F096FD2A135B52005DA59C /* MapSheetVM.swift in Sources */,
 				63F096F42A134DE3005DA59C /* UserVM.swift in Sources */,
 				6395395229F298C60019334E /* SearchNavigationView.swift in Sources */,
 				634AE16C2A0B9A86005811FB /* TakenBtnView.swift in Sources */,
 				63D8A07E2A0273D600D2FBFD /* TakenPhotoView.swift in Sources */,
 				638AEF7C29FBF166004BD2BE /* MainManagementBtn.swift in Sources */,
+				63F20ACB2A17664000896597 /* LogInView.swift in Sources */,
 				632D3FAD2A038AC900DC1783 /* KakaoMapVCWrapper.swift in Sources */,
+				63F20ABA2A17635A00896597 /* AuthAuthenticator.swift in Sources */,
 				636D83F229FFAB80003F4347 /* CameraViewModel.swift in Sources */,
 				63024F0C29EFDFB70074A52D /* MainOutBreakInfoView.swift in Sources */,
 				633E65112A12446E00E50EC5 /* MapSheetView.swift in Sources */,
@@ -595,6 +706,7 @@
 				63325A4D29F0FC7B00CF3A48 /* CornerRoundedView.swift in Sources */,
 				63F7E2D52A040C90006E8B3E /* InfoMainView.swift in Sources */,
 				63201F1429E97AFD00EB5D4E /* MainRequestBtn.swift in Sources */,
+				63F20AB72A17629600896597 /* BaseInterceptor.swift in Sources */,
 				636D83F429FFAC2D003F4347 /* Camera_ex.swift in Sources */,
 				638E118F29E3F8C3005CA2EA /* UserObject.swift in Sources */,
 				63F097012A135BA2005DA59C /* GroupBoxExtension.swift in Sources */,
@@ -602,24 +714,32 @@
 				63DC15E829D180ED0062691D /* MyBattApp.swift in Sources */,
 				63B8D9402A0B3B7D004EC7FC /* DiagnosisModel.swift in Sources */,
 				63517A1D2A07A6AF006DA928 /* CoinModel.swift in Sources */,
+				63F20AAE2A17614400896597 /* UserDefaultManager.swift in Sources */,
+				63F20AB42A17625400896597 /* ApiClient.swift in Sources */,
 				63A0306129ED29C500956BD9 /* UIDevice.swift in Sources */,
 				6347CBFA29F6E325001B99B6 /* AppManager.swift in Sources */,
 				63D8A07C2A026DA300D2FBFD /* PhotoCollection.swift in Sources */,
 				638E119129E3F996005CA2EA /* MainView.swift in Sources */,
 				63325A5029F1006500CF3A48 /* SearchMainView.swift in Sources */,
+				63F20ABC2A17638700896597 /* AuthCredential.swift in Sources */,
+				63F20ACE2A177AEC00896597 /* DiagnosisInfoView.swift in Sources */,
 				6385AE382A07C55A00D6CA76 /* CoinImageView.swift in Sources */,
+				63F20AC72A17652400896597 /* TokenResponse.swift in Sources */,
 				63F096FB2A135B37005DA59C /* CropDurationView.swift in Sources */,
 				63E5898B29E7DD0A00E38CBB /* ColorExtension.swift in Sources */,
 				6310E1672A0E44BC0071326C /* LocationService.swift in Sources */,
 				63325A4929F0EFC000CF3A48 /* CustomSegmentView.swift in Sources */,
+				63F20AC32A1764E900896597 /* TokenData.swift in Sources */,
 				63F096FF2A135B82005DA59C /* MapModel.swift in Sources */,
 				638AEF7E29FBF433004BD2BE /* MainSearchBtn.swift in Sources */,
 				63517A1B2A079FFC006DA928 /* OutBreakViewMoel.swift in Sources */,
 				6356A85C29E95E1B0085206C /* MainMapBtn.swift in Sources */,
+				63F20AB22A17622000896597 /* ApiLogger.swift in Sources */,
 				63A135A72A018CD0003A0C2D /* Camera.swift in Sources */,
 				63B8D93E2A0B3B4B004EC7FC /* DiagnosisViewModel.swift in Sources */,
 				63E3A8C229F3C8F900C5F24D /* ViewfinderView.swift in Sources */,
 				633CACA92A0B68DC00D23033 /* CIImageExtension.swift in Sources */,
+				63F20AC52A17650100896597 /* UserData.swift in Sources */,
 				6385AE362A07B8B200D6CA76 /* NetworkingManager.swift in Sources */,
 				63A4BABC2A13E8A40018E891 /* CropModel.swift in Sources */,
 				6385AE3A2A07C56F00D6CA76 /* CoinImageViewModel.swift in Sources */,
@@ -887,6 +1007,14 @@
 				minimumVersion = 4.0.0;
 			};
 		};
+		63F20AA92A175F6E00896597 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -899,6 +1027,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6345E9412A0BD7D50023CB4F /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		63F20AAA2A175F6E00896597 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63F20AA92A175F6E00896597 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
