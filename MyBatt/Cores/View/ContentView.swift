@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 enum BottomTab{
     case main, list, search, myPage
 }
@@ -24,62 +23,58 @@ struct ContentView: View {
                 bottomTabs.zIndex(1)
             }
         }
+
+        
     }
 }
 
 extension ContentView{
     var tabView: some View{
-        TabView(selection: $currentTab) {
             MainView(isCameraActive: $isCameraActive
-//                     ,naviStackIdx: $naviStackIdx
             )
-                .tag(BottomTab.main)
-        }
     }
     var bottomTabs: some View{
-        HStack(alignment: .center){
-            Spacer()
-            Button {
-                self.currentTab = .main
-                appManager.goRootView()
-            } label: {
-                VStack(spacing:5){
-                    Image(systemName: "house.fill")
-                        .foregroundColor(.accentColor)
-                        .imageScale(.large)
-                    Text("홈").font(.footnote)
-                }.scaleEffect(currentTab == .main ? 1 : 0.8)
-                    .opacity(currentTab == .main ? 1 : 0.5)
-            }.foregroundColor(.black)
-                .offset(x:-20)
-            Spacer()
-            Spacer()
-            Button {
-                self.currentTab = .main
-                appManager.goRootView()
-            } label: {
-                VStack(spacing:5){
-                    Image(systemName: "person.fill")
-                        .foregroundColor(Color.accentColor)
-                        .imageScale(.large)
-                    Text("내 정보").font(.footnote)
-                }.scaleEffect(currentTab == .main ? 1 : 0.8)
-                    .opacity(currentTab == .main ? 1 : 0.5)
-            }.foregroundColor(.black)
-            .offset(x:20)
-            Spacer()
+        ZStack(alignment:.bottom){
+            Text("Hello world!!").frame(width: appManager.screenWidth,height: 44)
+                .background(.white).edgesIgnoringSafeArea(.bottom)
+            HStack(alignment: .center){
+                Spacer()
+                Button {
+                    appManager.goRootView()
+                } label: {
+                    VStack(spacing:5){
+                        Image(systemName: "house.fill")
+                            .foregroundColor(.accentColor)
+                            .imageScale(.large)
+                        Text("홈").font(.footnote)
+                    }.scaleEffect(currentTab == .main ? 1 : 0.8)
+                        .opacity(currentTab == .main ? 1 : 0.5)
+                }.foregroundColor(.black)
+                    .offset(x:-20)
+                Spacer()
+                Spacer()
+                Button {
+                    appManager.goRootView()
+                } label: {
+                    VStack(spacing:5){
+                        Image(systemName: "person.fill")
+                            .foregroundColor(Color.accentColor)
+                            .imageScale(.large)
+                        Text("내 정보").font(.footnote)
+                    }.scaleEffect(currentTab == .main ? 1 : 0.8)
+                        .opacity(currentTab == .main ? 1 : 0.5)
+                }.foregroundColor(.black)
+                    .offset(x:20)
+                Spacer()
+            }
+            .frame(minHeight: 60)
+            .background(RoundedRectangle(cornerRadius: 10)
+                .fill(.thinMaterial)
+            ).clipped()
+                .edgesIgnoringSafeArea(.bottom)
+                .padding(.horizontal,UIDevice.current.hasNotch ? 30 : 0)
+                .overlay(cameraBtn.offset(y:-25),alignment: .center)
         }
-        .frame(minHeight: 60)
-        .background(RoundedRectangle(cornerRadius: 10)
-            .foregroundColor(
-                Color.lightGray
-            )
-        )
-            .clipped()
-            .edgesIgnoringSafeArea(.bottom)
-            .padding(.horizontal,UIDevice.current.hasNotch ? 30 : 0)
-            .overlay(cameraBtn.offset(y:-25),alignment: .center)
-                
     }
     
     var cameraBtn: some View{

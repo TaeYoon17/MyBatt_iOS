@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
-
+import PopupView
 struct DiagnosisView: View {
     //    @EnvironmentObject var appManager: AppManager
     let screenWidth = UIScreen.main.bounds.width
     @State private var isLoading = false
+    @EnvironmentObject var appManager: AppManager
     var body: some View {
         if isLoading{
             self.loadingView
@@ -46,9 +47,17 @@ struct DiagnosisView: View {
                 }
                 diagnosisBody
                     .padding(.horizontal)
-                Rectangle().frame(height: 160).foregroundColor(.white)
+                Rectangle().frame(height: 120).foregroundColor(.white)
             }
         }
+        .onDisappear(){
+            appManager.isTabbarHidden = false
+        }
+        .onDisappear(){
+            appManager.isDiagnosisActive = false
+            appManager.isTabbarHidden = false
+        }
+
     }
     var diagnosisBody: some View{
         VStack(spacing:8){

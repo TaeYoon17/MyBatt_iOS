@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Foundation
-
+import PopupView
 struct CropTypePhoto:Identifiable,Hashable{
     var id = UUID()
     let icon: String
@@ -20,6 +20,7 @@ struct TakenPhotoView: View {
     @StateObject var takenVM: TakenPhotoVM = TakenPhotoVM(lastCropType: .Lettuce)
     @Binding var takenView: Bool
     @State var stopToTaking = true
+    @State var isPopup = false
     private let adaptiveColumns = [
         GridItem(.adaptive(minimum: 170)),GridItem(.adaptive(minimum: 170))
     ]
@@ -32,12 +33,27 @@ struct TakenPhotoView: View {
                 )
                 .onAppear(){
                     takenVM.selectedCropType = appManager.lastCropType
+                    cameraModel.saveImageToAlbum()
+                    isPopup = true
                 }
                 .onDisappear(){
                     // 여기 유저 모델로 수정할 필요 있음
                     appManager.lastCropType = takenVM.selectedCropType
                     cameraModel.takenImage = nil
+                }.popup(isPresented: $isPopup) {
+                    Text("이미지를 저장했어요!")
+                        .font(.subheadline).bold()
+                        .padding()
+                        .background(.white)
+                        .clipShape(Capsule())
+                        .background(Capsule().stroke(lineWidth:5).foregroundColor(.black))
+                    
+                } customize: {
+                    $0.type(.floater())
+                        .position(.top).dragToDismiss(true).autohideIn(2)
+                    
                 }
+                
             }else{
                 ProgressView()
             }
@@ -106,16 +122,18 @@ struct TakenPhotoView: View {
             Spacer()
             ImageAppeaerBtnView(btnAction: {
                 takenView = false
-            }, labelText: "다시 촬영하기", iconName: "arrowshape.turn.up.backward",bgColor: .red)
+            }, labelText: "다시 촬영하기", iconName: "arrowshape.turn.up.backward",bgColor: .accentColor)
             Spacer()
             ImageAppeaerBtnView(btnAction: {
-                cameraModel.saveImageToAlbum()
                 takenView = false
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
                     appManager.cameraRunning(isRun: false)
+                    DispatchQueue.main.asyncAfter(deadline: .now()+0.2){
+                        appManager.isDiagnosisActive = true
+                    }
                 }
             }, labelText: "전송하기", iconName:
-                                    "paperplane", bgColor: .accentColor)
+                                    "paperplane", bgColor: .blue)
             Spacer()
         }
     }

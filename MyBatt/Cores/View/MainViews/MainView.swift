@@ -7,12 +7,8 @@
 
 import SwiftUI
 enum MainLinkViewType{
-    case OutBreakInfo
-    case Map
-    case CropManage
-    case Camera
-    case Search
-    case Album
+    case OutBreakInfo, Map,CropManage,Camera,Search,
+    Album,Diagnosis
     case none
 }
 
@@ -64,7 +60,7 @@ struct MainView: View {
                             .foregroundColor(.black)
                             .frame(minHeight: 60,maxHeight: 80)
                             .background(Color.lightGray)
-                        
+                            .cornerRadius(10)
                         //MARK: -- 도움말
                         HStack(alignment: .top,spacing:20){
                             //                                ScrollView{
@@ -86,7 +82,6 @@ struct MainView: View {
                 }
                 .padding()
             }
-            
             .disabled(appManager.getBindingStack(idx: self.naviStackIdx).wrappedValue)
             .disabled(appManager.isAction)
             .toolbar(content: {
@@ -126,11 +121,17 @@ struct MainView: View {
                 SearchMainView()
             case .Album:
                 AlbumPickerView()
+                    .onDisappear(){
+                        if appManager.isDiagnosisActive{
+                            self.activeLink(.Diagnosis)
+                        }
+                    }
+            case .Diagnosis:
+                DiagnosisView()
             case .none:
                 Text("None View")
             }
         } label: {
-            //            Text(self.naviStackIdx.description)
             EmptyView()
         }
         .isDetailLink(false)
@@ -139,9 +140,15 @@ struct MainView: View {
                 if appManager.isAlbumActive {
                     self.activeLink(.Album)
                 }
+                if appManager.isDiagnosisActive{
+                    self.activeLink(.Diagnosis)
+                }
             }
         }
-        
+//        .fullScreenCover(isPresented: $appManager.isDiagnosisActive) {
+//            DiagnosisView()
+//        }
+
     }
 }
 

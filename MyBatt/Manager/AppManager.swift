@@ -28,7 +28,7 @@ final class AppManager:ObservableObject{
     @Published var isTabbarHidden: Bool = false
     @Published var isCameraActive: Bool = false
     @Published var isAlbumActive: Bool = false
-    
+    @Published var isDiagnosisActive: Bool = false
     init(){
         viewStacks.append(false)
     }
@@ -36,6 +36,9 @@ final class AppManager:ObservableObject{
         get{
             self.viewStacks.count - 1
         }
+    }
+    public var screenWidth:CGFloat {
+        UIScreen.main.bounds.width
     }
     public private(set) var isAction: Bool = false
     public func getBindingStack(idx:Int)->Binding<Bool>{

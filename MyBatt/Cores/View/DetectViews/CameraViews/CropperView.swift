@@ -24,7 +24,10 @@ struct CropperView: UIViewControllerRepresentable{
         vc.resetButtonHidden = true
         vc.rotateButtonsHidden = true
         vc.doneButtonTitle = "완료 "
+        vc.doneButtonColor = .systemBlue
         vc.cancelButtonTitle = " 취소"
+        
+        vc.cancelButtonColor = UIColor(named: "AccentColor")
         vc.delegate = context.coordinator
         return vc
     }

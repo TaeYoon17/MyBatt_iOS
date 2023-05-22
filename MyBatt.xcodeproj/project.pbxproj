@@ -69,6 +69,7 @@
 		63B8D9402A0B3B7D004EC7FC /* DiagnosisModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B8D93F2A0B3B7D004EC7FC /* DiagnosisModel.swift */; };
 		63D8A07C2A026DA300D2FBFD /* PhotoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8A07B2A026DA300D2FBFD /* PhotoCollection.swift */; };
 		63D8A07E2A0273D600D2FBFD /* TakenPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8A07D2A0273D600D2FBFD /* TakenPhotoView.swift */; };
+		63DB82712A1BC11D00842F75 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = 63DB82702A1BC11D00842F75 /* PopupView */; };
 		63DC15E829D180ED0062691D /* MyBattApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DC15E729D180ED0062691D /* MyBattApp.swift */; };
 		63DC15EA29D180ED0062691D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DC15E929D180ED0062691D /* ContentView.swift */; };
 		63DC15EC29D180ED0062691D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63DC15EB29D180ED0062691D /* Assets.xcassets */; };
@@ -211,6 +212,7 @@
 				633E650F2A123E9C00E50EC5 /* NativePartialSheet in Frameworks */,
 				632D3F9F2A03894800DC1783 /* CoreLocation.framework in Frameworks */,
 				632473642A0396E7005D7C7E /* DaumMap.framework in Frameworks */,
+				63DB82712A1BC11D00842F75 /* PopupView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -639,6 +641,7 @@
 				633E650E2A123E9C00E50EC5 /* NativePartialSheet */,
 				63F20AAA2A175F6E00896597 /* Alamofire */,
 				630500872A1B5F7A007BF769 /* CropViewController */,
+				63DB82702A1BC11D00842F75 /* PopupView */,
 			);
 			productName = MyBatt;
 			productReference = 63DC15E429D180ED0062691D /* MyBatt.app */;
@@ -673,6 +676,7 @@
 				633E650D2A123E9C00E50EC5 /* XCRemoteSwiftPackageReference "NativePartialSheet" */,
 				63F20AA92A175F6E00896597 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				630500862A1B5F7A007BF769 /* XCRemoteSwiftPackageReference "TOCropViewController" */,
+				63DB826F2A1BC11C00842F75 /* XCRemoteSwiftPackageReference "PopupView" */,
 			);
 			productRefGroup = 63DC15E529D180ED0062691D /* Products */;
 			projectDirPath = "";
@@ -1051,6 +1055,14 @@
 				minimumVersion = 4.0.0;
 			};
 		};
+		63DB826F2A1BC11C00842F75 /* XCRemoteSwiftPackageReference "PopupView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/exyte/PopupView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		63F20AA92A175F6E00896597 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -1076,6 +1088,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6345E9412A0BD7D50023CB4F /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		63DB82702A1BC11D00842F75 /* PopupView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63DB826F2A1BC11C00842F75 /* XCRemoteSwiftPackageReference "PopupView" */;
+			productName = PopupView;
 		};
 		63F20AAA2A175F6E00896597 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;

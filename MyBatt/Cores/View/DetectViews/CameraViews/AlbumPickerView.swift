@@ -24,24 +24,35 @@ struct AlbumPickerView: View {
     var body: some View {
         ZStack{
             VStack{
-                if let image = image{
-                    image.resizable()
-                        .scaledToFill()
+                VStack(spacing:10){
+                    if let image = image{
+                        image.resizable()
+                            .scaledToFill()
+                    }
+                    ImageAppearView(image: $image).environmentObject(takenVM)
+                    
                 }
-                ImageAppearView(image: $image).environmentObject(takenVM)
+                Spacer()
                 HStack{
                     Spacer()
                     ImageAppeaerBtnView(btnAction:{
-                        appManager.goRootView()
-                    },labelText: "다시 촬영하기", iconName: "arrowshape.turn.up.backward",bgColor: .red)
+                        self.selectStep = .Pick
+                    },labelText: "다시 선택하기", iconName: "photo.on.rectangle.angled",bgColor:
+                        .accentColor
+                    )
                     Spacer()
                     ImageAppeaerBtnView(btnAction:{
                         appManager.goRootView()
-                    },labelText: "전송하기", iconName:
-                                            "paperplane", bgColor: .accentColor)
+                        DispatchQueue.main.asyncAfter(deadline: .now()+0.5){
+                            appManager.isDiagnosisActive = true
+                        }
+                        appManager.isDiagnosisActive = true
+                    },labelText: "전송하기", iconName:"paperplane", bgColor: .blue)
                     Spacer()
                 }
+                
             }
+            
         }
         .onAppear(){
             selectStep = .Pick
@@ -68,6 +79,8 @@ struct AlbumPickerView: View {
                     .onDisappear(){
                         if uiimage != nil{
                             selectStep = .Crop
+                        }else{
+                            appManager.goRootView()
                         }
                 }
             }
