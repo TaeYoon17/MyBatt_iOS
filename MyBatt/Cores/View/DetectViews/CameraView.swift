@@ -55,12 +55,15 @@ struct CameraView: View {
                     Color.white.opacity(0.5).frame(height: 0)
                     ,alignment: .top
                 )
-                .overlay(buttonsView()
-                    .frame(width: proxy.size.width,
-                           height: (proxy.size.height-proxy.size.width) / 2
-                           //                           height:  proxy.size.height * Self.barHeightFactor
-                          )
-                        .background(Color.black.opacity(0.5))
+                .overlay(
+                    VStack{buttonsView()
+                            
+                            .frame(width: proxy.size.width,
+                                   height: (proxy.size.height-proxy.size.width) / 2
+                            )
+                            .background(Color.black.opacity(0.5))
+                            
+                    }
                          ,alignment: .bottom)
                 .overlay(Color.clear
                     .frame(height: proxy.size.height * (1 - (Self.barHeightFactor * 2)))
@@ -74,32 +77,26 @@ struct CameraView: View {
         
     }
     private func buttonsView() -> some View {
-        HStack(spacing:60) {
-            Spacer()
+        HStack() {
+//            Spacer()
             //MARK: -- 사진첩
-            /*
-            NavigationLink {
-                //                    PhotoCollectionView(photoCollection: model.photoCollection)
-                //                        .onAppear {
-                //                            model.camera.isPreviewPaused = true
-                //                        }
-                //                        .onDisappear {
-                //                            model.camera.isPreviewPaused = false
-                //                        }
-            } label: {
+            Button{
+                appManager.isCameraActive = false
+                appManager.isAlbumActive = true
+            } label:{
                 Label {
                     Text("Gallery")
                         .foregroundColor(.blue)
                         .font(.system(size: 20))
                 } icon: {
-                    Image(systemName: "photo")
+                    Image(systemName: "photo.on.rectangle.angled")
                         .font(.system(size: 36, weight: .bold))
                         .foregroundColor(.white)
                         .scaledToFit()
-                }.foregroundColor(.blue)
+                }
             }
-             */
-//            Spacer()
+             
+            Spacer()
             //MARK: -- 사진 셔터
             NavigationLink(isActive:$isPhotoTaken) {
                 TakenPhotoView(takenView: $isPhotoTaken)
@@ -133,8 +130,7 @@ struct CameraView: View {
                     }.scaledToFit()
                 }
             }
-            
-            /*
+            Spacer()
             Button {
                 model.camera.switchCaptureDevice()
             } label: {
@@ -143,13 +139,12 @@ struct CameraView: View {
                     .foregroundColor(.white)
                     .scaledToFit()
             }
-             */
-            Spacer()
-            
+//            Spacer()
         }
         .buttonStyle(.plain)
         .labelStyle(.iconOnly)
         .padding()
+//        .background(.blue)
     }
 }
 

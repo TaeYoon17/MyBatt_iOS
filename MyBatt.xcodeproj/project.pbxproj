@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		63024F0C29EFDFB70074A52D /* MainOutBreakInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63024F0B29EFDFB70074A52D /* MainOutBreakInfoView.swift */; };
 		63024F0F29EFE76B0074A52D /* GroupBoxModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63024F0E29EFE76B0074A52D /* GroupBoxModifier.swift */; };
+		630500832A1B5EF0007BF769 /* AlbumPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630500822A1B5EF0007BF769 /* AlbumPickerView.swift */; };
+		630500852A1B5F45007BF769 /* PHPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630500842A1B5F45007BF769 /* PHPickerView.swift */; };
+		630500882A1B5F7A007BF769 /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 630500872A1B5F7A007BF769 /* CropViewController */; };
+		6305008A2A1B5FCF007BF769 /* CropperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630500892A1B5FCF007BF769 /* CropperView.swift */; };
+		6305008D2A1B7172007BF769 /* ImageAppearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6305008C2A1B7172007BF769 /* ImageAppearView.swift */; };
+		630500912A1B751C007BF769 /* ImageAppeaerBtnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630500902A1B751C007BF769 /* ImageAppeaerBtnView.swift */; };
 		6310E1672A0E44BC0071326C /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6310E1662A0E44BC0071326C /* LocationService.swift */; };
 		63201F1429E97AFD00EB5D4E /* MainRequestBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63201F1329E97AFD00EB5D4E /* MainRequestBtn.swift */; };
 		6324731A2A038CF0005D7C7E /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 632473192A038CF0005D7C7E /* Metal.framework */; };
@@ -97,6 +103,11 @@
 /* Begin PBXFileReference section */
 		63024F0B29EFDFB70074A52D /* MainOutBreakInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainOutBreakInfoView.swift; sourceTree = "<group>"; };
 		63024F0E29EFE76B0074A52D /* GroupBoxModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupBoxModifier.swift; sourceTree = "<group>"; };
+		630500822A1B5EF0007BF769 /* AlbumPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumPickerView.swift; sourceTree = "<group>"; };
+		630500842A1B5F45007BF769 /* PHPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHPickerView.swift; sourceTree = "<group>"; };
+		630500892A1B5FCF007BF769 /* CropperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropperView.swift; sourceTree = "<group>"; };
+		6305008C2A1B7172007BF769 /* ImageAppearView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAppearView.swift; sourceTree = "<group>"; };
+		630500902A1B751C007BF769 /* ImageAppeaerBtnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAppeaerBtnView.swift; sourceTree = "<group>"; };
 		6310E1662A0E44BC0071326C /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		631332C42A03A0AB00CDE9B3 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		63201F1329E97AFD00EB5D4E /* MainRequestBtn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRequestBtn.swift; sourceTree = "<group>"; };
@@ -193,6 +204,7 @@
 				6345E9432A0BD7D50023CB4F /* Lottie in Frameworks */,
 				632D3FA72A03897200DC1783 /* libsqlite3.tbd in Frameworks */,
 				632D3FA52A03896800DC1783 /* libxml2.tbd in Frameworks */,
+				630500882A1B5F7A007BF769 /* CropViewController in Frameworks */,
 				63F20AAB2A175F6E00896597 /* Alamofire in Frameworks */,
 				632D3FA32A03895C00DC1783 /* libc++.tbd in Frameworks */,
 				632D3FA12A03894F00DC1783 /* QuartzCore.framework in Frameworks */,
@@ -211,6 +223,16 @@
 				63024F0E29EFE76B0074A52D /* GroupBoxModifier.swift */,
 			);
 			path = Modifier;
+			sourceTree = "<group>";
+		};
+		6305008B2A1B7165007BF769 /* TakenComponents */ = {
+			isa = PBXGroup;
+			children = (
+				634AE16B2A0B9A86005811FB /* TakenBtnView.swift */,
+				6305008C2A1B7172007BF769 /* ImageAppearView.swift */,
+				630500902A1B751C007BF769 /* ImageAppeaerBtnView.swift */,
+			);
+			path = TakenComponents;
 			sourceTree = "<group>";
 		};
 		632D3F4D2A03854D00DC1783 /* CameraHelper */ = {
@@ -503,9 +525,12 @@
 		63E3A8BE29F3C8A700C5F24D /* CameraViews */ = {
 			isa = PBXGroup;
 			children = (
+				6305008B2A1B7165007BF769 /* TakenComponents */,
+				630500822A1B5EF0007BF769 /* AlbumPickerView.swift */,
 				63E3A8C129F3C8F900C5F24D /* ViewfinderView.swift */,
 				63D8A07D2A0273D600D2FBFD /* TakenPhotoView.swift */,
-				634AE16B2A0B9A86005811FB /* TakenBtnView.swift */,
+				630500842A1B5F45007BF769 /* PHPickerView.swift */,
+				630500892A1B5FCF007BF769 /* CropperView.swift */,
 			);
 			path = CameraViews;
 			sourceTree = "<group>";
@@ -613,6 +638,7 @@
 				6345E9422A0BD7D50023CB4F /* Lottie */,
 				633E650E2A123E9C00E50EC5 /* NativePartialSheet */,
 				63F20AAA2A175F6E00896597 /* Alamofire */,
+				630500872A1B5F7A007BF769 /* CropViewController */,
 			);
 			productName = MyBatt;
 			productReference = 63DC15E429D180ED0062691D /* MyBatt.app */;
@@ -646,6 +672,7 @@
 				6345E9412A0BD7D50023CB4F /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				633E650D2A123E9C00E50EC5 /* XCRemoteSwiftPackageReference "NativePartialSheet" */,
 				63F20AA92A175F6E00896597 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				630500862A1B5F7A007BF769 /* XCRemoteSwiftPackageReference "TOCropViewController" */,
 			);
 			productRefGroup = 63DC15E529D180ED0062691D /* Products */;
 			projectDirPath = "";
@@ -679,12 +706,15 @@
 				636001BF29F3C1B700BC1F7F /* UIScreenExtension.swift in Sources */,
 				63B8D93C2A0B35E0004EC7FC /* DiagnosisView.swift in Sources */,
 				6385AE3C2A07C6C200D6CA76 /* OutbreakDataService.swift in Sources */,
+				6305008D2A1B7172007BF769 /* ImageAppearView.swift in Sources */,
 				63024F0F29EFE76B0074A52D /* GroupBoxModifier.swift in Sources */,
 				635AD49C29E7CA14006F3685 /* UIColorExtension.swift in Sources */,
 				633CACA72A0B61A000D23033 /* DiagnosisDataService.swift in Sources */,
 				63A4BABE2A13EB280018E891 /* TakenPhotoVM.swift in Sources */,
 				63F20ABE2A17642E00896597 /* AuthRouter.swift in Sources */,
 				636001C129F3C50500BC1F7F /* Appearances.swift in Sources */,
+				630500912A1B751C007BF769 /* ImageAppeaerBtnView.swift in Sources */,
+				630500832A1B5EF0007BF769 /* AlbumPickerView.swift in Sources */,
 				63DC15EA29D180ED0062691D /* ContentView.swift in Sources */,
 				63F096F92A135B1A005DA59C /* CropSelectView.swift in Sources */,
 				63F20AC02A17644500896597 /* UserRouter.swift in Sources */,
@@ -709,12 +739,14 @@
 				63F20AB72A17629600896597 /* BaseInterceptor.swift in Sources */,
 				636D83F429FFAC2D003F4347 /* Camera_ex.swift in Sources */,
 				638E118F29E3F8C3005CA2EA /* UserObject.swift in Sources */,
+				6305008A2A1B5FCF007BF769 /* CropperView.swift in Sources */,
 				63F097012A135BA2005DA59C /* GroupBoxExtension.swift in Sources */,
 				63325A4B29F0F5E300CF3A48 /* ViewExtension.swift in Sources */,
 				63DC15E829D180ED0062691D /* MyBattApp.swift in Sources */,
 				63B8D9402A0B3B7D004EC7FC /* DiagnosisModel.swift in Sources */,
 				63517A1D2A07A6AF006DA928 /* CoinModel.swift in Sources */,
 				63F20AAE2A17614400896597 /* UserDefaultManager.swift in Sources */,
+				630500852A1B5F45007BF769 /* PHPickerView.swift in Sources */,
 				63F20AB42A17625400896597 /* ApiClient.swift in Sources */,
 				63A0306129ED29C500956BD9 /* UIDevice.swift in Sources */,
 				6347CBFA29F6E325001B99B6 /* AppManager.swift in Sources */,
@@ -889,11 +921,13 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyBatt/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 허용해줘잉";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "위치를 허용할까요?";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "위치를 허용할까요?!?!?!?!?!?";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 좀 쓰자!!";
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Album permissions to save videos";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "앨범 좀 허용 해줘!!!!";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 좀 쓰자!!";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -937,11 +971,13 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyBatt/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 허용해줘잉";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "위치를 허용할까요?";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "위치를 허용할까요?!?!?!?!?!?";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 좀 쓰자!!";
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Album permissions to save videos";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "앨범 좀 허용 해줘!!!!";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 좀 쓰자!!";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -991,6 +1027,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		630500862A1B5F7A007BF769 /* XCRemoteSwiftPackageReference "TOCropViewController" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TimOliver/TOCropViewController.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		633E650D2A123E9C00E50EC5 /* XCRemoteSwiftPackageReference "NativePartialSheet" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/CoolONEOfficial/NativePartialSheet.git";
@@ -1018,6 +1062,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		630500872A1B5F7A007BF769 /* CropViewController */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 630500862A1B5F7A007BF769 /* XCRemoteSwiftPackageReference "TOCropViewController" */;
+			productName = CropViewController;
+		};
 		633E650E2A123E9C00E50EC5 /* NativePartialSheet */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 633E650D2A123E9C00E50EC5 /* XCRemoteSwiftPackageReference "NativePartialSheet" */;

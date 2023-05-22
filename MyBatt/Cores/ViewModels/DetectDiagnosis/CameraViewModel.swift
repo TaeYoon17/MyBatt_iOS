@@ -10,8 +10,12 @@ import SwiftUI
 import os.log
 import AVFoundation
 import CoreLocation
+//import PhotoKit
+import PhotosUI
+import ImageIO
+import UIKit
 import Combine
-final class CameraViewModel:ObservableObject{
+final class CameraViewModel:NSObject,ObservableObject{
     let camera = Camera()
     lazy var locationService = LocationService()
     @Published var viewFinderImage: Image?
@@ -25,7 +29,8 @@ final class CameraViewModel:ObservableObject{
     @Published var address: String? = nil
     private var cancellable = Set<AnyCancellable>()
     
-    init(){
+    override init(){
+        super.init()
         Task{ await handleCameraPreviews() }
         Task{ await handleCameraPhotos() }
         self.addLocationSubscribers()
@@ -57,7 +62,7 @@ final class CameraViewModel:ObservableObject{
         for await image in imageStream{
             Task{ @MainActor in
                 viewFinderImage = image.image!
-//                print("view change!!")
+                //                print("view change!!")
             }
         }
     }
@@ -68,19 +73,20 @@ final class CameraViewModel:ObservableObject{
         for await photoData in unpackedPhotoStream{
             Task{ @MainActor in
                 //thumbnailImage = photoData.thumbnailImage
-                let ciimage = CIImage(data: photoData.imageData, options: [.applyOrientationProperty: true])!
+                let ciimage = CIImage(data: photoData.imageData, options: [.applyOrientationProperty: true
+                                                                          ])!
                 let cropCiImage = ciimage.cropImage
                 print(cropCiImage.description)
                 takenImage = cropCiImage.image!
                 takenCIImage = cropCiImage
             }
-//            savePhoto(imageData: photoData.imageData)
+            //            savePhoto(imageData: photoData.imageData)
         }
     }
     // Device Camera에서 가져온 AVCapturePhoto를 Image로 바꾸기
     fileprivate func unpackPhoto(_ photo:AVCapturePhoto)-> PhotoData?{
         // AVCapturePhoto 타입을 Data 타입으로 바꾼다.
-//        print(photo.description)
+        //        print(photo.description)
         guard let imageData: Data = photo.fileDataRepresentation() else { return nil }
         
         guard let previewCGImage = photo.previewCGImageRepresentation(),
@@ -99,13 +105,44 @@ final class CameraViewModel:ObservableObject{
     }
     
     //MARK: -- 사진첩 썸내일을 로드하는 함수
-    func loadThumbnail() async{}
+    func loadThumbnail() async{ }
     
     //MARK: -- 사진첩을 누르면 사진 로드하기
     func loadPhotos() async{}
     
     //MARK: -- 사진 저장하기
-    func savePhoto(imageData: Data) {}
+    func saveImageToAlbum() {
+        // 이미지 저장을 요청하기 전에 이미지 이름을 설정합니다.
+        guard let ciimage = self.takenCIImage else {
+            print("CIImage 없음!!")
+            return
+        }
+        PHPhotoLibrary.requestAuthorization { (state) in
+            print(state)
+        }
+       print("savePhoto 실행!!")
+        //이미지 저장 타입(jpeg)을 줘야한다!!
+        let image = UIImage(data:UIImage(ciImage: ciimage).jpegData(compressionQuality: 1)!)!
+        var savedAssetID: String?
+        PHPhotoLibrary.shared().performChanges({
+            let request = PHAssetChangeRequest.creationRequestForAsset(from: image)
+            request.creationDate = Date()
+            request.location = CLLocation()
+            savedAssetID = request.placeholderForCreatedAsset?.localIdentifier
+        }, completionHandler: { success, error in
+            if success, let assetID = savedAssetID {
+                // 이미지가 성공적으로 저장되었을 때의 처리
+                print("Image saved with name: ")
+            } else {
+                // 이미지 저장 중에 오류가 발생했을 때의 처리
+                if let error = error {
+                    print("Error saving image: \(error.localizedDescription)")
+                } else {
+                    print("Image save operation was not successful.")
+                }
+            }
+        })
+    }
     
     var currentZoomFactor: CGFloat = 2.0
     var lastScale: CGFloat = 2.0
@@ -120,9 +157,13 @@ final class CameraViewModel:ObservableObject{
         lastScale = 2.0
     }
 }
-
 extension CameraViewModel{
     
+}
+
+
+//MARK: -- Thumbnail 관련
+extension CameraViewModel{
 }
 
 

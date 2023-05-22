@@ -384,7 +384,6 @@ extension Camera: AVCaptureVideoDataOutputSampleBufferDelegate {
             connection.videoOrientation = videoOrientation
         }
         let ciImage = CIImage(cvImageBuffer: pixelBuffer)
-        
         let newciImage = ciImage.cropped(to: CGRect(x: 0, y: 0, width: ciImage.extent.size.width, height: ciImage.extent.size.width))
 
         if let addToPreviewStream = addToPreviewStream{

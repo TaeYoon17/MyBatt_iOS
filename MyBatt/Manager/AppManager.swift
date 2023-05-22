@@ -27,6 +27,7 @@ final class AppManager:ObservableObject{
     }
     @Published var isTabbarHidden: Bool = false
     @Published var isCameraActive: Bool = false
+    @Published var isAlbumActive: Bool = false
     
     init(){
         viewStacks.append(false)

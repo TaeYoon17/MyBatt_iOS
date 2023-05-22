@@ -56,8 +56,6 @@ struct TakenPhotoView: View {
                     .disabled(stopToTaking)
             }
             ToolbarItem(placement: .principal) {
-//                Text(cameraModel.coordinate?.longitude.description)
-//                Text("\(cameraModel.coordinate?.latitude.description ?? "")")
                 Text("\(cameraModel.address ?? "")")
                     .fontWeight(.semibold)
             }
@@ -100,7 +98,25 @@ struct TakenPhotoView: View {
                 }
             }
             Spacer()
-            TakenBtnView(takenPhotoPage: $takenView).padding(.vertical)
+            self.takenBtnView
+        }
+    }
+    var takenBtnView: some View{
+        HStack{
+            Spacer()
+            ImageAppeaerBtnView(btnAction: {
+                takenView = false
+            }, labelText: "다시 촬영하기", iconName: "arrowshape.turn.up.backward",bgColor: .red)
+            Spacer()
+            ImageAppeaerBtnView(btnAction: {
+                cameraModel.saveImageToAlbum()
+                takenView = false
+                DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                    appManager.cameraRunning(isRun: false)
+                }
+            }, labelText: "전송하기", iconName:
+                                    "paperplane", bgColor: .accentColor)
+            Spacer()
         }
     }
 }

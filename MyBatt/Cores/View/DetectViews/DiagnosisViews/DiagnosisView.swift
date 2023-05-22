@@ -15,7 +15,7 @@ struct DiagnosisView: View {
         if isLoading{
             self.loadingView
         }else{
-            self.diagnosisView
+            self.diagnosisView.navigationTitle("병해 진단 결과")
         }
     }
     
@@ -30,35 +30,42 @@ struct DiagnosisView: View {
         }
     }
     var diagnosisView: some View{
-        VStack(spacing:8){
-            ZStack{
-                Rectangle()
-                    .fill(.thickMaterial)
-                    .frame(width: screenWidth,height:screenWidth/1.2)
-                    .overlay {
-                        Image("picture_demo")
-                            .resizable()
-                            .frame(width: screenWidth/1.2)
-                            .clipped()
-                    }
+        ScrollView(showsIndicators: false){
+            VStack(spacing:8){
+                ZStack{
+                    Rectangle()
+                        .fill(.thickMaterial)
+                        .frame(width: screenWidth,height:screenWidth/1.2)
+                        .overlay {
+                            Image("picture_demo")
+                                .resizable()
+                                .padding(.horizontal)
+                                .frame(width: screenWidth)
+                                .clipped()
+                        }
+                }
+                diagnosisBody
+                    .padding(.horizontal)
+                Rectangle().frame(height: 160).foregroundColor(.white)
             }
-//                .background(Color.accentColor)
-            diagnosisBody
-                .padding(.horizontal)
-            Spacer()
         }
     }
     var diagnosisBody: some View{
         VStack(spacing:8){
-            HStack{
+            HStack(alignment:.bottom){
                 Text("고추")
-                    .font(.title2.bold())
-                    .padding(.all,8)
-                    .background(.blue)
-                    .cornerRadius(15)
+                    .font(.headline.bold())
+                    .padding(.horizontal,8)
+                    .padding(.vertical,4)
+                    .foregroundColor(.white)
+                    .background(Color.accentColor.opacity(0.6))
+//                    .background(.ultraThinMaterial)
+                    .cornerRadius(8)
+                Text("2023.05.11 05:52").font(.callout)
+                    .padding(.bottom,2)
                 Spacer()
-            }.padding(.horizontal)
-            ScrollView(showsIndicators: false) {
+            }
+//            ScrollView(showsIndicators: true) {
                 //MARK: -- 가장 유사한 결과
                 GroupBox {
                         DiagnosisInfoView()
@@ -98,7 +105,7 @@ struct DiagnosisView: View {
                         .background(Color.accentColor.opacity(0.08))
                     }.modifier(DiagnosisInfoViewModifier(paddingSize: 0))
                 }.bgColor(.white,paddingSize: 4)
-            }
+//            }
         }
     }
 }

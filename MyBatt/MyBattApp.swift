@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct MyBattApp: App {
-    @State private var isTrue = false
+    @State private var isTrue = true
     var body: some Scene {
         WindowGroup {
             if isTrue{

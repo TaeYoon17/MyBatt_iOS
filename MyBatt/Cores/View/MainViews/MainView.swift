@@ -12,14 +12,8 @@ enum MainLinkViewType{
     case CropManage
     case Camera
     case Search
+    case Album
     case none
-    //    func goLink()->some View{
-    //        switch self{
-    //        case .Camera: return Text("Hello World")
-    //        case .CropManage: return CameraView()
-    //        default: return EmptyView()
-    //        }
-    //    }
 }
 
 struct MainView: View {
@@ -28,7 +22,7 @@ struct MainView: View {
     @EnvironmentObject var appManager:AppManager
     @State var linkView = MainLinkViewType.none
     @State var naviStackIdx = 0
-//    @Binding var naviStackIdx: Int
+    //    @Binding var naviStackIdx: Int
     var body: some View {
         NavigationView {
             ZStack{
@@ -92,6 +86,7 @@ struct MainView: View {
                 }
                 .padding()
             }
+            
             .disabled(appManager.getBindingStack(idx: self.naviStackIdx).wrappedValue)
             .disabled(appManager.isAction)
             .toolbar(content: {
@@ -116,30 +111,37 @@ struct MainView: View {
     }
     var naviLinkController: some View{
         NavigationLink(isActive:appManager.getBindingStack(idx: naviStackIdx)){
-                switch linkView {
-                case .OutBreakInfo:
-//                    Text("OutBreak View")
-                    CoinImageView(coin: globalCoinDemo)
-                case .Map:
-                    MapMainView()
-//                    Text("MapMainView")
-                case .CropManage:
-                    Text("Crop Manage View")
-                case .Camera:
-                    Text("EmptyView")
-                case .Search:
-                    SearchMainView()
-                case .none:
-                    Text("None View")
-                }
+            switch linkView {
+            case .OutBreakInfo:
+                //                    Text("OutBreak View")
+                CoinImageView(coin: globalCoinDemo)
+            case .Map:
+                MapMainView()
+                //                    Text("MapMainView")
+            case .CropManage:
+                Text("Crop Manage View")
+            case .Camera:
+                Text("EmptyView")
+            case .Search:
+                SearchMainView()
+            case .Album:
+                AlbumPickerView()
+            case .none:
+                Text("None View")
+            }
         } label: {
-//            Text(self.naviStackIdx.description)
+            //            Text(self.naviStackIdx.description)
             EmptyView()
         }
-            .isDetailLink(false)
-            .fullScreenCover(isPresented: $appManager.isCameraActive) {
-                CameraView()
+        .isDetailLink(false)
+        .fullScreenCover(isPresented: $appManager.isCameraActive) {
+            CameraView().onDisappear(){
+                if appManager.isAlbumActive {
+                    self.activeLink(.Album)
+                }
             }
+        }
+        
     }
 }
 
@@ -155,6 +157,6 @@ struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         MainView(isCameraActive: .constant(false))
             .environmentObject(AppManager())
-//                 , naviStackIdx: .constant(0)
+        //                 , naviStackIdx: .constant(0)
     }
 }
