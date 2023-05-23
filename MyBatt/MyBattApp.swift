@@ -20,7 +20,7 @@ struct MyBattApp: App {
                         Appearances.tabBarClear()
                     }
             }else{
-                LogInView().environmentObject(appManager)
+                OnboardingView().environmentObject(appManager)
             }
         }
     }

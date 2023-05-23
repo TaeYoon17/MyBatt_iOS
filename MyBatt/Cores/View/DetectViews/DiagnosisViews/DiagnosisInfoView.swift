@@ -36,20 +36,7 @@ struct DiagnosisInfoView: View {
     }
 }
 
-struct DiagnosisInfoViewModifier: ViewModifier{
-    let paddingSize: CGFloat
-    func body(content: Content) -> some View {
-        content.padding(.all,paddingSize)
-            .cornerRadius(8)
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(lineWidth: 2)
-                .foregroundColor(.gray.opacity(0.3))
-        )
-        .font(.subheadline)
-    }
-    
-}
+
 
 struct DiagnosisInfoView_Previews: PreviewProvider {
     static var previews: some View {
