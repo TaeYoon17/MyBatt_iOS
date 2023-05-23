@@ -39,9 +39,9 @@ struct CameraView: View {
         .onAppear(){
             Appearances.navigationBarClear()
             //            UINavigationBar.applyCustomAppearance()
-//            Task{
-//                await model.camera.start()
-//            }
+            //            Task{
+            //                await model.camera.start()
+            //            }
         }.onDisappear(){
             Appearances.navigationBarWhite()
             model.camera.stop()
@@ -56,15 +56,12 @@ struct CameraView: View {
                     ,alignment: .top
                 )
                 .overlay(
-                    VStack{buttonsView()
-                            
-                            .frame(width: proxy.size.width,
-                                   height: (proxy.size.height-proxy.size.width) / 2
-                            )
-                            .background(Color.black.opacity(0.5))
-                            
-                    }
-                         ,alignment: .bottom)
+                    buttonsView()
+                        .frame(width: proxy.size.width,
+                               height: (proxy.size.height-proxy.size.width) / 2
+                              )
+                        .background(Color.black.opacity(0.5))
+                    ,alignment: .bottom)
                 .overlay(Color.clear
                     .frame(height: proxy.size.height * (1 - (Self.barHeightFactor * 2)))
                     .accessibilityElement()
@@ -78,7 +75,7 @@ struct CameraView: View {
     }
     private func buttonsView() -> some View {
         HStack() {
-//            Spacer()
+            Spacer()
             //MARK: -- 사진첩
             Button{
                 appManager.isCameraActive = false
@@ -95,16 +92,15 @@ struct CameraView: View {
                         .scaledToFit()
                 }
             }
-             
             Spacer()
             //MARK: -- 사진 셔터
             NavigationLink(isActive:$isPhotoTaken) {
                 TakenPhotoView(takenView: $isPhotoTaken)
                     .environmentObject(model)
                     .onAppear(){
-//                        model.camera.isPreviewPaused = true
+                        //                        model.camera.isPreviewPaused = true
                     }.onDisappear(){
-//                        model.camera.isPreviewPaused = false
+                        //                        model.camera.isPreviewPaused = false
                     }
             } label: {
                 Button {
@@ -139,12 +135,12 @@ struct CameraView: View {
                     .foregroundColor(.white)
                     .scaledToFit()
             }
-//            Spacer()
+            Spacer()
         }
         .buttonStyle(.plain)
         .labelStyle(.iconOnly)
         .padding()
-//        .background(.blue)
+        //        .background(.blue)
     }
 }
 

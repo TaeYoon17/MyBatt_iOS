@@ -9,18 +9,18 @@ import SwiftUI
 
 @main
 struct MyBattApp: App {
-    @State private var isTrue = true
+    @StateObject var appManager = AppManager()
     var body: some Scene {
         WindowGroup {
-            if isTrue{
+            if appManager.isLoginActive{
                 ContentView()
-                    .environmentObject(AppManager())
+                    .environmentObject(appManager)
                     .onAppear(){
                         Appearances.navigationBarWhite()
                         Appearances.tabBarClear()
                     }
             }else{
-                LogInView()
+                LogInView().environmentObject(appManager)
             }
         }
     }

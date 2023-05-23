@@ -23,8 +23,6 @@ struct ContentView: View {
                 bottomTabs.zIndex(1)
             }
         }
-
-        
     }
 }
 

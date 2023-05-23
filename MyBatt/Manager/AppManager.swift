@@ -25,6 +25,7 @@ final class AppManager:ObservableObject{
             }
         }
     }
+    @Published var isLoginActive: Bool = false
     @Published var isTabbarHidden: Bool = false
     @Published var isCameraActive: Bool = false
     @Published var isAlbumActive: Bool = false

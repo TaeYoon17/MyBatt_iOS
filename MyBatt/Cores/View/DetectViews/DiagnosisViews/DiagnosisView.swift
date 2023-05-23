@@ -23,7 +23,7 @@ struct DiagnosisView: View {
     var loadingView: some View{
         VStack{
             ProgressView {
-                Text("병해 진단 중입니다.")
+                Text("병해 진단 중...")
             }
             Button("취소하고 돌아기기") {
                 print("Cancel Called!!")
