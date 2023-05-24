@@ -9,7 +9,7 @@ import UIKit
 import SwiftUI
 
 
-typealias Geo = (latitude: Double,longtitude: Double)
+
 struct KakaoMapVCWrapper: UIViewControllerRepresentable{
     func makeUIViewController(context: Context) -> some UIViewController {
         return KakaoMapVC()

@@ -7,10 +7,10 @@
 
 import Foundation
 final class UserDefaultsManager {
+    private init(){}
     enum Key: String, CaseIterable{
         case refreshToken, accessToken
     }
-    
     static let shared: UserDefaultsManager = {
         return UserDefaultsManager()
     }()
@@ -34,7 +34,5 @@ final class UserDefaultsManager {
         let accessToken = UserDefaults.standard.string(forKey: Key.accessToken.rawValue) ?? ""
         let refreshToken = UserDefaults.standard.string(forKey: Key.refreshToken.rawValue) ?? ""
         return TokenData(accessToken: accessToken, refreshToken: refreshToken)
-    }
-
-    
+    }    
 }

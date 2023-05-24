@@ -10,17 +10,25 @@ import SwiftUI
 @main
 struct MyBattApp: App {
     @StateObject var appManager = AppManager()
+    @StateObject var userVM = UserVM()
     var body: some Scene {
         WindowGroup {
-            if appManager.isLoginActive{
+            if userVM.isUserLoggined{
                 ContentView()
+                    .transition(.opacity)
                     .environmentObject(appManager)
+                    .environmentObject(userVM)
                     .onAppear(){
+                        print("isAlreadyLoggedIn:",userVM.isUserLoggined)
                         Appearances.navigationBarWhite()
                         Appearances.tabBarClear()
                     }
             }else{
-                OnboardingView().environmentObject(appManager)
+                OnboardingView()
+                    .transition(.opacity)
+                    .environmentObject(userVM)
+                    .environmentObject(appManager)
+                    
             }
         }
     }

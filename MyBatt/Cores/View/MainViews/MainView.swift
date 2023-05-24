@@ -7,8 +7,8 @@
 
 import SwiftUI
 enum MainLinkViewType{
-    case OutBreakInfo, Map,CropManage,Camera,Search,
-    Album,Diagnosis
+    case OutBreakInfo, Map,CropManage,Camera,Search,MyInfo,
+         Album,Diagnosis
     case none
 }
 
@@ -16,13 +16,18 @@ struct MainView: View {
     @Binding var isCameraActive: Bool
     @State private var pickerNumber = 1
     @EnvironmentObject var appManager:AppManager
+    @EnvironmentObject var userVM: UserVM
     @State var linkView = MainLinkViewType.none
     @State var naviStackIdx = 0
+    @State var isAnimating = false
     //    @Binding var naviStackIdx: Int
     var body: some View {
         NavigationView {
             ZStack{
                 self.naviLinkController
+                    .onReceive(appManager.mainViewLink) { nextType in
+                        self.activeLink(nextType)
+                    }
                 ScrollView(showsIndicators:false){
                     VStack(spacing:25){
                         //MARK: -- 병해 발생 정보
@@ -32,9 +37,15 @@ struct MainView: View {
                             HStack(alignment:.lastTextBaseline){
                                 Text("병해 발생 정보").font(.title2.bold())
                                 Spacer()
-                                Button{
-                                    self.activeLink(.OutBreakInfo)
-                                }label:{
+//                                Button{
+////                                    self.activeLink(.OutBreakInfo)
+//
+//                                }label:{
+//                                    Text("전체 보기")
+//                                        .font(.footnote.weight(.semibold))
+//                                        .underline()
+//                                }
+                                Link(destination: URL(string:"https://ncpms.rda.go.kr/mobile/NewIndcUserListR.ms")!) {
                                     Text("전체 보기")
                                         .font(.footnote.weight(.semibold))
                                         .underline()
@@ -82,6 +93,7 @@ struct MainView: View {
                 }
                 .padding()
             }
+            .opacity(isAnimating ? 1 : 0)
             .disabled(appManager.getBindingStack(idx: self.naviStackIdx).wrappedValue)
             .disabled(appManager.isAction)
             .toolbar(content: {
@@ -103,16 +115,24 @@ struct MainView: View {
             })
             .navigationBarTitleDisplayMode(.inline)
         }.navigationViewStyle(.stack)
+            .onAppear(){
+                withAnimation(.easeOut(duration: 0.8)){
+                    isAnimating.toggle()
+                }
+            }
+            .onDisappear(){
+                withAnimation {
+                    isAnimating.toggle()
+                }
+            }
     }
     var naviLinkController: some View{
         NavigationLink(isActive:appManager.getBindingStack(idx: naviStackIdx)){
             switch linkView {
             case .OutBreakInfo:
-                //                    Text("OutBreak View")
-                CoinImageView(coin: globalCoinDemo)
+                Text("OutBreakInfo")
             case .Map:
                 MapMainView()
-                //                    Text("MapMainView")
             case .CropManage:
                 Text("Crop Manage View")
             case .Camera:
@@ -130,6 +150,10 @@ struct MainView: View {
                 DiagnosisView()
             case .none:
                 Text("None View")
+            case .MyInfo:
+                InfoMainView().onDisappear(){
+                    appManager.isMyInfoActive = false
+                }
             }
         } label: {
             EmptyView()
@@ -145,10 +169,7 @@ struct MainView: View {
                 }
             }
         }
-//        .fullScreenCover(isPresented: $appManager.isDiagnosisActive) {
-//            DiagnosisView()
-//        }
-
+        
     }
 }
 

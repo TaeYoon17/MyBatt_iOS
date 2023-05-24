@@ -33,8 +33,9 @@ extension ContentView{
     }
     var bottomTabs: some View{
         ZStack(alignment:.bottom){
-            Text("Hello world!!").frame(width: appManager.screenWidth,height: 44)
-                .background(.white).edgesIgnoringSafeArea(.bottom)
+            Color.white.frame(width: appManager.screenWidth,height: 100)
+                .offset(y:40)
+                .edgesIgnoringSafeArea(.bottom)
             HStack(alignment: .center){
                 Spacer()
                 Button {
@@ -52,7 +53,10 @@ extension ContentView{
                 Spacer()
                 Spacer()
                 Button {
-                    appManager.goRootView()
+                    if !appManager.isMyInfoActive{
+                        appManager.isMyInfoActive = true
+                        appManager.goRootToNextView(nextType: .MyInfo)
+                    }
                 } label: {
                     VStack(spacing:5){
                         Image(systemName: "person.fill")
@@ -63,6 +67,7 @@ extension ContentView{
                         .opacity(currentTab == .main ? 1 : 0.5)
                 }.foregroundColor(.black)
                     .offset(x:20)
+//                    .disabled(appManager.isMyInfoActive)
                 Spacer()
             }
             .frame(minHeight: 60)

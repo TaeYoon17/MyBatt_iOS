@@ -31,6 +31,8 @@ import Foundation
 //    }
 //}
 
+
+
 struct RegisterResponse: Codable,Identifiable{
     var uuid: UUID = UUID()
     var id: String{

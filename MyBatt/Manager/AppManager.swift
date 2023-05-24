@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Combine
 final class AppManager:ObservableObject{
     lazy var lastCropType: CropType = .Lettuce
     @Published private var viewStacks:[Bool] = []{
@@ -30,6 +31,8 @@ final class AppManager:ObservableObject{
     @Published var isCameraActive: Bool = false
     @Published var isAlbumActive: Bool = false
     @Published var isDiagnosisActive: Bool = false
+    @Published var isMyInfoActive: Bool = false
+    var mainViewLink = PassthroughSubject<MainLinkViewType, Never>()
     init(){
         viewStacks.append(false)
     }
@@ -84,7 +87,15 @@ extension AppManager{
         guard viewStacks.count != 1 else { return }
         self.goParentView(upToIdx: viewStacks.count - 1)
     }
-    func goParentView(upToIdx: Int){
+    func goRootToNextView(nextType: MainLinkViewType? = nil){
+        guard viewStacks.count != 1 else {
+            guard let nextType = nextType else { return }
+            self.mainViewLink.send(nextType)
+            return
+        }
+        self.goParentView(upToIdx: viewStacks.count - 1,nextType:nextType)
+    }
+    func goParentView(upToIdx: Int,nextType:MainLinkViewType? = nil){
         self.isAction = true
         let trueLen = viewStacks.count - 2
         guard viewStacks.count - 1 >= upToIdx else { print("over Idx!!")
@@ -95,9 +106,15 @@ extension AppManager{
         }
         DispatchQueue.main.asyncAfter(deadline: .now()+0.2){
             for _ in 0..<upToIdx{
+                if self.viewStacks.count > 1{
                     _ = self.viewStacks.popLast()
+                }
             }
             self.isAction = false
+            guard let nextType = nextType else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.6){
+                self.mainViewLink.send(nextType)
+            }
         }
     }
 }

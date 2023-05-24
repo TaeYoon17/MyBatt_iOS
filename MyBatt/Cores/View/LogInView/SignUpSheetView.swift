@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SignUpSheetView: View {
+    @EnvironmentObject var userVM: UserVM
     @State private var userEmail = ""
     @State private var username = ""
     @State private var password = ""
@@ -15,23 +16,36 @@ struct SignUpSheetView: View {
     @State private var showCheckPassword = false
     @State private var showPassword = false
     @State private var isSignUp = false
+    var isAllFilled: Bool{
+        // 테스트용
+        return true
+        let isFiiled = ![userEmail,username,password,checkPassword].contains{ $0 == "" }
+        guard isFiiled else { return false }
+        return checkPassword == password
+    }
     var body: some View {
         VStack{
             self.userInputField
             VStack{
                 Button {
-                    print("회원가입 버튼")
+                    if isAllFilled{
+                        print("회원가입 시작!!")
+                        
+//                        userVM.register(name: username, email: userEmail, password: password)
+                        userVM.register(name: "인급동2", email: "moviemaker2@gmail.com", password: "gunja15")
+                    }else{
+                        print("아직 가입 안됨!!")
+                    }
                 } label: {
                     HStack{
                         Spacer()
                         Text("회원가입").font(.headline).bold().foregroundColor(.white)
-                        
                         Spacer()
                     }.padding(.vertical,8)
                 }
                 .buttonStyle(
                     .borderedProminent)
-                .tint(.accentColor.opacity(isSignUp ? 1:0.2))
+                .tint(.accentColor.opacity(isAllFilled ? 1:0.2))
                 .buttonBorderShape(.roundedRectangle(radius: 12))
                 .padding()
             }
@@ -131,6 +145,6 @@ extension SignUpSheetView{
 
 struct SignUpSheetView_Previews: PreviewProvider {
     static var previews: some View {
-        SignUpSheetView()
+        SignUpSheetView().environmentObject(UserVM())
     }
 }
