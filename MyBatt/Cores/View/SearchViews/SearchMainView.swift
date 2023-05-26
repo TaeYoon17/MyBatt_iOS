@@ -7,28 +7,42 @@
 
 import SwiftUI
 struct SearchMainView: View{
-    @State private var queryStr: String = ""
-    @State private var numbers = Array(repeating: 0, count: 100).enumerated().map{$0.offset}
-    @State private var selectedColor = "Red"
-    @State private var headerHeight = 0
-    let colors = ["Red", "Green", "Blue"]
-    var body:some View{
-        List{
-            ForEach(numbers,id:\.self){ idx in
-                Text("\(idx) 입니다.")
-            }.onDelete { idx in
-                numbers.remove(atOffsets: idx)
+    @State private var searchTerm = ""
+    @StateObject var oo = SeaerchMainVM()
+    @Environment(\.isSearching) private var isSearching
+    @Environment(\.dismissSearch) private var dismissSearch
+    var body: some View {
+        NavigationView{
+            VStack{
+                SearchedView()
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .navigationTitle("병해 정보 검색")
+                Rectangle().frame(height:100).foregroundColor(.white)
             }
         }
-        .listStyle(.plain)
-        .navigationBarTitleDisplayMode(.large)
-        .navigationTitle("검색")
-        .onChange(of: queryStr) { newValue in
-            print(newValue)
-            print("wow world")
+        .searchable(text: $searchTerm){
+            ForEach(oo.searchResults) { item in
+                HStack{
+                    Text("\(item.name)-\(item.title)")
+                        .foregroundColor(.black)
+                }.frame(height: 100)
+                .padding(.vertical,4)
+            }
         }
-        .searchable(text: $queryStr,placement: .navigationBarDrawer(displayMode: .always))
-        .animation(.easeIn(duration: 0.5), value: selectedColor)
+        .onChange(of: searchTerm) { newValue in
+            print(isSearching)
+            if searchTerm.isEmpty && !isSearching {
+                //Search cancelled here
+                print("검색 취소")
+            }
+            oo.searchResults = oo.data.filter({ item in
+                item.name.lowercased().contains(newValue.lowercased())
+            })
+        }.onSubmit(of:.search) {
+            print(isSearching)
+            print("검색 실행")
+        }
     }
     
 }
@@ -36,5 +50,24 @@ struct SearchMainView: View{
 struct SearchMainView_Previews: PreviewProvider {
     static var previews: some View {
         SearchMainView()
+    }
+}
+fileprivate struct SearchedView: View {
+    @Environment(\.isSearching) private var isSearching
+    var body: some View {
+        ZStack{
+            VStack{
+                if isSearching{
+                    VStack(spacing:20){
+                        Image(systemName: "magnifyingglass")
+                            .resizable()
+                            .scaledToFit().frame(width:100)
+                        Text("궁금하면 물어봐!!")
+                    }
+                }else{
+                    Text("검색하기 전 기본 뷰")
+                    }
+                }
+        }
     }
 }

@@ -37,14 +37,6 @@ struct MainView: View {
                             HStack(alignment:.lastTextBaseline){
                                 Text("병해 발생 정보").font(.title2.bold())
                                 Spacer()
-//                                Button{
-////                                    self.activeLink(.OutBreakInfo)
-//
-//                                }label:{
-//                                    Text("전체 보기")
-//                                        .font(.footnote.weight(.semibold))
-//                                        .underline()
-//                                }
                                 Link(destination: URL(string:"https://ncpms.rda.go.kr/mobile/NewIndcUserListR.ms")!) {
                                     Text("전체 보기")
                                         .font(.footnote.weight(.semibold))

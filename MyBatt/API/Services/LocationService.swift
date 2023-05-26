@@ -73,7 +73,6 @@ final class LocationService: NSObject, ObservableObject, CLLocationManagerDelega
 }
 extension LocationService:MTMapReverseGeoCoderDelegate{
     func mtMapReverseGeoCoder(_ rGeoCoder: MTMapReverseGeoCoder!, foundAddress addressString: String!) {
-        print(addressString)
         guard let addressString = addressString else { return }
         print(addressString)
         address = addressString

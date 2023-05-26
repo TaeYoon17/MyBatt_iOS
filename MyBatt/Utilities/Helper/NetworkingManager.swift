@@ -31,8 +31,10 @@ final class NetworkingManager{
     static private func handleURLResponse(output: URLSession.DataTaskPublisher.Output) throws -> Data{
         guard let response: HTTPURLResponse = output.response as? HTTPURLResponse,
               response.statusCode >= 200 && response.statusCode < 300 else {
+            print("URL 코드 오류 \(output.response.description)")
             throw URLError(.badServerResponse)
         }
+        print("output.response \(response.statusCode)")
         return output.data
     }
     static func handleCompletion(completion: Subscribers.Completion<Error>){
@@ -46,7 +48,11 @@ final class NetworkingManager{
     static func upload(request: URLRequest) -> AnyPublisher<Data,Error>{
         URLSession.shared.dataTaskPublisher(for: request)
             .receive(on: DispatchQueue.global(qos: .default))
-            .tryMap { try handleURLResponse(output: $0)  }
+            .tryMap {
+                print("taskpublisher 보내기")
+                return try handleURLResponse(output: $0)
+                
+            }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }

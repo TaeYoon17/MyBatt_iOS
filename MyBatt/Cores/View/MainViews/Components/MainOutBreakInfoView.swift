@@ -41,6 +41,7 @@ enum OutBreakType:CaseIterable,Identifiable{
     }
 }
 struct MainOutBreakInfoView: View {
+    @StateObject var outBreakVM: OutBreakViewMoel = OutBreakViewMoel()
     @State private var pickerNumber = 1
     
     // 바인딩을 통한 값 변환
@@ -54,47 +55,80 @@ struct MainOutBreakInfoView: View {
         VStack{
             Divider().frame(minHeight: 5)
             VStack(spacing:0){
-                //                self.picker.onAppear(){
-                //                    UISegmentedControl.appearance().selectedSegmentTintColor = .orange
-                //                }
                 self.customPicker
                 self.content
             }
+        }.onAppear(){
+            outBreakVM.fetchOutbreakList()
         }
+    }
+    func getListSize(type: OutBreakType)->Int{
+        if let model = self.outBreakVM.outbreakModel{
+            switch type{
+            case .Advisory:
+                return model.watchListSize
+            case .Forecast:
+                return model.forecastListSize
+            case .Warning:
+                return model.warningListSize
+            }
+        }
+        return 0
     }
     var customPicker: some View{
         SegmentControlView(segments: OutBreakType.allCases, selected: $outBreakType, titleNormalColor: .accentColor, titleSelectedColor: .black, bgColor: bgColor, animation: .easeInOut) { segment in
-            Text(segment.title)
-                .foregroundColor(segment.color)
+            
+            (Text("\(segment.title) ")
+                
                 .font(.system(size: 18, weight: .semibold, design: .rounded))
-                .padding(.horizontal)
-                .padding(.vertical, 8)
+             + Text("(\(self.getListSize(type: segment)))")
+                .font(.system(size: 12, weight: .semibold, design: .rounded))
+            ).foregroundColor(segment.color)
+            .padding(.horizontal)
+            .padding(.vertical, 8)
         } background: {
             RoundedTopRectangle(radius: 10)
         }.frame(height: 30)
     }
     var content: some View{
-        VStack(alignment:.leading,spacing:10){
-            ForEach(datas,id:\.self){ data in
+        ScrollView{
+            
+            switch self.outBreakType{
+            case .Advisory: contentBody(datas: outBreakVM.outbreakModel?.watchList ?? [])
+            case .Forecast: contentBody(datas: outBreakVM.outbreakModel?.forecastList ?? [])
+            case .Warning: contentBody(datas: outBreakVM.outbreakModel?.warningList ?? [])
+            }
+            
+        }.frame(height: 100)
+    }
+    func contentBody(datas: [OutbreakItem])-> some View{
+        VStack(alignment: .leading,spacing: 10){
+            ForEach(datas){ data in
                 HStack{
-                    Text(data).fontWeight(.medium).font(.system(size: 14,design: .rounded))
-                    if data != datas.last{
+                    Text("\(data.cropName) - ")
+                        .fontWeight(.semibold).font(.system(size: 15,weight: .semibold, design: .rounded))
+                    +
+                    Text(data.sickNameKor)
+                        .fontWeight(.medium).font(.system(size: 14,design: .rounded))
+                    if data.id != datas.last?.id{
                         Spacer()
                     }
                 }.padding(.leading,14)
             }
+            if datas.isEmpty{
+                Rectangle().frame(height: 1).foregroundColor(.white)
+            }
         }.padding(.vertical)
-        .background(
-            Rectangle().foregroundColor(.white)
-                .cornerRadius(10, corners: [.bottomLeft,.bottomRight])
-        )
+            .background(
+                Rectangle().foregroundColor(.white)
+                    .cornerRadius(10, corners: [.bottomLeft,.bottomRight])
+            )
     }
 }
 
 fileprivate struct SegmentBtnView<ID:Identifiable,Content: View>:View{
     let id:ID
     @ViewBuilder var content: () -> Content
-    
     var body: some View{
         content()
     }

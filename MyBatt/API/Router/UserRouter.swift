@@ -25,8 +25,6 @@ enum UserRouter: URLRequestConvertible {
             return "user/all"
         case .fetchCurrentUserInfo:
             return "user/info"
-        default:
-            return ""
         }
     }
     

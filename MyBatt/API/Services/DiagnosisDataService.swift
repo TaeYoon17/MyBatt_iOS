@@ -9,62 +9,108 @@ import Foundation
 import SwiftUI
 import Combine
 
-typealias DiagnosisData = (diagnosis:Diagnosis,iamge:Image)
 final class DiagnosisDataService{
-    @Published var diagnosisData: DiagnosisData?
-//    @Published var diagnosisImage: Image? = nil
+    @Published var diagnosisResponse: DiagnosisResponse?
     var diagnosisSubscription: AnyCancellable?
-    let boundary = UUID()
-    init(urlString: String,imageInfo: String,image:CIImage){
-        getDiagnosis(urlString: urlString, imageInfo: imageInfo, image: image)
+    let boundary = UUID().uuidString
+    init(){}
+    deinit{
+        diagnosisSubscription?.cancel()
     }
-    private func getDiagnosis(urlString: String,imageInfo: String,image:CIImage){
+    //MARK: -- 리프레시 토큰으로 AccessToken을 refresh후 실제 진단 모델 로직 실행
+    func getDiagnosis(urlString: String,geo:Geo,cropType: CropType,image:UIImage){
+        let refreshToken = UserDefaultsManager.shared.getTokens().refreshToken
+        var authRequest = try! URLRequest(url: URL(string:"http://15.164.23.13:8080/member/refresh")!, method: .post)
+        authRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        authRequest.httpBody = try? JSONSerialization.data(withJSONObject: ["refreshToken": refreshToken])
+        URLSession.shared.dataTask(with: authRequest){(data,response,error) in
+            if let error = error{
+                print("Error: \(error.localizedDescription)")
+            }else if let data = data{
+                let token = try! JSONDecoder().decode(RefreshResponse.self, from: data)
+                print(token.accessToken)
+                UserDefaultsManager.shared.setTokens(accessToken: token.accessToken, refreshToken: refreshToken)
+                self._getDiagnosis(urlString: urlString, geo: geo, cropType: cropType, image: image)
+            }
+        }.resume()
+    }
+    // MARK: -- 실제 진단 로직
+    private func _getDiagnosis(urlString: String,geo:Geo,cropType: CropType,image: UIImage){
         guard let url = URL(string: urlString) else {
             print("There is no ulr string")
             return
         }
-        let urlRequest = getURLRequest(url: url, imageInfo: imageInfo, image: image)
-        diagnosisSubscription = NetworkingManager.upload(request: urlRequest)
-            .tryMap({ (data) -> Diagnosis in
-                guard let diagnosis: Diagnosis = try? JSONDecoder().decode(Diagnosis.self, from: data) else{
+        let diagnosis = """
+            { "userLatitue":\"\(geo.latitude)\",
+                "userLongitude":\"\(geo.longtitude)\",
+                "regDate":\"\(Date().formatted(.iso8601))\",
+            "cropType":\"\(cropType.rawValue)\"
+            }
+            """
+        //        2023-02-20T11:22:33.000000
+        let urlRequest: URLRequest = getURLRequest(url: url, info: diagnosis, image: image)
+        self.diagnosisSubscription = NetworkingManager.upload(request: urlRequest)
+            .tryMap({ (data) -> DiagnosisResponse in
+                guard let diagnosis: ResponseWrapper<DiagnosisResponse> = try? JSONDecoder().decode(ResponseWrapper<DiagnosisResponse>.self, from: data) else{
                     throw fatalError("Diagnosis Wrong")
                 }
-                return diagnosis
+                return diagnosis.data
             })
-            .sink(receiveCompletion: NetworkingManager.handleCompletion(completion:)) { [weak self] (diagnosis: Diagnosis) in
-                print("getCoinImage sinked")
-                self?.diagnosisData = (diagnosis,image.image!)
-                self?.diagnosisSubscription?.cancel()
-        }
+            .sink(receiveCompletion: NetworkingManager.handleCompletion(completion:)) { [weak self] (diagnosis: DiagnosisResponse) in
+                print("DiagnosisResponse sinked")
+                self?.diagnosisResponse = diagnosis
+            }
     }
-    private func getURLRequest(url: URL,imageInfo: String,image:CIImage)->URLRequest{
+    
+}
+extension DiagnosisDataService{
+    
+    //MARK: -- 요청 형식을 만드는 코드
+    private func getURLRequest(url: URL,info: String,image:UIImage)->URLRequest{
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary= \(boundary)", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json, text/plain, */*", forHTTPHeaderField: "Accept")
-        guard let dataImage = UIImage(ciImage: image,scale: 1,orientation: .up)
-            .jpegData(compressionQuality: 1) else { return request }
-        let requestBody = getRequestBody(imageInfo: imageInfo, image: dataImage)
+        request.setValue("Bearer \(UserDefaultsManager.shared.getTokens().accessToken)", forHTTPHeaderField: "Authorization")
+        let dataImage = image.jpegData(compressionQuality: 1)!
+        let requestBody = getRequestBody(imageInfo: info, image: dataImage)
         request.httpBody = requestBody
         return request
     }
+    
     private func getRequestBody(imageInfo: String,image: Data)->Data{
         var requestBody = Data()
         // Add any additional form fields
-        let diagnosis = """
-    {"userId":10, "userLatitue":"1.1", "userLongitude":"2.2", "regDate":"2023-02-20T11:22:33.000000", "cropType":"1"}
-    """
-//        print(String(decoding: diagnosisData.jsonEncoding(),as: UTF8.self))
         requestBody.append("--\(self.boundary)\r\n".data(using: .utf8)!)
         requestBody.append("Content-Disposition: form-data; name=\"requestInput\"\r\n\r\n".data(using: .utf8)!)
-        requestBody.append("\(diagnosis)\r\n".data(using: .utf8)!)
+        requestBody.append("\(imageInfo)\r\n".data(using: .utf8)!)
         requestBody.append("--\(self.boundary)\r\n".data(using: .utf8)!)
-        requestBody.append("Content-Disposition: form-data; name=\"image\"; filename=\"image_png\"\r\n".data(using: .utf8)!)
-        requestBody.append("Content-Type: image/png\r\n\r\n".data(using: .utf8)!)
+        requestBody.append("Content-Disposition: form-data; name=\"image\"; filename=\"image_jpeg\"\r\n".data(using: .utf8)!)
+        requestBody.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
         requestBody.append(image)
         requestBody.append("\r\n".data(using: .utf8)!)
         // Add the closing boundary
         requestBody.append("--\(boundary)--\r\n".data(using: .utf8)!)
         return requestBody
+    }
+    
+    func testJSONString(data: Data){
+        do {
+            // JSON 객체로 변환
+            let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+            
+            // JSON 객체를 Data로 직렬화
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonObject, options: [])
+            
+            // Data를 String으로 변환
+            if let jsonString = String(data: jsonData, encoding: .utf8) {
+                print(jsonString)
+            } else {
+                print("Failed to convert Data to String.")
+                
+            }
+        } catch {
+            print("JSON serialization failed: \(error.localizedDescription)")
+        }
     }
 }

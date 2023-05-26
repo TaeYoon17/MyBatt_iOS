@@ -8,13 +8,17 @@
 import SwiftUI
 
 struct DiagnosisInfoView: View {
-    let diagnosisName: String = "고추 점무늬병"
-    let accuracy: Int = 86
+//    let diagnosisName: String = "고추 점무늬병"
+//    let accuracy: Int = 86
+    let accuracy: Double
+    let diagnosisNumber: Int
     var body: some View {
         HStack{
             VStack(alignment: .leading,spacing:8){
-                Text("병명: ").bold()+Text(diagnosisName)
-                Text("일치율: ").bold()+Text("\(accuracy)%")
+                Text("병명: ").bold()+Text(
+                    Diagnosis.koreanTable[DiagnosisType(rawValue: diagnosisNumber) ?? .PepperNormal] ?? "알 수 없는 질병"
+                )
+                Text("일치율: ").bold()+Text("\(Int(accuracy*100))%")
             }
             Spacer()
             Button{
@@ -40,6 +44,6 @@ struct DiagnosisInfoView: View {
 
 struct DiagnosisInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        DiagnosisInfoView()
+        DiagnosisInfoView(accuracy: 0.86, diagnosisNumber: 7)
     }
 }

@@ -11,7 +11,6 @@ import Combine
 
 // 인증 관련 api 호출
 enum AuthApiService {
-    
     // 회원가입
     static func register(name: String, email: String, password: String) -> AnyPublisher<RegisterData?, AFError>{
         print("AuthApiService - register() called")

@@ -12,6 +12,7 @@ import AVFoundation
 import CoreLocation
 //import PhotoKit
 import PhotosUI
+import Photos
 import ImageIO
 import UIKit
 import Combine
@@ -23,7 +24,7 @@ final class CameraViewModel:NSObject,ObservableObject{
     @Published var takenImage: Image?
     var takenCIImage: CIImage?
     var isPhothosLoaded = false
-    
+    var localIdentifier: String? = nil
     @Published var coordinate: CLLocationCoordinate2D? = nil
     @Published var isLocated: Bool = false
     @Published var address: String? = nil
@@ -122,13 +123,14 @@ final class CameraViewModel:NSObject,ObservableObject{
         }
        print("savePhoto 실행!!")
         //이미지 저장 타입(jpeg)을 줘야한다!!
-        let image = UIImage(data:UIImage(ciImage: ciimage).jpegData(compressionQuality: 1)!)!
+        let image:UIImage = UIImage(data:UIImage(ciImage: ciimage).jpegData(compressionQuality: 1)!)!
         var savedAssetID: String?
         PHPhotoLibrary.shared().performChanges({
             let request = PHAssetChangeRequest.creationRequestForAsset(from: image)
             request.creationDate = Date()
             request.location = CLLocation()
             savedAssetID = request.placeholderForCreatedAsset?.localIdentifier
+            self.localIdentifier = savedAssetID!
         }, completionHandler: { success, error in
             if success, let assetID = savedAssetID {
                 // 이미지가 성공적으로 저장되었을 때의 처리
@@ -157,8 +159,27 @@ final class CameraViewModel:NSObject,ObservableObject{
         lastScale = 2.0
     }
 }
+
+//MARK: -- FetchImage 저장 된 곳
 extension CameraViewModel{
-    
+    func fetchToRequestImage(cropType: CropType,completion:@escaping ((CropType,CLLocationCoordinate2D,UIImage)->Void)){
+        let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier!], options: nil)
+        let size = 640
+        print("가져올 데이터 사이즈 \(size)")
+        if let asset = fetchResult.firstObject {
+            PHImageManager.default().requestImage(for: asset, targetSize: CGSize(width: size, height: size), contentMode: .aspectFit, options: nil) { (image, info) in
+                // 가져온 이미지를 사용
+                if let image = image {
+                    // 이미지 사용 코드 작성
+//                    returnImage = image
+//                    semaphore.signal()
+                    print("이미지 전송 시작")
+                    completion(cropType,self.locationService.coordinate!,image)
+                }
+            }
+        }
+
+    }
 }
 
 

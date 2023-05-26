@@ -9,17 +9,24 @@ import Foundation
 import Alamofire
 import Combine
 import SwiftUI
+import CoreLocation
 final class UserVM: ObservableObject{
     //MARK: properties
     private var userModel: UserModel = UserModel()
     @Published var isUserLoggined: Bool = false
-
+    @Published var diagnoisResult:DiagnosisResponse?
+    @Published var diagnosisImage: Image?
+    private let diagnosisDataService: DiagnosisDataService
     var subscription = Set<AnyCancellable>()
     // 회원가입 완료 이벤트
     var registrationSuccess = PassthroughSubject<(), Never>()
     // 로그인 완료 이벤트
     var loginSuccess = PassthroughSubject<(), Never>()
+    // 진단 완료
+    var diagnosisSuccess = PassthroughSubject<DiagnosisResponse?,Never>()
     init(){
+        self.diagnosisDataService = DiagnosisDataService()
+        addSubscribers()
         checkToken()
     }
     deinit{
@@ -63,5 +70,22 @@ final class UserVM: ObservableObject{
     {
         guard let userToken = userModel.token else { self.isUserLoggined = false; return}
         self.isUserLoggined = userToken.accessToken != "" && userToken.refreshToken != ""
+    }
+}
+
+extension UserVM{
+    private func addSubscribers(){ // 의존성 주입
+        let diagnosisPublisher: Published<DiagnosisResponse?>.Publisher = diagnosisDataService.$diagnosisResponse
+        diagnosisPublisher.sink{[weak self] output in
+            print("diagnosisPublisher result called")
+            print(output?.cropType ?? "0")
+            self?.diagnosisSuccess.send(output)
+        }
+        .store(in: &subscription)
+    }
+    func requestImage( cropType:CropType,geo:CLLocationCoordinate2D,image: UIImage)->Void{
+        self.diagnosisDataService.getDiagnosis(urlString: "http://15.164.23.13:8080/crop/diagnosis",
+                                      geo: Geo(Double(geo.latitude),Double(geo.longitude)),
+                                      cropType: cropType, image: image)
     }
 }

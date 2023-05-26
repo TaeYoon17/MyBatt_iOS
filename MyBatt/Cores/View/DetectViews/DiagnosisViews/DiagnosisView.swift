@@ -12,9 +12,17 @@ struct DiagnosisView: View {
     let screenWidth = UIScreen.main.bounds.width
     @State private var isLoading = false
     @EnvironmentObject var appManager: AppManager
+    @EnvironmentObject var userVM: UserVM
+    @Environment(\.dismiss) private var dismiss
+    @State private var diagnosisResponse: DiagnosisResponse?
     var body: some View {
         if isLoading{
-            self.loadingView
+            self.loadingView.onReceive(userVM.diagnosisSuccess) { output in
+                if let output = output{
+                    self.isLoading = false
+                    diagnosisResponse = output
+                }
+            }
         }else{
             self.diagnosisView.navigationTitle("병해 진단 결과")
         }
@@ -26,7 +34,7 @@ struct DiagnosisView: View {
                 Text("병해 진단 중...")
             }
             Button("취소하고 돌아기기") {
-                print("Cancel Called!!")
+                dismiss()
             }
         }
     }
@@ -38,7 +46,7 @@ struct DiagnosisView: View {
                         .fill(.thickMaterial)
                         .frame(width: screenWidth,height:screenWidth/1.2)
                         .overlay {
-                            Image("picture_demo")
+                            userVM.diagnosisImage!
                                 .resizable()
                                 .padding(.horizontal)
                                 .frame(width: screenWidth)
@@ -62,7 +70,7 @@ struct DiagnosisView: View {
     var diagnosisBody: some View{
         VStack(spacing:8){
             HStack(alignment:.bottom){
-                Text("고추")
+                Text(Crop.koreanTable[CropType(rawValue: self.diagnosisResponse?.cropType ?? -1)!] ?? "진단 실패")
                     .font(.headline.bold())
                     .padding(.horizontal,8)
                     .padding(.vertical,4)
@@ -70,14 +78,17 @@ struct DiagnosisView: View {
                     .background(Color.accentColor.opacity(0.6))
 //                    .background(.ultraThinMaterial)
                     .cornerRadius(8)
-                Text("2023.05.11 05:52").font(.callout)
+                Text(self.diagnosisResponse?.regDate ?? "날짜 정보 없음").font(.callout)
                     .padding(.bottom,2)
                 Spacer()
             }
 //            ScrollView(showsIndicators: true) {
                 //MARK: -- 가장 유사한 결과
                 GroupBox {
-                        DiagnosisInfoView()
+                    if let result = self.diagnosisResponse?.diagosisResults?[0]{
+                        DiagnosisInfoView(accuracy:result.accuracy, diagnosisNumber:result.diseaseCode)
+                    }
+                    
                 } label: {
                     Text("가장 유사한 결과")
                 }.bgColor(.white,paddingSize: 4)
@@ -85,8 +96,8 @@ struct DiagnosisView: View {
                 //MARK: -- 다른 유사 결과
                 GroupBox {
                     LazyVStack{
-                        DiagnosisInfoView()
-                        DiagnosisInfoView()
+//                        DiagnosisInfoView()
+//                        DiagnosisInfoView()
                     }
                 } label: {
                     Text("다른 유사 결과")

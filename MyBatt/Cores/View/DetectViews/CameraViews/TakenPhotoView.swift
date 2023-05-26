@@ -8,6 +8,7 @@
 import SwiftUI
 import Foundation
 import PopupView
+import CoreLocation
 struct CropTypePhoto:Identifiable,Hashable{
     var id = UUID()
     let icon: String
@@ -18,6 +19,7 @@ struct TakenPhotoView: View {
     @EnvironmentObject var cameraModel: CameraViewModel
     @EnvironmentObject var appManager: AppManager
     @StateObject var takenVM: TakenPhotoVM = TakenPhotoVM(lastCropType: .Lettuce)
+    @EnvironmentObject var userVM: UserVM
     @Binding var takenView: Bool
     @State var stopToTaking = true
     @State var isPopup = false
@@ -46,12 +48,11 @@ struct TakenPhotoView: View {
                         .padding()
                         .background(.white)
                         .clipShape(Capsule())
-                        .background(Capsule().stroke(lineWidth:5).foregroundColor(.black))
+                        .background(Capsule().stroke(lineWidth:3).foregroundColor(.black))
                     
                 } customize: {
                     $0.type(.floater())
                         .position(.top).dragToDismiss(true).autohideIn(2)
-                    
                 }
                 
             }else{
@@ -124,8 +125,11 @@ struct TakenPhotoView: View {
                 takenView = false
             }, labelText: "다시 촬영하기", iconName: "arrowshape.turn.up.backward",bgColor: .accentColor)
             Spacer()
+            //MARK: -- 병해진단 전송 버튼
             ImageAppeaerBtnView(btnAction: {
                 takenView = false
+                userVM.diagnosisImage = cameraModel.takenImage
+                cameraModel.fetchToRequestImage(cropType: takenVM.selectedCropType, completion: userVM.requestImage)
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
                     appManager.cameraRunning(isRun: false)
                     DispatchQueue.main.asyncAfter(deadline: .now()+0.2){
