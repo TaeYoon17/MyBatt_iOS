@@ -19,20 +19,7 @@ final class DiagnosisDataService{
     }
     //MARK: -- 리프레시 토큰으로 AccessToken을 refresh후 실제 진단 모델 로직 실행
     func getDiagnosis(urlString: String,geo:Geo,cropType: CropType,image:UIImage){
-        let refreshToken = UserDefaultsManager.shared.getTokens().refreshToken
-        var authRequest = try! URLRequest(url: URL(string:"http://15.164.23.13:8080/member/refresh")!, method: .post)
-        authRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        authRequest.httpBody = try? JSONSerialization.data(withJSONObject: ["refreshToken": refreshToken])
-        URLSession.shared.dataTask(with: authRequest){(data,response,error) in
-            if let error = error{
-                print("Error: \(error.localizedDescription)")
-            }else if let data = data{
-                let token = try! JSONDecoder().decode(RefreshResponse.self, from: data)
-                print(token.accessToken)
-                UserDefaultsManager.shared.setTokens(accessToken: token.accessToken, refreshToken: refreshToken)
-                self._getDiagnosis(urlString: urlString, geo: geo, cropType: cropType, image: image)
-            }
-        }.resume()
+        self._getDiagnosis(urlString: urlString, geo: geo, cropType: cropType, image: image)
     }
     // MARK: -- 실제 진단 로직
     private func _getDiagnosis(urlString: String,geo:Geo,cropType: CropType,image: UIImage){

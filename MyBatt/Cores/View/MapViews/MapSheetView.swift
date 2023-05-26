@@ -12,7 +12,7 @@ enum LocationType{
     case Searching
 }
 struct MapSheetView: View {
-    @StateObject private var vm = MapSheetVM()
+    @EnvironmentObject var vm: MapSheetVM
     @State var isCustom: Bool = false
     @State var selectionIdx:Int = 2 {
         didSet {
@@ -28,24 +28,26 @@ struct MapSheetView: View {
         ScrollView(.vertical,showsIndicators: false){
             VStack(spacing: 15){
                 HStack{
-                    TextField("구리시 인창동", text:.constant("") ).padding(.vertical, 10)
+                    TextField(vm.locationName ?? "위치 정보가 없습니다.", text:.constant("") ).padding(.vertical, 10)
                         .padding(.horizontal).background {
                             RoundedRectangle (cornerRadius: 10,style: .continuous)
                                 .foregroundColor(.white)
                         }
                         .foregroundColor(.gray)
                     Button{
-                        vm.isGPSOn.toggle()
+                        vm.isGPSOn!.toggle()
                     }label: {
-                        Image(systemName: vm.isGPSOn ? "location.fill" : "location")
+                        Image(systemName: vm.isGPSOn! ? "location.fill" : "location")
                     }.buttonBorderShape(.roundedRectangle)
                     .padding()
-                    .background(vm.isGPSOn ? Color.secondary : .white)
+                    .background(vm.isGPSOn! ? Color.secondary : .white)
                     .clipShape(Circle())
                 }
                 GroupBox {
                     ForEach(vm.crops.indices,id:\.self){ idx in
-                        CropSelectView(pageSheetCrop: $vm.crops[idx])
+                        if idx != vm.crops.endIndex-1{
+                            CropSelectView(pageSheetCrop: $vm.crops[idx])
+                        }
                     }
                 } label: {
                     Text("작물 이름")

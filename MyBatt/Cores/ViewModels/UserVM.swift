@@ -16,6 +16,8 @@ final class UserVM: ObservableObject{
     @Published var isUserLoggined: Bool = false
     @Published var diagnoisResult:DiagnosisResponse?
     @Published var diagnosisImage: Image?
+    @Published var outbreakModel: OutbreakModel?
+    
     private let diagnosisDataService: DiagnosisDataService
     var subscription = Set<AnyCancellable>()
     // 회원가입 완료 이벤트
@@ -72,13 +74,44 @@ final class UserVM: ObservableObject{
         self.isUserLoggined = userToken.accessToken != "" && userToken.refreshToken != ""
     }
 }
+extension UserVM{
+    func fetchOutbreakList(){
+        if outbreakModel != nil { return }
+                print("AuthApiService - fetchCurrentUserInfo() called")
+                let storedTokenData = UserDefaultsManager.shared.getTokens()
+        
+                let credential = OAuthCredential(accessToken: storedTokenData.accessToken,
+                                                 refreshToken: storedTokenData.refreshToken,
+                                                 expiration: Date(timeIntervalSinceNow: 60 * 60))
+        
+                // Create the interceptor
+                let authenticator = OAuthAuthenticator()
+                let authInterceptor = AuthenticationInterceptor(authenticator: authenticator,
+                                                                credential: credential)
+    
+            ApiClient.shared.session
+            .request(CropInfoRouter.NoticeList, interceptor: authInterceptor)
+                    .publishDecodable(type: ResponseWrapper<OutbreakModel>.self)
+                    .value()
+                    .sink(receiveCompletion: { completion in
+                        switch completion{
+                        case .finished:
+                            print("가져오기 성공")
+                        case .failure(let error):
+                            print("가져오기 실패")
+                            print(error.localizedDescription)
+                        }
+                    }, receiveValue: { output in
+                        self.outbreakModel = output.data
+                    }).store(in: &subscription)
+    }
+}
 
 extension UserVM{
     private func addSubscribers(){ // 의존성 주입
         let diagnosisPublisher: Published<DiagnosisResponse?>.Publisher = diagnosisDataService.$diagnosisResponse
         diagnosisPublisher.sink{[weak self] output in
             print("diagnosisPublisher result called")
-            print(output?.cropType ?? "0")
             self?.diagnosisSuccess.send(output)
         }
         .store(in: &subscription)

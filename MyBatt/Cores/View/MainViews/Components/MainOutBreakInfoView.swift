@@ -41,9 +41,8 @@ enum OutBreakType:CaseIterable,Identifiable{
     }
 }
 struct MainOutBreakInfoView: View {
-    @StateObject var outBreakVM: OutBreakViewMoel = OutBreakViewMoel()
+    @EnvironmentObject var userVM: UserVM
     @State private var pickerNumber = 1
-    
     // 바인딩을 통한 값 변환
     @State private var outBreakType:OutBreakType = .Forecast
     let bgColor: Color = .white
@@ -59,11 +58,11 @@ struct MainOutBreakInfoView: View {
                 self.content
             }
         }.onAppear(){
-            outBreakVM.fetchOutbreakList()
+            userVM.fetchOutbreakList()
         }
     }
     func getListSize(type: OutBreakType)->Int{
-        if let model = self.outBreakVM.outbreakModel{
+        if let model = self.userVM.outbreakModel{
             switch type{
             case .Advisory:
                 return model.watchListSize
@@ -91,15 +90,18 @@ struct MainOutBreakInfoView: View {
         }.frame(height: 30)
     }
     var content: some View{
-        ScrollView{
-            
+        ScrollView(showsIndicators:false){
             switch self.outBreakType{
-            case .Advisory: contentBody(datas: outBreakVM.outbreakModel?.watchList ?? [])
-            case .Forecast: contentBody(datas: outBreakVM.outbreakModel?.forecastList ?? [])
-            case .Warning: contentBody(datas: outBreakVM.outbreakModel?.warningList ?? [])
+            case .Advisory: contentBody(datas: userVM.outbreakModel?.watchList ?? [])
+            case .Forecast: contentBody(datas: userVM.outbreakModel?.forecastList ?? [])
+            case .Warning: contentBody(datas: userVM.outbreakModel?.warningList ?? [])
             }
             
         }.frame(height: 100)
+            .background(
+                Rectangle().foregroundColor(.white)
+                    .cornerRadius(10, corners: [.bottomLeft,.bottomRight])
+            )
     }
     func contentBody(datas: [OutbreakItem])-> some View{
         VStack(alignment: .leading,spacing: 10){
@@ -119,10 +121,7 @@ struct MainOutBreakInfoView: View {
                 Rectangle().frame(height: 1).foregroundColor(.white)
             }
         }.padding(.vertical)
-            .background(
-                Rectangle().foregroundColor(.white)
-                    .cornerRadius(10, corners: [.bottomLeft,.bottomRight])
-            )
+
     }
 }
 

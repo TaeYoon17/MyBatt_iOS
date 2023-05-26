@@ -51,7 +51,6 @@ final class NetworkingManager{
             .tryMap {
                 print("taskpublisher 보내기")
                 return try handleURLResponse(output: $0)
-                
             }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()

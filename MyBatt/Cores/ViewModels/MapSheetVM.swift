@@ -19,9 +19,10 @@ struct MapSheetCrop{
 typealias AccRange = (start:Double,end:Double)
 final class MapSheetVM:ObservableObject{
     static let accRange: AccRange = (start:85,end:95)
+    @Published var locationName: String? = ""
     @Published var crops: [MapSheetCrop]
 //    @Published var dates: [DurationType]
-    @Published var isGPSOn: Bool = false
+    @Published var isGPSOn: Bool? = true
     @Published var durationType: DurationType = .day
     @Published var selectDate:Date = Date()
     var dateRange: ClosedRange<Date>{
@@ -35,7 +36,6 @@ final class MapSheetVM:ObservableObject{
         crops = CropType.allCases.map { type in
             MapSheetCrop(cropType: type, accuracy: Self.accRange.start > 80.0 ? Self.accRange.start : 80,isOn: false)
         }
-//        dates = DurationType.allCases
     }
 }
 

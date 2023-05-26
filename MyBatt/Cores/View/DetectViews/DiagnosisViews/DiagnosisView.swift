@@ -10,7 +10,7 @@ import PopupView
 struct DiagnosisView: View {
     //    @EnvironmentObject var appManager: AppManager
     let screenWidth = UIScreen.main.bounds.width
-    @State private var isLoading = false
+    @State private var isLoading = true
     @EnvironmentObject var appManager: AppManager
     @EnvironmentObject var userVM: UserVM
     @Environment(\.dismiss) private var dismiss
@@ -18,8 +18,10 @@ struct DiagnosisView: View {
     var body: some View {
         if isLoading{
             self.loadingView.onReceive(userVM.diagnosisSuccess) { output in
+                print("진단 결과 onReceive!!")
                 if let output = output{
                     self.isLoading = false
+                    print("진단 결과 onReceive!!")
                     diagnosisResponse = output
                 }
             }

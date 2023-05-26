@@ -22,6 +22,7 @@ struct MyBattApp: App {
                         print("isAlreadyLoggedIn:",userVM.isUserLoggined)
                         Appearances.navigationBarWhite()
                         Appearances.tabBarClear()
+                        userVM.fetchOutbreakList()
                     }
             }else{
                 OnboardingView()

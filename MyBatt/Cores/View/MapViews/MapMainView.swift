@@ -10,21 +10,23 @@ import NativePartialSheet
 import CoreLocation
 struct MapMainView: View {
     @EnvironmentObject var appManager: AppManager
+    @StateObject private var vm = MapSheetVM()
     @State var isPresent = false
     @State var detent: Detent = .height(70)
     @State var zoomLevel:Int = 1
     @State var center: Geo = (37.603406,127.142995)
-    @State var address: String? = ""
+    @State var isTracking: Bool? = false
+    let circles: [Geo] = []
     var body: some View {
         ZStack{
-            KakaoMapViewWrapper(zoomLevel: $zoomLevel,center: $center,address: $address)
+            KakaoMapViewWrapper(zoomLevel: $zoomLevel,center: $center,address: $vm.locationName,isTrackingMode: $vm.isGPSOn)
                 .ignoresSafeArea()
                 .overlay(alignment: .top, content: {
                     Text(zoomLevel.description)
                         .background(.white)
                 })
                 .sheet(isPresented: $isPresent){
-                    MapSheetView()
+                    MapSheetView().environmentObject(vm)
                 }
                 .presentationDetents([.large,.height(70)],selection: $detent)
                 .cornerRadius(16)
@@ -48,6 +50,9 @@ struct MapMainView: View {
         }
         .onAppear(){
             appManager.isTabbarHidden = true
+            DispatchQueue.main.asyncAfter(deadline: .now()+1){
+                self.vm.isGPSOn = false
+            }
         }
         .onDisappear(){
             withAnimation(.easeOut(duration: 0.2)) {
@@ -70,7 +75,7 @@ struct MapMainView: View {
             ToolbarItem(placement: .principal) {
 //                Text("경기도 구리시 인창동")
 //                Text("\(self.center.latitude) - \(self.center.longtitude)")
-                Text("\(self.address ?? "")")
+                Text("\(vm.locationName ?? "")")
                     .fontWeight(.semibold)
             }
         }
