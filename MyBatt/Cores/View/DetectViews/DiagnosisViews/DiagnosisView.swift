@@ -8,36 +8,51 @@
 import SwiftUI
 import PopupView
 struct DiagnosisView: View {
-    //    @EnvironmentObject var appManager: AppManager
     let screenWidth = UIScreen.main.bounds.width
     @State private var isLoading = true
     @EnvironmentObject var appManager: AppManager
     @EnvironmentObject var userVM: UserVM
     @Environment(\.dismiss) private var dismiss
     @State private var diagnosisResponse: DiagnosisResponse?
+    @State private var isFailed = false
     var body: some View {
-        if isLoading{
-            self.loadingView.onReceive(userVM.diagnosisSuccess) { output in
-                print("진단 결과 onReceive!!")
-                if let output = output{
-                    self.isLoading = false
+        ZStack{
+            if isLoading{
+                self.loadingView
+                    .onReceive(userVM.diagnosisFail) { str in
+                        if let str = str{
+                            print(str)
+                            self.isFailed = true
+                        }
+                    }
+                    .onReceive(userVM.diagnosisSuccess) { output in
                     print("진단 결과 onReceive!!")
-                    diagnosisResponse = output
+                    if let output = output{
+                        self.isLoading = false
+                        print("진단 결과 onReceive!!")
+                        diagnosisResponse = output
+                        print(output.cropType)
+                        print(output.diagnosisResults)
+                    }
                 }
+            }else{
+                self.diagnosisView.navigationTitle("병해 진단 결과")
             }
-        }else{
-            self.diagnosisView.navigationTitle("병해 진단 결과")
+        }.alert(isPresented: $isFailed) {
+            Alert(title: Text("사진 똑바로 찍으세요"),dismissButton: .default(Text("돌아가기"),action: {
+                appManager.goRootView()
+            }))
         }
     }
     
     var loadingView: some View{
-        VStack{
+        VStack(spacing:18){
             ProgressView {
                 Text("병해 진단 중...")
             }
             Button("취소하고 돌아기기") {
                 dismiss()
-            }
+            }.buttonStyle(.bordered)
         }
     }
     var diagnosisView: some View{
@@ -80,14 +95,14 @@ struct DiagnosisView: View {
                     .background(Color.accentColor.opacity(0.6))
 //                    .background(.ultraThinMaterial)
                     .cornerRadius(8)
-                Text(self.diagnosisResponse?.regDate ?? "날짜 정보 없음").font(.callout)
+                Text(Date.changeDateFormat(dateString: self.diagnosisResponse?.regDate ?? "날짜 정보 없음")).font(.callout)
                     .padding(.bottom,2)
                 Spacer()
             }
 //            ScrollView(showsIndicators: true) {
                 //MARK: -- 가장 유사한 결과
                 GroupBox {
-                    if let result = self.diagnosisResponse?.diagosisResults?[0]{
+                    if let result = self.diagnosisResponse?.diagnosisResults?[0]{
                         DiagnosisInfoView(accuracy:result.accuracy, diagnosisNumber:result.diseaseCode)
                     }
                     

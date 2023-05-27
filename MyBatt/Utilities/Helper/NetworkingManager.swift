@@ -48,10 +48,13 @@ final class NetworkingManager{
     static func upload(request: URLRequest) -> AnyPublisher<Data,Error>{
         URLSession.shared.dataTaskPublisher(for: request)
             .receive(on: DispatchQueue.global(qos: .default))
-            .tryMap {
-                print("taskpublisher 보내기")
-                return try handleURLResponse(output: $0)
-            }
+//            .tryMap {
+//                print("taskpublisher 보내기")
+//                return try handleURLResponse(output: $0)
+//            }
+            .tryMap({ output in
+                return output.data
+            })
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }

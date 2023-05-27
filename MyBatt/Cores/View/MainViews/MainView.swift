@@ -7,7 +7,7 @@
 
 import SwiftUI
 enum MainLinkViewType{
-    case OutBreakInfo, Map,CropManage,Camera,Search,MyInfo,
+    case OutBreakInfo, Map,CropManage,Camera,Search,MyInfo,ExpertRequest,
          Album,Diagnosis
     case none
 }
@@ -77,7 +77,7 @@ struct MainView: View {
                             }
                             MainRequestBtn(labelImage: "headphones",
                                            labelText: "전문가에게 추가 문의하기"){
-                                activeLink(.none)
+                                activeLink(.ExpertRequest)
                             }
                         }.frame(minHeight: 80)
                     }.cornerRadius(10)
@@ -100,10 +100,10 @@ struct MainView: View {
                         .frame(width: 32,height: 32)
                         .offset(x:-10)
                 }
-                ToolbarItem(id: "Alert",placement: .navigationBarTrailing) {
-                    Image(systemName: "bell").foregroundColor(.accentColor)
-                        .font(.system(.body).bold())
-                }
+//                ToolbarItem(id: "Alert",placement: .navigationBarTrailing) {
+//                    Image(systemName: "bell").foregroundColor(.accentColor)
+//                        .font(.system(.body).bold())
+//                }
             })
             .navigationBarTitleDisplayMode(.inline)
         }.navigationViewStyle(.stack)
@@ -146,6 +146,8 @@ struct MainView: View {
                 InfoMainView().onDisappear(){
                     appManager.isMyInfoActive = false
                 }
+            case .ExpertRequest:
+                ExpertMainView()
             }
         } label: {
             EmptyView()
@@ -177,6 +179,7 @@ struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         MainView(isCameraActive: .constant(false))
             .environmentObject(AppManager())
+            .environmentObject(UserVM())
         //                 , naviStackIdx: .constant(0)
     }
 }

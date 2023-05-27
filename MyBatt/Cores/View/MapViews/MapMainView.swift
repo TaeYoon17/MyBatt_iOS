@@ -20,6 +20,7 @@ struct MapMainView: View {
     var body: some View {
         ZStack{
             KakaoMapViewWrapper(zoomLevel: $zoomLevel,center: $center,address: $vm.locationName,isTrackingMode: $vm.isGPSOn)
+                
                 .ignoresSafeArea()
                 .overlay(alignment: .top, content: {
                     Text(zoomLevel.description)
@@ -27,6 +28,8 @@ struct MapMainView: View {
                 })
                 .sheet(isPresented: $isPresent){
                     MapSheetView().environmentObject(vm)
+                    .onChange(of: vm.crops, perform: {output in
+                        })
                 }
                 .presentationDetents([.large,.height(70)],selection: $detent)
                 .cornerRadius(16)

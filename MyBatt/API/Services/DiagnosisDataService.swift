@@ -11,6 +11,7 @@ import Combine
 
 final class DiagnosisDataService{
     @Published var diagnosisResponse: DiagnosisResponse?
+    @Published var diagnosisCode: String?
     var diagnosisSubscription: AnyCancellable?
     let boundary = UUID().uuidString
     init(){}
@@ -20,6 +21,20 @@ final class DiagnosisDataService{
     //MARK: -- 리프레시 토큰으로 AccessToken을 refresh후 실제 진단 모델 로직 실행
     func getDiagnosis(urlString: String,geo:Geo,cropType: CropType,image:UIImage){
         self._getDiagnosis(urlString: urlString, geo: geo, cropType: cropType, image: image)
+        //        let refreshToken = UserDefaultsManager.shared.getTokens().refreshToken
+        //        var authRequest = try! URLRequest(url: URL(string:"http://15.164.23.13:8080/member/refresh")!, method: .post)
+        //        authRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        //        authRequest.httpBody = try? JSONSerialization.data(withJSONObject: ["refreshToken": refreshToken])
+        //        URLSession.shared.dataTask(with: authRequest){(data,response,error) in
+        //            if let error = error{
+        //                print("Error: \(error.localizedDescription)")
+        //            }else if let data = data{
+        //                let token = try! JSONDecoder().decode(RefreshResponse.self, from: data)
+        //                print(token.accessToken)
+        //                UserDefaultsManager.shared.setTokens(accessToken: token.accessToken, refreshToken: refreshToken)
+        //
+        //            }
+        //        }.resume()
     }
     // MARK: -- 실제 진단 로직
     private func _getDiagnosis(urlString: String,geo:Geo,cropType: CropType,image: UIImage){
@@ -37,15 +52,23 @@ final class DiagnosisDataService{
         //        2023-02-20T11:22:33.000000
         let urlRequest: URLRequest = getURLRequest(url: url, info: diagnosis, image: image)
         self.diagnosisSubscription = NetworkingManager.upload(request: urlRequest)
-            .tryMap({ (data) -> DiagnosisResponse in
+        //            .tryMap({ (data) -> DiagnosisResponse in
+        //                guard let diagnosis: ResponseWrapper<DiagnosisResponse> = try? JSONDecoder().decode(ResponseWrapper<DiagnosisResponse>.self, from: data) else{
+        //                    throw fatalError("Diagnosis Wrong")
+        //                }
+        //                return diagnosis.data
+        //            })
+            .tryMap({ (data) -> ResponseWrapper<DiagnosisResponse>  in
+                print(self.testJSONString(data: data))
                 guard let diagnosis: ResponseWrapper<DiagnosisResponse> = try? JSONDecoder().decode(ResponseWrapper<DiagnosisResponse>.self, from: data) else{
                     throw fatalError("Diagnosis Wrong")
                 }
-                return diagnosis.data
+                return diagnosis
             })
-            .sink(receiveCompletion: NetworkingManager.handleCompletion(completion:)) { [weak self] (diagnosis: DiagnosisResponse) in
+            .sink(receiveCompletion: NetworkingManager.handleCompletion(completion:)) { [weak self] (diagnosis: ResponseWrapper<DiagnosisResponse>) in
                 print("DiagnosisResponse sinked")
-                self?.diagnosisResponse = diagnosis
+                self?.diagnosisResponse = diagnosis.data
+                self?.diagnosisCode = diagnosis.code
             }
     }
     

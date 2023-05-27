@@ -25,7 +25,8 @@ final class UserVM: ObservableObject{
     // 로그인 완료 이벤트
     var loginSuccess = PassthroughSubject<(), Never>()
     // 진단 완료
-    var diagnosisSuccess = PassthroughSubject<DiagnosisResponse?,Never>()
+    var diagnosisSuccess = PassthroughSubject<(DiagnosisResponse?),Never>()
+    var diagnosisFail = PassthroughSubject<(String?),Never>()
     init(){
         self.diagnosisDataService = DiagnosisDataService()
         addSubscribers()
@@ -113,6 +114,12 @@ extension UserVM{
         diagnosisPublisher.sink{[weak self] output in
             print("diagnosisPublisher result called")
             self?.diagnosisSuccess.send(output)
+        }
+        .store(in: &subscription)
+        let diagnosisErrorPublisher: Published<String?>.Publisher = diagnosisDataService.$diagnosisCode
+        diagnosisErrorPublisher.sink{[weak self] output in
+            print("diagnosisError result called: \(output)")
+            self?.diagnosisFail.send(output)
         }
         .store(in: &subscription)
     }

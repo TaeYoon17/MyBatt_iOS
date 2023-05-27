@@ -29,14 +29,15 @@ struct DiagnosisResponse:Codable{
     let cropType: Int?
     let id, diagnosisRecordID, userID: Int?
     let userLongitude, userLatitude: Double?
-    let regDate, imagePath: String?
-    let diagosisResults: [DiagnosisItem]?
+    var regDate:String?
+    let imagePath: String?
+    let diagnosisResults: [DiagnosisItem]?
 
     enum CodingKeys: String, CodingKey {
         case cropType, id
         case diagnosisRecordID = "diagnosisRecordId"
         case userID = "userId"
-        case userLongitude, userLatitude, regDate, imagePath, diagosisResults
+        case userLongitude, userLatitude, regDate, imagePath, diagnosisResults
     }
 }
 struct DiagnosisItem: Codable{
@@ -46,6 +47,14 @@ struct DiagnosisItem: Codable{
     let boxX2: Double
     let boxY1:Double
     let boxY2:Double
+    enum CodingKeys: String, CodingKey {
+        case diseaseCode
+        case accuracy
+        case boxX1
+        case boxX2
+        case boxY1
+        case boxY2
+    }
 }
 struct Diagnosis{
     static let koreanTable:[DiagnosisType:String] = [

@@ -49,6 +49,6 @@ struct CropSelectView: View {
 
 struct CropSelectView_Previews: PreviewProvider {
     static var previews: some View {
-        CropSelectView(pageSheetCrop: .constant(MapSheetCrop(cropType: .Lettuce, accuracy: 85,isOn: false)))
+        CropSelectView(pageSheetCrop: .constant(MapSheetCrop(cropType: CropType.Lettuce.rawValue, accuracy: 85,isOn: false)))
     }
 }
