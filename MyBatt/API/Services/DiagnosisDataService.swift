@@ -61,7 +61,8 @@ final class DiagnosisDataService{
             .tryMap({ (data) -> ResponseWrapper<DiagnosisResponse>  in
                 print(self.testJSONString(data: data))
                 guard let diagnosis: ResponseWrapper<DiagnosisResponse> = try? JSONDecoder().decode(ResponseWrapper<DiagnosisResponse>.self, from: data) else{
-                    throw fatalError("Diagnosis Wrong")
+//                    throw fatalError("Diagnosis Wrong")
+                    return ResponseWrapper(data: nil, message: "오류", code: "출력 오류")
                 }
                 return diagnosis
             })

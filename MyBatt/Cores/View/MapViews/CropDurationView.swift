@@ -9,9 +9,11 @@ import SwiftUI
 
 struct CropDurationView: View {
     @EnvironmentObject var vm: MapSheetVM
+    
     private var today: (Int,Int,Int) {
         let date = Date()
         let calendar = Calendar.current
+        
         let components = calendar.dateComponents([.year, .month, .day], from: date)
         if let year = components.year,
            let month = components.month,
@@ -31,7 +33,6 @@ struct CropDurationView: View {
                     Text("오늘: ").fontWeight(.semibold) + Text("\(String(today.0))년 \(today.1)월 \(today.2)일")
                 })
                 .onChange(of: vm.selectDate) { newValue in
-                    print(newValue)
                 }
             }
         } label:{
@@ -51,6 +52,29 @@ struct CropDurationView: View {
             .background(.white)
             .onChange(of: vm.durationType) { newValue in
                 //여기서 네트워킹
+                let currentDate = Date()
+                switch newValue{
+                case .custom: break
+                case .day:
+                    let oneDay: TimeInterval = 24 * 60 * 60
+                    vm.selectDate = currentDate.addingTimeInterval(-oneDay)
+                case .fortnight:
+                    let halfMonth: TimeInterval = 60 * 60 * 24 * 15
+                    vm.selectDate = currentDate.addingTimeInterval(-halfMonth)
+                case .month:
+                    let calendar = Calendar.current // 현재 사용되는 달력
+                    var dateComponents = DateComponents()
+                    dateComponents.month = -1
+                    vm.selectDate = calendar.date(byAdding: dateComponents, to: currentDate)!
+                case .quarter:
+                    let calendar = Calendar.current // 현재 사용되는 달력
+                    var dateComponents = DateComponents()
+                    dateComponents.month = -3
+                    vm.selectDate = calendar.date(byAdding: dateComponents, to: currentDate)!
+                case .week:
+                    let week: TimeInterval = 60 * 60 * 24 * 7
+                    vm.selectDate = currentDate.addingTimeInterval(-week)
+                }
                 print(newValue.rawValue)
             }
         }

@@ -24,6 +24,7 @@ struct ExpertMainView: View {
                 }
             } header: {
                 Text("요청 중인 메시지")
+                    .font(.headline).foregroundColor(.accentColor)
             }
             Section {
                 ForEach(users,id:\.self){ user in
@@ -37,9 +38,10 @@ struct ExpertMainView: View {
                 }
             } header: {
                 Text("응답 온 메시지")
+                    .font(.headline).foregroundColor(.accentColor)
             }
-            .listStyle(.plain)
-        }
+            
+        }.listStyle(.sidebar)
         .navigationTitle("전문가 문의")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

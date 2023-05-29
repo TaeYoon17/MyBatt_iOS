@@ -49,8 +49,6 @@ struct ExpertMailView: View {
                                 Text("요청 메시지를 적으세요")
                             }
                         }
-                        //                    .padding(.horizontal,)
-                        //                        .padding(.vertical,4)
                         .background(.white)
                         .cornerRadius(8)
                     }

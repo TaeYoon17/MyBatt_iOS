@@ -6,20 +6,17 @@
 //
 
 import SwiftUI
-enum SelectType:String,CaseIterable{
-    case camera = "카메라"
-    case album = "앨범"
-}
 enum SelectStep:String,Identifiable{
     case Pick,Crop
     var id: String { rawValue }
 }
 struct AlbumPickerView: View {
     @EnvironmentObject var appManager: AppManager
+    @EnvironmentObject var userVM: UserVM
     @StateObject var takenVM: TakenPhotoVM = TakenPhotoVM(lastCropType: .Lettuce)
+    
     @State private var uiimage:UIImage? = nil
     @State private var image : Image? = Image("")
-    @State var selectType :SelectType = .camera
     @State private var selectStep: SelectStep?
     var body: some View {
         ZStack{
@@ -42,7 +39,9 @@ struct AlbumPickerView: View {
                     )
                     Spacer()
                     ImageAppeaerBtnView(btnAction:{
+                        userVM.requestImage(cropType: takenVM.selectedCropType, geo: .init(latitude: 0, longitude: 0), image: uiimage!)
                         appManager.goRootView()
+                        
                         DispatchQueue.main.asyncAfter(deadline: .now()+0.5){
                             appManager.isDiagnosisActive = true
                         }

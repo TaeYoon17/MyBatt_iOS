@@ -3,4 +3,22 @@
    uuid = "C82BA60F-08AE-4B57-8427-7E8D9E70EB42"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0108A892-CD09-423B-A1DA-A2CC2CD03DA7"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyBatt/Cores/View/DetectViews/DiagnosisViews/DiagnosisView.swift"
+            startingColumnNumber = "32"
+            endingColumnNumber = "32"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
+            landmarkName = "diagnosisBody"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

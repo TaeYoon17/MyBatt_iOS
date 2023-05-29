@@ -14,17 +14,24 @@ struct MapMainView: View {
     @State var isPresent = false
     @State var detent: Detent = .height(70)
     @State var zoomLevel:Int = 1
-    @State var center: Geo = (37.603406,127.142995)
     @State var isTracking: Bool? = false
     let circles: [Geo] = []
     var body: some View {
         ZStack{
-            KakaoMapViewWrapper(zoomLevel: $zoomLevel,center: $center,address: $vm.locationName,isTrackingMode: $vm.isGPSOn)
-                
+            KakaoMapViewWrapper(zoomLevel: $zoomLevel,center: $vm.center,
+                                address: $vm.locationName,isTrackingMode: $vm.isGPSOn,
+                                mapDiseaseResult: $vm.mapDiseaseResult
+            )
                 .ignoresSafeArea()
                 .overlay(alignment: .top, content: {
-                    Text(zoomLevel.description)
-                        .background(.white)
+                    VStack{
+                        Text(zoomLevel.description)
+                            .background(.white)
+                        Button("주변 정보 요정") {
+                            //MARK: -- 위치 주변 request 시작
+                            vm.requestNearDisease()
+                        }
+                    }
                 })
                 .sheet(isPresented: $isPresent){
                     MapSheetView().environmentObject(vm)
@@ -46,6 +53,7 @@ struct MapMainView: View {
                                             onDidDismiss: {
                     print("isDismissed")
                 })
+            
                 
         }
         .onTapGesture {

@@ -84,7 +84,6 @@ extension UserVM{
                 let credential = OAuthCredential(accessToken: storedTokenData.accessToken,
                                                  refreshToken: storedTokenData.refreshToken,
                                                  expiration: Date(timeIntervalSinceNow: 60 * 60))
-        
                 // Create the interceptor
                 let authenticator = OAuthAuthenticator()
                 let authInterceptor = AuthenticationInterceptor(authenticator: authenticator,
@@ -116,6 +115,7 @@ extension UserVM{
             self?.diagnosisSuccess.send(output)
         }
         .store(in: &subscription)
+        
         let diagnosisErrorPublisher: Published<String?>.Publisher = diagnosisDataService.$diagnosisCode
         diagnosisErrorPublisher.sink{[weak self] output in
             print("diagnosisError result called: \(output)")
@@ -123,6 +123,7 @@ extension UserVM{
         }
         .store(in: &subscription)
     }
+    
     func requestImage( cropType:CropType,geo:CLLocationCoordinate2D,image: UIImage)->Void{
         self.diagnosisDataService.getDiagnosis(urlString: "http://15.164.23.13:8080/crop/diagnosis",
                                       geo: Geo(Double(geo.latitude),Double(geo.longitude)),

@@ -12,12 +12,15 @@ struct DiagnosisView: View {
     @State private var isLoading = true
     @EnvironmentObject var appManager: AppManager
     @EnvironmentObject var userVM: UserVM
+    @StateObject var diagnosisVM: DiagnosisVM = DiagnosisVM()
     @Environment(\.dismiss) private var dismiss
     @State private var diagnosisResponse: DiagnosisResponse?
     @State private var isFailed = false
+    @State var naviStackIdx = 0
     var body: some View {
         ZStack{
             if isLoading{
+//            if false{
                 self.loadingView
                     .onReceive(userVM.diagnosisFail) { str in
                         if let str = str{
@@ -31,12 +34,21 @@ struct DiagnosisView: View {
                         self.isLoading = false
                         print("진단 결과 onReceive!!")
                         diagnosisResponse = output
-                        print(output.cropType)
-                        print(output.diagnosisResults)
                     }
                 }
             }else{
-                self.diagnosisView.navigationTitle("병해 진단 결과")
+                ZStack{
+                    NavigationLink {
+                        DiagnosisDetailView()
+                    } label: {
+                        EmptyView()
+                    }
+                    self.diagnosisView.navigationTitle("병해 진단 결과")
+                        .onReceive(diagnosisVM.requestInfoSuccess) { output in
+                            self.naviStackIdx = appManager.linkAction()
+                            print("진단 결과를 받았습니다!!")
+                        }
+                }
             }
         }.alert(isPresented: $isFailed) {
             Alert(title: Text("사진 똑바로 찍으세요"),dismissButton: .default(Text("돌아가기"),action: {
@@ -44,7 +56,6 @@ struct DiagnosisView: View {
             }))
         }
     }
-    
     var loadingView: some View{
         VStack(spacing:18){
             ProgressView {
@@ -103,9 +114,9 @@ struct DiagnosisView: View {
                 //MARK: -- 가장 유사한 결과
                 GroupBox {
                     if let result = self.diagnosisResponse?.diagnosisResults?[0]{
-                        DiagnosisInfoView(accuracy:result.accuracy, diagnosisNumber:result.diseaseCode)
+                        DiagnosisInfoView(accuracy:result.accuracy ?? 0,
+                                          diagnosisNumber:result.diseaseCode ?? -1,code:result.sickKey ?? "-1")
                     }
-                    
                 } label: {
                     Text("가장 유사한 결과")
                 }.bgColor(.white,paddingSize: 4)
@@ -113,8 +124,15 @@ struct DiagnosisView: View {
                 //MARK: -- 다른 유사 결과
                 GroupBox {
                     LazyVStack{
-//                        DiagnosisInfoView()
-//                        DiagnosisInfoView()
+                        if let results: [DiagnosisItem] = self.diagnosisResponse?.diagnosisResults{
+                            ForEach(results){ result in
+                                if let first = results.first{
+                                    if result.id != first.id{
+                                        DiagnosisInfoView(accuracy:result.accuracy ?? 0, diagnosisNumber:result.diseaseCode ?? -1,code:result.sickKey ?? "0")
+                                    }
+                                }
+                            }
+                        }
                     }
                 } label: {
                     Text("다른 유사 결과")
@@ -145,12 +163,22 @@ struct DiagnosisView: View {
 //            }
         }
     }
+    var naviLinkController: some View{
+        NavigationLink(isActive:appManager.getBindingStack(idx: naviStackIdx)){
+            DiagnosisDetailView()
+        } label: {
+            EmptyView()
+        }
+        .isDetailLink(false)
+        
+    }
 }
 
 struct DiagnosisView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             DiagnosisView().environmentObject(AppManager())
+                .environmentObject(UserVM())
                 .navigationTitle("wowworld")
                 .navigationBarTitleDisplayMode(.inline)
         }

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+// 고 - 딸 - 상 - 토
 struct MapSheetCrop:Codable,Equatable{
     let cropType: CropType.RawValue
     var cropKorean: String{
@@ -17,6 +17,6 @@ struct MapSheetCrop:Codable,Equatable{
     enum CodingKeys: String, CodingKey {
         case cropType
         case accuracy
-        case isOn = "on"
+        case isOn
     }
 }

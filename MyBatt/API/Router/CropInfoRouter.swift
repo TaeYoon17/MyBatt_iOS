@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 
 enum CropInfoRouter: URLRequestConvertible {
-    case SickDetail
+    case SickDetail(sickKey:String)
     case SickList
     case NoticeList
     case PsisList(cropName:String,diseaseWeedName:String,displayCount:String,startPoint:String)
@@ -20,8 +20,8 @@ enum CropInfoRouter: URLRequestConvertible {
     
     var endPoint: String {
         switch self{
-        case .SickDetail:
-            return "crop/sickDetail"
+        case .SickDetail(let sickKey):
+            return "crop/sickDetail?sickKey=\(sickKey)"
         case .SickList:
             return "crop/sickList"
         case .NoticeList:
@@ -30,6 +30,7 @@ enum CropInfoRouter: URLRequestConvertible {
             return "crop/psisList"
         case .PsisDetail:
             return "crop/psisDetail"
+//        case .
         }
     }
     

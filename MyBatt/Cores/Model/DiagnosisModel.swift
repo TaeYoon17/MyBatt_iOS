@@ -21,7 +21,6 @@ enum DiagnosisType:Int{
     case TomatoNormal
     case TomatoLeafFungus
     case TomatoYellowLeafRoll
-    
 }
 
 // MARK: -- RegData를 String으로 했음!!
@@ -40,9 +39,15 @@ struct DiagnosisResponse:Codable{
         case userLongitude, userLatitude, regDate, imagePath, diagnosisResults
     }
 }
-struct DiagnosisItem: Codable{
-    let diseaseCode: Int
-    let accuracy: Double
+
+
+
+
+struct DiagnosisItem: Codable,Identifiable{
+    var id = UUID()
+    let diseaseCode: Int?
+    let accuracy: Double?
+    let sickKey: String?
     let boxX1:Double
     let boxX2: Double
     let boxY1:Double
@@ -50,6 +55,7 @@ struct DiagnosisItem: Codable{
     enum CodingKeys: String, CodingKey {
         case diseaseCode
         case accuracy
+        case sickKey
         case boxX1
         case boxX2
         case boxY1
