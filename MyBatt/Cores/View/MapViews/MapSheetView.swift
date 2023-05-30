@@ -24,16 +24,22 @@ struct MapSheetView: View {
     @State var isPresented = false
     @State var isPepper = false
     @State var slider = 76.0
+    @State var searchLocation = ""
     var body: some View {
         ScrollView(.vertical,showsIndicators: false){
             VStack(spacing: 15){
                 HStack{
-                    TextField(vm.locationName ?? "위치 정보가 없습니다.", text:.constant("") ).padding(.vertical, 10)
+                    TextField("예) 광진구 능동로 209, 서울시 - 초성 검색", text: $searchLocation).padding(.vertical, 10)
                         .padding(.horizontal).background {
                             RoundedRectangle (cornerRadius: 10,style: .continuous)
                                 .foregroundColor(.white)
                         }
-                        .foregroundColor(.gray)
+                        .foregroundColor(.black)
+                        .onSubmit {
+                            print(searchLocation)
+                            vm.requestLocation(query: searchLocation)
+                            searchLocation = ""
+                        }
                     Button{
                         vm.isGPSOn!.toggle()
                     }label: {

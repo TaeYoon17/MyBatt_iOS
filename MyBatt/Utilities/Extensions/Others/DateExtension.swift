@@ -20,4 +20,9 @@ extension Date{
             return "잘못된 날짜"
         }
     }
+    static var weekAgo: Date{
+        let date = Date()
+        let week: TimeInterval = 60 * 60 * 24 * 7
+        return date.addingTimeInterval(-week)
+    }
 }

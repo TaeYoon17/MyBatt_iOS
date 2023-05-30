@@ -23,13 +23,13 @@ struct MyBattApp: App {
                         Appearances.navigationBarWhite()
                         Appearances.tabBarClear()
                         userVM.fetchOutbreakList()
+                        
                     }
             }else{
                 OnboardingView()
                     .transition(.opacity)
                     .environmentObject(userVM)
                     .environmentObject(appManager)
-                    
             }
         }
     }

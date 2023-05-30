@@ -17,6 +17,7 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
     @Binding var isTrackingMode: Bool?
     @Binding var mapDiseaseResult: MapDiseaseResult?
     func makeUIView(context: Context) -> KakaoMapUIView {
+        
         let kakaoMapView = KakaoMapUIView()
         //        kakaoMapView.setZoomLevel(MTMapZoomLevel(zoomLevel), animated: false)
         //37.603406 127.142995
@@ -46,6 +47,13 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
                 context.coordinator.makeDiseaseRange(mapDiseaseResponse: mapDiseaseResult.results)
             }
         }
+        if let prevGeo = context.coordinator.prevGeo{
+            if prevGeo != center{
+                print("get와 center가 다름!!")
+                context.coordinator.prevGeo = center
+                context.coordinator.changeCenter()
+            }
+        }
     }
     
     
@@ -56,9 +64,11 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
         @Binding var center: Geo
         @Binding var address: String?
         var prevDiseaseResults: MapDiseaseResult?
+        var prevGeo : Geo?
         var diseaseCircles:[CropType:[MTMapCircle]] = [.Lettuce : [],.Pepper:[],.StrawBerry:[],.Tomato:[]]
         var centerCircle:MTMapCircle? = nil
         var centerMarker:MTMapPOIItem? = nil
+        var isMoving: Bool = false
         var isTrackingMode: Bool?{
             didSet{
                 DispatchQueue.global(qos: .default).async {
@@ -70,14 +80,13 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
                 }
             }
         }
-        
         init(zoomLevel: Binding<Int>,center: Binding<Geo>,address: Binding<String?>
              ,isTrackingMode:Bool?) {
             _zoomLevel = zoomLevel
             _center = center
             _address = address
             self.isTrackingMode = isTrackingMode
-            
+            self.prevGeo = center.wrappedValue
         }
         deinit{
             self.removeAllCircles()
@@ -88,6 +97,7 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
             self.changeAllCircles(zoomLevel: Int(zoomLevel))
         }
         func mapView(_ mapView: MTMapView!, finishedMapMoveAnimation mapCenterPoint: MTMapPoint!) {
+//            if self.isMoving { return }
             self.center = mapCenterPoint.mapPointGeo().getGeo
             guard let apiKey:String = Bundle.main.object(forInfoDictionaryKey: "KAKAO_APP_KEY") as? String else{
                 print("apiKey 가져오기 실패")
@@ -95,7 +105,7 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
             }
             self.removeCenterCircle()
             self.addCenterCircle()
-//            self.changeAllCircles()
+            //            self.changeAllCircles()
             let geoCoder = MTMapReverseGeoCoder(mapPoint: mapCenterPoint, with: self, withOpenAPIKey: apiKey)
             self.geocoder = geoCoder
             if let geoCoder = self.geocoder{
@@ -105,7 +115,9 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
                 print("geoCoder 실행 실패!!")
             }
         }
-        
+        func mtMapReverseGeoCoder(_ rGeoCoder: MTMapReverseGeoCoder!, failedToFindAddressWithError error: Error!) {
+            print("에러 발생!! \(error.localizedDescription)")
+        }
         func mtMapReverseGeoCoder(_ rGeoCoder: MTMapReverseGeoCoder!, foundAddress addressString: String!) {
             //            print("주소 이름 변환 성공!!")
             guard let addressString = addressString else { return }
@@ -148,6 +160,7 @@ extension KakaoMapViewWrapper.MapCoordinator{
 //MARK: -- 가져온 response값을 통해 원을 그리는 함수
 extension KakaoMapViewWrapper.MapCoordinator{
     func makeDiseaseRange(mapDiseaseResponse: [CropType:[MapItem]]){
+//        if isMoving { return }
         print("--------------makeDiseaseRange 함수 호출됨!!--------------")
         self.removeAllCircles()
         self.diseaseCircles = [.Lettuce : [],.Pepper:[],.StrawBerry:[],.Tomato:[]]
@@ -171,7 +184,6 @@ extension KakaoMapViewWrapper.MapCoordinator{
                 }
             }
         }
-        
     }
     func makeCircle(geo:Geo,cropType: CropType)->MTMapCircle{
         let circle = MTMapCircle()
@@ -192,27 +204,35 @@ extension KakaoMapViewWrapper.MapCoordinator{
         return circle
     }
     func drawAllCircles(){
-        
-            for cropCircle in self.diseaseCircles{
-                cropCircle.value.forEach { circle in
-                    if let mapView = self.mapView{
-                        mapView.addCircle(circle)
-                    }else{
-                        print("mapView 안됨!!")
-                    }
+        for cropCircle in self.diseaseCircles{
+            cropCircle.value.forEach { circle in
+                if let mapView = self.mapView{
+                    mapView.addCircle(circle)
+                }else{
+                    print("mapView 안됨!!")
                 }
             }
+        }
     }
     func changeAllCircles(zoomLevel: Int){
-        print("changeAllCircles() called!!")
-                for cropCircle in self.diseaseCircles{
-                    cropCircle.value.forEach { circle in
-                        circle.circleRadius = Float(self.changeRadius())
-                    }
-                }
+        for cropCircle in self.diseaseCircles{
+            cropCircle.value.forEach { circle in
+                circle.circleRadius = Float(self.changeRadius())
+            }
+        }
     }
 }
-
+//MARK: -- 위치를 바꾼다.
+extension KakaoMapViewWrapper.MapCoordinator{
+    func changeCenter(){
+        DispatchQueue.main.async {
+            self.isMoving = true
+            print("func changeCenter\(self.center)")
+            self.mapView?.setMapCenter(MTMapPoint(geoCoord: .init(latitude: self.center.latitude, longitude: self.center.longtitude)), animated: false)
+            self.isMoving = false
+        }
+    }
+}
 
 class KakaoMapUIView: MTMapView{
     init(){

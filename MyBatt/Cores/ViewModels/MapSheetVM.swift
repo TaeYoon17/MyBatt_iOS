@@ -17,11 +17,10 @@ final class MapSheetVM:ObservableObject{
     @Published var locationName: String? = ""
     @Published var crops: [MapSheetCrop]
     @Published var center: Geo = (37.661497,126.884958)
-    
     // 여기 나중에 true로 수정해야함!
     @Published var isGPSOn: Bool? = false
     @Published var durationType: DurationType = .week
-    @Published var selectDate:Date = Date()
+    @Published var selectDate:Date = Date.weekAgo
     @Published var mapDiseaseResponse: [MapDiseaseResponse]?
     @Published var mapDiseaseResult:MapDiseaseResult?
     // 작물 종류 - 진단 타입 - 계수
@@ -34,6 +33,7 @@ final class MapSheetVM:ObservableObject{
         let endDate = calendar.date(byAdding: .day, value: 0, to: currentDate)!
         return startDate...endDate
     }
+    var mapQueryDataService: MapQueryDataService = MapQueryDataService()
     init(){
         crops = CropType.allCases.map { type in
             MapSheetCrop(cropType: type.rawValue, accuracy: Self.accRange.start > 80.0 ? Self.accRange.start : 80,isOn: false)
@@ -132,6 +132,14 @@ final class MapSheetVM:ObservableObject{
         return MapDiseaseResult(results: returnVal)
     }
 }
+//MARK: -- 검색어 좌표 변환
+extension MapSheetVM{
+    func requestLocation(query:String){
+        guard query != "" else { return }
+        mapQueryDataService.getMapCoordinate(query: query)
+    }
+}
+
 extension MapSheetVM{
     private func addSubscribers(){ // 의존성 주입
         let myLocationPublisher: Published<Geo>.Publisher = self.$center
@@ -149,6 +157,16 @@ extension MapSheetVM{
 //            print("selectDatePublisher 변화가 일어남")
             print(output.ISO8601Format())
             self?.requestNearDisease()
+        }.store(in: &subscription)
+        let mapQueryPublisher: Published<MapQueryModel?>.Publisher = self.mapQueryDataService.$queryResult
+        mapQueryPublisher.sink { [weak self] output in
+            if let output = output{
+                if !output.documents!.isEmpty{
+                    self?.center = Geo(latitude:Double(output.documents![0].y!)!,
+                                       longtitude:Double(output.documents![0].x!)!)
+                    
+                }
+            }
         }.store(in: &subscription)
     }
 }

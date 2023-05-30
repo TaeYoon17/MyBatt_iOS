@@ -24,14 +24,14 @@ struct MapMainView: View {
             )
                 .ignoresSafeArea()
                 .overlay(alignment: .top, content: {
-                    VStack{
-                        Text(zoomLevel.description)
-                            .background(.white)
-                        Button("주변 정보 요정") {
-                            //MARK: -- 위치 주변 request 시작
-                            vm.requestNearDisease()
-                        }
-                    }
+//                    VStack{
+//                        Text(zoomLevel.description)
+//                            .background(.white)
+//                        Button("주변 정보 요정") {
+//                            //MARK: -- 위치 주변 request 시작
+//                            vm.requestNearDisease()
+//                        }
+//                    }
                 })
                 .sheet(isPresented: $isPresent){
                     MapSheetView().environmentObject(vm)

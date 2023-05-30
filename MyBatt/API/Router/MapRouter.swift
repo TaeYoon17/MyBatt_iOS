@@ -42,10 +42,10 @@ enum MapRouter: URLRequestConvertible {
 //                ["cropType":crop.cropType,"accuracy":crop.accuracy,"isOn":crop.isOn] as [String : Any]
 //            }
             parameters["mapSheepCropList"] = [
-                ["cropType":0,"accuracy":0,"isOn":true] as [String : Any],
-                ["cropType":1,"accuracy":0,"isOn":true] as [String : Any],
-                ["cropType":2,"accuracy":0,"isOn":true] as [String : Any],
-                ["cropType":3,"accuracy":0,"isOn":true] as [String : Any]
+                ["cropType":0,"accuracy":0,"isOn":mapSheetCropList[0].isOn] as [String : Any],
+                ["cropType":1,"accuracy":0,"isOn":mapSheetCropList[1].isOn] as [String : Any],
+                ["cropType":2,"accuracy":0,"isOn":mapSheetCropList[2].isOn] as [String : Any],
+                ["cropType":3,"accuracy":0,"isOn":mapSheetCropList[3].isOn] as [String : Any]
             ]
             return parameters
         }
