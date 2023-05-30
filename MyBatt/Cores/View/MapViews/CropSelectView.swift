@@ -8,38 +8,61 @@
 import SwiftUI
 struct CropSelectView: View {
     @Binding var pageSheetCrop:MapSheetCrop
+    @Binding var myDiagnosis: [DiagnosisType:Int]?
     @State private var acc: Double = 85
     let accRange: AccRange = MapSheetVM.accRange
     var body: some View {
         VStack{
             Toggle(isOn: $pageSheetCrop.isOn) {
-                HStack{
-                    Text(pageSheetCrop.cropKorean)
-                        .font(.body)
-                        .fontWeight(.semibold)
-                    Spacer()
-                    if pageSheetCrop.isOn{
-                        Text("최소 정확도: \(Int(acc))%")
-                            .font(.callout)
-                            .padding(.trailing,5)
+                VStack{
+                    HStack{
+                        Text(pageSheetCrop.cropKorean)
+                            .font(.body)
+                            .fontWeight(.semibold)
+                            .foregroundColor(pageSheetCrop.cropColor)
+                        Spacer()
+                        if pageSheetCrop.isOn{
+                            Text("최소 정확도: \(Int(acc))%")
+                                .font(.callout)
+                                .padding(.trailing,5)
+                        }
                     }
+                    
                 }
             }.onChange(of: pageSheetCrop.isOn) { newValue in
                 print(newValue)
             }
             if pageSheetCrop.isOn{
-                Slider(value: $acc,in:accRange.start...accRange.end,step: 1.0) {
-                    Text("최소 정확도")
-                } minimumValueLabel: {
-                    Text("\(Int(accRange.start))%")
-                } maximumValueLabel: {
-                    Text("\(Int(accRange.end))%")
-                } onEditingChanged: { v in
-                    if v == false{
-                        print(Int(acc))
-                        pageSheetCrop.accuracy = acc
+                VStack{
+                    Slider(value: $acc,in:accRange.start...accRange.end,step: 1.0) {
+                        Text("최소 정확도")
+                    } minimumValueLabel: {
+                        Text("\(Int(accRange.start))%")
+                    } maximumValueLabel: {
+                        Text("\(Int(accRange.end))%")
+                    } onEditingChanged: { v in
+                        if v == false{
+                            print(Int(acc))
+                            pageSheetCrop.accuracy = acc
+                        }
+                    }.font(.subheadline)
+                    if let myDiagnosis = myDiagnosis{
+                        VStack(spacing:4){
+                            ForEach(Array(myDiagnosis.keys.sorted(by: { lhs, rhs in
+                                lhs.rawValue < rhs.rawValue
+                            })),id:\.self){ key in
+                                HStack{
+                                    (
+                                        Text("\(Diagnosis.koreanTable[key] ?? "") 계수: ")
+                                        .font(.footnote).fontWeight(.semibold)
+                                    + Text("\(myDiagnosis[key] ?? 0)").font(.footnote)
+                                     )
+                                    Spacer()
+                                }
+                            }
+                        }
                     }
-                }.font(.subheadline)
+                }
             }
         }
         .padding(.horizontal)
@@ -51,6 +74,6 @@ struct CropSelectView: View {
 
 struct CropSelectView_Previews: PreviewProvider {
     static var previews: some View {
-        CropSelectView(pageSheetCrop: .constant(MapSheetCrop(cropType: CropType.Lettuce.rawValue, accuracy: 85,isOn: false)))
+        CropSelectView(pageSheetCrop: .constant(MapSheetCrop(cropType: CropType.Lettuce.rawValue, accuracy: 85,isOn: false)), myDiagnosis: .constant([:]))
     }
 }

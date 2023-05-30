@@ -46,7 +46,7 @@ struct MapSheetView: View {
                 GroupBox {
                     ForEach(vm.crops.indices,id:\.self){ idx in
                         if idx != vm.crops.endIndex-1{
-                            CropSelectView(pageSheetCrop: $vm.crops[idx])
+                            CropSelectView(pageSheetCrop: $vm.crops[idx], myDiagnosis: $vm.mapDiseaseCnt[CropType(rawValue: vm.crops[idx].cropType) ?? .none])
                         }
                     }
                 } label: {

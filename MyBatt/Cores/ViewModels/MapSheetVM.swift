@@ -20,10 +20,12 @@ final class MapSheetVM:ObservableObject{
     
     // 여기 나중에 true로 수정해야함!
     @Published var isGPSOn: Bool? = false
-    @Published var durationType: DurationType = .day
+    @Published var durationType: DurationType = .week
     @Published var selectDate:Date = Date()
     @Published var mapDiseaseResponse: [MapDiseaseResponse]?
     @Published var mapDiseaseResult:MapDiseaseResult?
+    // 작물 종류 - 진단 타입 - 계수
+    @Published var mapDiseaseCnt: [CropType:[DiagnosisType:Int]] = [:]
     var subscription = Set<AnyCancellable>()
     var dateRange: ClosedRange<Date>{
         let calendar = Calendar.current
@@ -79,13 +81,42 @@ final class MapSheetVM:ObservableObject{
             if let nullableData = output.data{
                 print(nullableData)
                 self?.mapDiseaseResult = self?.makeDiseaseResult(data: nullableData)
-                print("self?.mapDiseaseResult 값 생성!!")
-//                print(self?.mapDiseaseResult)
+//                print("self?.mapDiseaseResult 값 생성!!")
+                self?.makeDiseaseCnt()
             }else{
                 print("내부에 데이터 없음!!")
             }
         }.store(in: &subscription)
     }
+    private func makeDiseaseCnt(){
+        var mapDiseaseCnt: [CropType:[DiagnosisType:Int]] = [
+            .Lettuce: [
+                .LettuceDownyMildew : 0,
+                .LettuceMycosis : 0
+            ],
+            .Pepper:[
+                .PepperSpot: 0,
+                .PepperMildMotle: 0
+            ],
+            .StrawBerry:[
+                .StrawberryPowderyMildew: 0,
+                .StrawberryGrayMold:0,
+            ],
+            .Tomato:[
+                .TomatoLeafFungus:0,
+                .TomatoYellowLeafRoll:0
+            ]
+        ]
+        DispatchQueue.main.async {
+            self.mapDiseaseResult?.results.forEach({ (key,val) in
+                val.forEach { item in
+                    mapDiseaseCnt[key]![item.diseaseCode]? += 1
+                }
+            })
+            self.mapDiseaseCnt = mapDiseaseCnt
+        }
+    }
+    
     private func makeDiseaseResult(data: [MapDiseaseResponse])->MapDiseaseResult{
         var returnVal: [CropType:[MapItem]] = CropType.allCases.reduce(into: [:]) { partialResult, type in
             if type != .none {

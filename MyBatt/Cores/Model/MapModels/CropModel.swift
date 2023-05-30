@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import SwiftUI
 enum CropType:Int,CaseIterable{
     case Pepper = 0
-    case Lettuce = 1
-    case StrawBerry = 2
+    case Lettuce = 2
+    case StrawBerry = 1
     case Tomato = 3
     case none = -1
 }
@@ -19,5 +20,6 @@ struct Crop{
     static var allCrops:[CropType]{
         CropType.allCases
     }
+    static let colorTable:[CropType:Color] = [.Lettuce: Color.yellow,.Pepper: Color.blue,.StrawBerry: Color.red,.Tomato: Color.orange]
 }
 

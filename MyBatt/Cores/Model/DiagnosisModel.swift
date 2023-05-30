@@ -7,20 +7,20 @@
 
 import Foundation
 
-enum DiagnosisType:Int{
+enum DiagnosisType:Int,Hashable{
     case none = -1
     case PepperNormal = 0
-    case PepperMildMotle
-    case PepperSpot
-    case StrawberryNormal
-    case StrawberryGrayMold
-    case StrawberryPowderyMildew
-    case LettuceNormal
-    case LettuceMycosis
-    case LettuceDownyMildew
-    case TomatoNormal
-    case TomatoLeafFungus
-    case TomatoYellowLeafRoll
+    case PepperMildMotle = 1
+    case PepperSpot = 2
+    case StrawberryNormal = 3
+    case StrawberryGrayMold = 4
+    case StrawberryPowderyMildew = 5
+    case LettuceNormal = 6
+    case LettuceMycosis = 7
+    case LettuceDownyMildew = 8
+    case TomatoNormal = 9
+    case TomatoLeafFungus = 10
+    case TomatoYellowLeafRoll = 11
 }
 
 // MARK: -- RegData를 String으로 했음!!

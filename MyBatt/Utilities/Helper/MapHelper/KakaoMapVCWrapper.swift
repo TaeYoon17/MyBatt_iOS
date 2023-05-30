@@ -18,7 +18,7 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
     @Binding var mapDiseaseResult: MapDiseaseResult?
     func makeUIView(context: Context) -> KakaoMapUIView {
         let kakaoMapView = KakaoMapUIView()
-//        kakaoMapView.setZoomLevel(MTMapZoomLevel(zoomLevel), animated: false)
+        //        kakaoMapView.setZoomLevel(MTMapZoomLevel(zoomLevel), animated: false)
         //37.603406 127.142995
         kakaoMapView.baseMapType = .standard
         kakaoMapView.setMapCenter(MTMapPoint(geoCoord: .init(geo: center)),
@@ -26,7 +26,7 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
                                   animated: false)
         context.coordinator.mapView = kakaoMapView
         kakaoMapView.delegate = context.coordinator
-//        context.coordinator.addCircle(geo: center)
+        //        context.coordinator.addCircle(geo: center)
         return kakaoMapView
     }
     
@@ -40,15 +40,6 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
         if context.coordinator.isTrackingMode != self.isTrackingMode{
             context.coordinator.isTrackingMode = self.isTrackingMode
         }
-//        if let mapDiseaseResult = self.mapDiseaseResult{
-//            if let prevResult = context.coordinator.prevDiseaseResults{
-//                if prevResult.id != mapDiseaseResult.id{
-//                    context.coordinator.makeDiseaseRange(mapDiseaseResponse: mapDiseaseResult.results)
-//                }
-//            }else{
-//                context.coordinator.makeDiseaseRange(mapDiseaseResponse: mapDiseaseResult.results)
-//            }
-//        }
         if let mapDiseaseResult = self.mapDiseaseResult{
             if mapDiseaseResult != context.coordinator.prevDiseaseResults{
                 context.coordinator.prevDiseaseResults = mapDiseaseResult
@@ -81,7 +72,7 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
         }
         
         init(zoomLevel: Binding<Int>,center: Binding<Geo>,address: Binding<String?>
-            ,isTrackingMode:Bool?) {
+             ,isTrackingMode:Bool?) {
             _zoomLevel = zoomLevel
             _center = center
             _address = address
@@ -92,7 +83,9 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
             self.removeAllCircles()
         }
         func mapView(_ mapView: MTMapView!, zoomLevelChangedTo zoomLevel: MTMapZoomLevel) {
+            print("------- zoomLevel: MTMapZoomLevel) \(zoomLevel)!--------")
             self.zoomLevel = Int(zoomLevel)
+            self.changeAllCircles(zoomLevel: Int(zoomLevel))
         }
         func mapView(_ mapView: MTMapView!, finishedMapMoveAnimation mapCenterPoint: MTMapPoint!) {
             self.center = mapCenterPoint.mapPointGeo().getGeo
@@ -100,8 +93,9 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
                 print("apiKey 가져오기 실패")
                 return
             }
-//            self.removeCenterCircle()
-//            self.addCenterCircle()
+            self.removeCenterCircle()
+            self.addCenterCircle()
+//            self.changeAllCircles()
             let geoCoder = MTMapReverseGeoCoder(mapPoint: mapCenterPoint, with: self, withOpenAPIKey: apiKey)
             self.geocoder = geoCoder
             if let geoCoder = self.geocoder{
@@ -113,32 +107,24 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
         }
         
         func mtMapReverseGeoCoder(_ rGeoCoder: MTMapReverseGeoCoder!, foundAddress addressString: String!) {
-//            print("주소 이름 변환 성공!!")
+            //            print("주소 이름 변환 성공!!")
             guard let addressString = addressString else { return }
-//            print(addressString)
+            //            print(addressString)
             address = addressString
         }
-        func makeCircle(geo:Geo)->MTMapCircle{
-            let circle = MTMapCircle()
-            circle.circleLineWidth = 3
-            circle.circleLineColor = .black
-            circle.circleFillColor = UIColor(red: 0, green: 0, blue: 1, alpha: 1)
-            circle.circleRadius = 30
-            circle.circleCenterPoint = MTMapPoint(geoCoord:MTMapPointGeo(latitude: geo.latitude, longitude: geo.longtitude))
-            return circle
-        }
+        
     }
-
+    
 }
 //MARK: -- 반경표시 Circle 만들기
 extension KakaoMapViewWrapper.MapCoordinator{
     func addCenterCircle(){
-//            self.centerCircle = nil
         let circle = MTMapCircle()
         circle.circleLineWidth = 1
         circle.circleLineColor = .lightGray
-        circle.circleFillColor = UIColor(red: 0, green: 0.625, blue: 0.055, alpha: 0.6)
-        circle.circleRadius = 32
+        circle.circleFillColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
+        circle.circleRadius = Float(self.changeRadius())
+        
         circle.circleCenterPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: center.latitude, longitude: center.longtitude))
         self.centerCircle = circle
         mapView?.addCircle(circle)
@@ -146,41 +132,67 @@ extension KakaoMapViewWrapper.MapCoordinator{
     func removeCenterCircle(){
         mapView?.removeCircle(self.centerCircle)
     }
+    func changeRadius()->Int{
+        switch self.zoomLevel{
+        case 1: return 32
+        case 2: return 70
+        case 3: return 160
+        case 4: return 320
+        case 5: return 700
+        case 6: return 1200
+        default: return  16
+        }
+    }
 }
 
 //MARK: -- 가져온 response값을 통해 원을 그리는 함수
 extension KakaoMapViewWrapper.MapCoordinator{
     func makeDiseaseRange(mapDiseaseResponse: [CropType:[MapItem]]){
         print("--------------makeDiseaseRange 함수 호출됨!!--------------")
-//        self.removeAllCircles()
+        self.removeAllCircles()
+        self.diseaseCircles = [.Lettuce : [],.Pepper:[],.StrawBerry:[],.Tomato:[]]
         DispatchQueue.main.async {
             for (key,val) in mapDiseaseResponse{
                 for item in val{
-                    self.addCircle(geo: item.geo)
+                    let circle = self.makeCircle(geo: item.geo, cropType: item.cropType)
+                    self.diseaseCircles[key]?.append(circle)
                 }
             }
+            self.drawAllCircles()
         }
-//        print(diseaseCircles)
-        self.drawAllCircles()
     }
     func removeAllCircles(){
         for cropCircle in self.diseaseCircles{
             cropCircle.value.forEach { circle in
-                mapView?.removeCircle(circle)
+                if let mapView = self.mapView{
+                    mapView.removeCircle(circle)
+                }else{
+                    print("mapView 안됨!!")
+                }
             }
         }
+        
     }
-    func addCircle(geo:Geo){
+    func makeCircle(geo:Geo,cropType: CropType)->MTMapCircle{
         let circle = MTMapCircle()
-        print("-----geo: \(geo)---------")
-        circle.circleFillColor = UIColor(red: Double.random(in: 0.0..<1.0), green: Double.random(in: 0.0..<1.0), blue: Double.random(in: 0.0..<1.0), alpha: 0.2)
-        circle.circleRadius = 100
-        circle.circleCenterPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: geo.latitude, longitude: geo.longtitude))
-        self.centerCircle = circle
-        mapView?.addCircle(circle)
+        circle.circleLineColor = UIColor(red: 0, green: 0.625, blue: 0.055, alpha: 1)
+        circle.circleRadius = Float(self.changeRadius())
+        switch cropType{
+        case .Lettuce:
+            circle.circleFillColor = UIColor(red: 1, green: 1, blue: 0, alpha: 0.3)
+        case .Pepper:
+            circle.circleFillColor = UIColor(red: 0, green: 0, blue: 1, alpha: 0.3)
+        case .StrawBerry:
+            circle.circleFillColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.3)
+        case .Tomato:
+            circle.circleFillColor = UIColor(red: 1, green: 0.5, blue: 0, alpha: 0.3)
+        case .none: break
+        }
+        circle.circleCenterPoint = MTMapPoint(geoCoord:MTMapPointGeo(latitude: geo.latitude, longitude: geo.longtitude))
+        return circle
     }
     func drawAllCircles(){
-        DispatchQueue.main.async {
+        
             for cropCircle in self.diseaseCircles{
                 cropCircle.value.forEach { circle in
                     if let mapView = self.mapView{
@@ -190,7 +202,14 @@ extension KakaoMapViewWrapper.MapCoordinator{
                     }
                 }
             }
-        }
+    }
+    func changeAllCircles(zoomLevel: Int){
+        print("changeAllCircles() called!!")
+                for cropCircle in self.diseaseCircles{
+                    cropCircle.value.forEach { circle in
+                        circle.circleRadius = Float(self.changeRadius())
+                    }
+                }
     }
 }
 

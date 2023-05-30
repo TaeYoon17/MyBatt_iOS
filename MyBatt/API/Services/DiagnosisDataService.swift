@@ -52,12 +52,6 @@ final class DiagnosisDataService{
         //        2023-02-20T11:22:33.000000
         let urlRequest: URLRequest = getURLRequest(url: url, info: diagnosis, image: image)
         self.diagnosisSubscription = NetworkingManager.upload(request: urlRequest)
-        //            .tryMap({ (data) -> DiagnosisResponse in
-        //                guard let diagnosis: ResponseWrapper<DiagnosisResponse> = try? JSONDecoder().decode(ResponseWrapper<DiagnosisResponse>.self, from: data) else{
-        //                    throw fatalError("Diagnosis Wrong")
-        //                }
-        //                return diagnosis.data
-        //            })
             .tryMap({ (data) -> ResponseWrapper<DiagnosisResponse>  in
                 print(self.testJSONString(data: data))
                 guard let diagnosis: ResponseWrapper<DiagnosisResponse> = try? JSONDecoder().decode(ResponseWrapper<DiagnosisResponse>.self, from: data) else{

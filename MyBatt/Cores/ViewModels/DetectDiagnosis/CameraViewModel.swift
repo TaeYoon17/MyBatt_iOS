@@ -74,8 +74,7 @@ final class CameraViewModel:NSObject,ObservableObject{
         for await photoData in unpackedPhotoStream{
             Task{ @MainActor in
                 //thumbnailImage = photoData.thumbnailImage
-                let ciimage = CIImage(data: photoData.imageData, options: [.applyOrientationProperty: true
-                                                                          ])!
+                let ciimage = CIImage(data: photoData.imageData, options: [.applyOrientationProperty: true])!
                 let cropCiImage = ciimage.cropImage
                 print(cropCiImage.description)
                 takenImage = cropCiImage.image!
@@ -165,6 +164,7 @@ extension CameraViewModel{
     func fetchToRequestImage(cropType: CropType,completion:@escaping ((CropType,CLLocationCoordinate2D,UIImage)->Void)){
         let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier!], options: nil)
         let size = 1280
+//        let size = 360
         print("가져올 데이터 사이즈 \(size)")
         if let asset = fetchResult.firstObject {
             PHImageManager.default().requestImage(for: asset, targetSize: CGSize(width: size, height: size), contentMode: .aspectFit, options: nil) { (image, info) in
