@@ -13,12 +13,12 @@ import Combine
 
 typealias AccRange = (start:Double,end:Double)
 final class MapSheetVM:ObservableObject{
-    static let accRange: AccRange = (start:85,end:95)
+    static let accRange: AccRange = (start:50,end:95)
     @Published var locationName: String? = ""
     @Published var crops: [MapSheetCrop]
     @Published var center: Geo = (37.661497,126.884958)
     // 여기 나중에 true로 수정해야함!
-    @Published var isGPSOn: Bool? = false
+    @Published var isGPSOn: Bool? = true
     @Published var durationType: DurationType = .week
     @Published var selectDate:Date = Date.weekAgo
     @Published var mapDiseaseResponse: [MapDiseaseResponse]?
@@ -56,7 +56,6 @@ final class MapSheetVM:ObservableObject{
                 return true
             }
         }
-        print(cropps)
         let storedTokenData = UserDefaultsManager.shared.getTokens()
         let credential = OAuthCredential(accessToken: storedTokenData.accessToken,
                                          refreshToken: storedTokenData.refreshToken,
@@ -78,9 +77,15 @@ final class MapSheetVM:ObservableObject{
                 print("requestNearDisease 가져오기 실패 \(error.localizedDescription)")
             }
         } receiveValue: {[weak self] output in
-            if let nullableData = output.data{
+            if let nullableData: [MapDiseaseResponse] = output.data{
                 print(nullableData)
-                self?.mapDiseaseResult = self?.makeDiseaseResult(data: nullableData)
+                self?.mapDiseaseResult = self?.makeDiseaseResult(data: nullableData.filter { response in
+                    let type:DiagnosisType = DiagnosisType(rawValue: response.diseaseCode ?? -1) ?? .none
+                    switch type{
+                    case .none,.LettuceNormal,.PepperNormal,.TomatoNormal,.StrawberryNormal: return false
+                    default: return true
+                    }
+                })
 //                print("self?.mapDiseaseResult 값 생성!!")
                 self?.makeDiseaseCnt()
             }else{
@@ -149,7 +154,7 @@ extension MapSheetVM{
         .store(in: &subscription)
         let cropFilterPublisher: Published<[MapSheetCrop]>.Publisher = self.$crops
         cropFilterPublisher.sink { [weak self] output in
-            print("변화가 일어남")
+            print("변화가 일어남 \(output[0].accuracy) \(output[1].accuracy) \(output[2].accuracy) \(output[3].accuracy)")
             self?.requestNearDisease()
         }.store(in: &subscription)
         let selectDatePublisher: Published<Date>.Publisher = self.$selectDate

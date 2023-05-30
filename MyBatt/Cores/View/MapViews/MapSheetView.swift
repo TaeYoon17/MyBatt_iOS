@@ -29,7 +29,7 @@ struct MapSheetView: View {
         ScrollView(.vertical,showsIndicators: false){
             VStack(spacing: 15){
                 HStack{
-                    TextField("예) 광진구 능동로 209, 서울시 - 초성 검색", text: $searchLocation).padding(.vertical, 10)
+                    TextField("예) 광진구 능동로 209 - 초성 검색", text: $searchLocation).padding(.vertical, 10)
                         .padding(.horizontal).background {
                             RoundedRectangle (cornerRadius: 10,style: .continuous)
                                 .foregroundColor(.white)

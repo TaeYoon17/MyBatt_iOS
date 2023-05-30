@@ -16,11 +16,16 @@ struct MainManagementBtn: View {
                     VStack{
                         Divider()
                         VStack(alignment: .leading,spacing: 5){
-                            ForEach(0...2,id:\.self){ idx in
-                                HStack{
-                                    Text("Hello world")
-                                    Spacer()
-                                }
+                            //MARK: -- 여기 작성 - 작물 관리 폴더 이름
+                            //                            ForEach(0...2,id:\.self){ idx in
+                            //                                HStack{
+                            //                                    Text("Hello world")
+                            //                                    Spacer()
+                            //                                }
+                            //                            }
+                            HStack{
+                                Text("Hello world")
+                                Spacer()
                             }
                         }
                     }

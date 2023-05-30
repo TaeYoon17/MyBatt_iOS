@@ -11,9 +11,10 @@ import SwiftUI
 
 struct CropperView: UIViewControllerRepresentable{
     @Binding var image: Image?
-    @Binding var getImage: UIImage?
+    @Binding var uiimage: UIImage?
+    @EnvironmentObject var vm: AlbumPickerVM
     func makeUIViewController(context: Context) -> CropViewController {
-        let vc = CropViewController(croppingStyle: .default, image: getImage ?? UIImage())
+        let vc = CropViewController(croppingStyle: .default, image: uiimage ?? UIImage())
                 vc.toolbar.cancelTextButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
                 vc.toolbar.doneTextButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         vc.aspectRatioPreset = .presetSquare
@@ -33,12 +34,14 @@ struct CropperView: UIViewControllerRepresentable{
     }
     func updateUIViewController(_ uiViewController: CropViewController, context: Context) {}
     func makeCoordinator() -> Coordinator {
-        Coordinator(image: $image)
+        Coordinator(image: $image,uiImage: $vm.uiimage)
     }
     final class Coordinator: NSObject, CropViewControllerDelegate{
         @Binding var image: Image?
-        init(image: Binding<Image?>) {
+        @Binding var uiImage: UIImage?
+        init(image: Binding<Image?>,uiImage: Binding<UIImage?>) {
             self._image = image
+            self._uiImage = uiImage
 //            self._showImagePicker = showImagePicker
         }
         func cropViewController(_ cropViewController: CropViewController, didFinishCancelled cancelled: Bool) {
@@ -47,6 +50,7 @@ struct CropperView: UIViewControllerRepresentable{
         func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
             cropViewController.dismiss(animated: true)
             print("Did Crop")
+            self.uiImage = image
             self.image = Image(uiImage: image)
         }
     }

@@ -30,7 +30,6 @@ struct SignUpSheetView: View {
                 Button {
                     if isAllFilled{
                         print("회원가입 시작!!")
-                        
 //                        userVM.register(name: username, email: userEmail, password: password)
                         userVM.register(name: "인급동2", email: "moviemaker2@gmail.com", password: "gunja15")
                     }else{

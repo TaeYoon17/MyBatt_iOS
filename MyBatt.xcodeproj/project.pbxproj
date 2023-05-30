@@ -128,6 +128,7 @@
 		63F5D3052A262B2800D8BB78 /* BundleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F5D3042A262B2800D8BB78 /* BundleExtension.swift */; };
 		63F5D3072A262C2D00D8BB78 /* MapQueryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F5D3062A262C2D00D8BB78 /* MapQueryModel.swift */; };
 		63F5D3092A262DC000D8BB78 /* MapQueryDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F5D3082A262DC000D8BB78 /* MapQueryDataService.swift */; };
+		63F5D30B2A269EB900D8BB78 /* AlbumPickerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F5D30A2A269EB900D8BB78 /* AlbumPickerVM.swift */; };
 		63F7E2D52A040C90006E8B3E /* InfoMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F7E2D42A040C90006E8B3E /* InfoMainView.swift */; };
 /* End PBXBuildFile section */
 
@@ -253,6 +254,7 @@
 		63F5D3042A262B2800D8BB78 /* BundleExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleExtension.swift; sourceTree = "<group>"; };
 		63F5D3062A262C2D00D8BB78 /* MapQueryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapQueryModel.swift; sourceTree = "<group>"; };
 		63F5D3082A262DC000D8BB78 /* MapQueryDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapQueryDataService.swift; sourceTree = "<group>"; };
+		63F5D30A2A269EB900D8BB78 /* AlbumPickerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumPickerVM.swift; sourceTree = "<group>"; };
 		63F7E2D42A040C90006E8B3E /* InfoMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoMainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -584,6 +586,7 @@
 				63B8D93D2A0B3B4B004EC7FC /* DiagnosisVM.swift */,
 				636D83F129FFAB80003F4347 /* CameraViewModel.swift */,
 				63A4BABD2A13EB280018E891 /* TakenPhotoVM.swift */,
+				63F5D30A2A269EB900D8BB78 /* AlbumPickerVM.swift */,
 			);
 			path = DetectDiagnosis;
 			sourceTree = "<group>";
@@ -905,6 +908,7 @@
 				63201F1429E97AFD00EB5D4E /* MainRequestBtn.swift in Sources */,
 				63F20AB72A17629600896597 /* BaseInterceptor.swift in Sources */,
 				636D83F429FFAC2D003F4347 /* Camera_ex.swift in Sources */,
+				63F5D30B2A269EB900D8BB78 /* AlbumPickerVM.swift in Sources */,
 				6305008A2A1B5FCF007BF769 /* CropperView.swift in Sources */,
 				63F097012A135BA2005DA59C /* GroupBoxExtension.swift in Sources */,
 				6357C6FF2A2066A80094162C /* OutbreakItem.swift in Sources */,

@@ -14,7 +14,7 @@ struct AlbumPickerView: View {
     @EnvironmentObject var appManager: AppManager
     @EnvironmentObject var userVM: UserVM
     @StateObject var takenVM: TakenPhotoVM = TakenPhotoVM(lastCropType: .Lettuce)
-    
+    @StateObject var vm: AlbumPickerVM = AlbumPickerVM()
     @State private var uiimage:UIImage? = nil
     @State private var image : Image? = Image("")
     @State private var selectStep: SelectStep?
@@ -27,7 +27,6 @@ struct AlbumPickerView: View {
                             .scaledToFill()
                     }
                     ImageAppearView(image: $image).environmentObject(takenVM)
-                    
                 }
                 Spacer()
                 HStack{
@@ -39,9 +38,10 @@ struct AlbumPickerView: View {
                     )
                     Spacer()
                     ImageAppeaerBtnView(btnAction:{
-                        userVM.requestImage(cropType: takenVM.selectedCropType, geo: .init(latitude: 0, longitude: 0), image: uiimage!)
+                        print("AlbumPickerView Request 실행")
+                        vm.fetchToRequestImage(cropType: takenVM.selectedCropType, completion: userVM.requestImage(cropType:geo:image:))
+//                        userVM.requestImage(cropType: takenVM.selectedCropType, geo: .init(latitude: 0, longitude: 0), image: uiimage!)
                         appManager.goRootView()
-                        
                         DispatchQueue.main.asyncAfter(deadline: .now()+0.5){
                             appManager.isDiagnosisActive = true
                         }
@@ -62,7 +62,8 @@ struct AlbumPickerView: View {
         }
         .sheet(item: $selectStep) { sheet in
             switch sheet{
-            case .Crop: CropperView(image: $image, getImage: $uiimage)
+            case .Crop: CropperView(image: $image,uiimage: $uiimage)
+                    .environmentObject(vm)
                     .overlay(alignment: .top, content: {
                         Text("이미지를 확대, 축소, 이동해 자르세요")
                             .font(.footnote)
@@ -70,6 +71,8 @@ struct AlbumPickerView: View {
                     })
                     .onDisappear(){
                         selectStep = nil
+                        userVM.diagnosisImage = self.image
+                        vm.saveImageToAlbum()
                     }
                     .edgesIgnoringSafeArea(.bottom)
             case .Pick:

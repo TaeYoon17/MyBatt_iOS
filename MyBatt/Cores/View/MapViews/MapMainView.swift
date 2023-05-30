@@ -14,7 +14,6 @@ struct MapMainView: View {
     @State var isPresent = false
     @State var detent: Detent = .height(70)
     @State var zoomLevel:Int = 1
-    @State var isTracking: Bool? = false
     let circles: [Geo] = []
     var body: some View {
         ZStack{
@@ -61,6 +60,7 @@ struct MapMainView: View {
         }
         .onAppear(){
             appManager.isTabbarHidden = true
+            self.vm.isGPSOn = true
             DispatchQueue.main.asyncAfter(deadline: .now()+1){
                 self.vm.isGPSOn = false
             }

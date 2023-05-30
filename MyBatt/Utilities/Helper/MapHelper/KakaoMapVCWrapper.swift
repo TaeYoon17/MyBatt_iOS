@@ -17,7 +17,6 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
     @Binding var isTrackingMode: Bool?
     @Binding var mapDiseaseResult: MapDiseaseResult?
     func makeUIView(context: Context) -> KakaoMapUIView {
-        
         let kakaoMapView = KakaoMapUIView()
         //        kakaoMapView.setZoomLevel(MTMapZoomLevel(zoomLevel), animated: false)
         //37.603406 127.142995
@@ -27,6 +26,10 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
                                   animated: false)
         context.coordinator.mapView = kakaoMapView
         kakaoMapView.delegate = context.coordinator
+        DispatchQueue.global(qos: .default).async {
+            kakaoMapView.currentLocationTrackingMode = .onWithoutHeading
+        }
+        
         //        context.coordinator.addCircle(geo: center)
         return kakaoMapView
     }
@@ -69,7 +72,7 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
         var centerCircle:MTMapCircle? = nil
         var centerMarker:MTMapPOIItem? = nil
         var isMoving: Bool = false
-        var isTrackingMode: Bool?{
+        var isTrackingMode: Bool? = false{
             didSet{
                 DispatchQueue.global(qos: .default).async {
                     if self.isTrackingMode == true{
@@ -105,7 +108,6 @@ struct KakaoMapViewWrapper: UIViewRepresentable{
             }
             self.removeCenterCircle()
             self.addCenterCircle()
-            //            self.changeAllCircles()
             let geoCoder = MTMapReverseGeoCoder(mapPoint: mapCenterPoint, with: self, withOpenAPIKey: apiKey)
             self.geocoder = geoCoder
             if let geoCoder = self.geocoder{

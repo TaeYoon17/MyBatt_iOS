@@ -9,7 +9,7 @@ import SwiftUI
 struct CropSelectView: View {
     @Binding var pageSheetCrop:MapSheetCrop
     @Binding var myDiagnosis: [DiagnosisType:Int]?
-    @State private var acc: Double = 85
+    @State private var acc: Double = 50
     let accRange: AccRange = MapSheetVM.accRange
     var body: some View {
         VStack{
@@ -30,11 +30,11 @@ struct CropSelectView: View {
                     
                 }
             }.onChange(of: pageSheetCrop.isOn) { newValue in
-                print(newValue)
+//                print(newValue)
             }
             if pageSheetCrop.isOn{
                 VStack{
-                    Slider(value: $acc,in:accRange.start...accRange.end,step: 1.0) {
+                    Slider(value: $acc,in:accRange.start...accRange.end,step: 5.0) {
                         Text("최소 정확도")
                     } minimumValueLabel: {
                         Text("\(Int(accRange.start))%")
@@ -42,7 +42,7 @@ struct CropSelectView: View {
                         Text("\(Int(accRange.end))%")
                     } onEditingChanged: { v in
                         if v == false{
-                            print(Int(acc))
+                            print("onEditingChanged: \(Int(acc))")
                             pageSheetCrop.accuracy = acc
                         }
                     }.font(.subheadline)

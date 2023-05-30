@@ -30,10 +30,10 @@ enum MapRouter: URLRequestConvertible {
         switch self {
         case let .nearDisease(geo: geo, mapSheetCropList: mapSheetCropList, date: date):
             var parameters = Parameters()
-//            parameters["latitude"] = geo.latitude
-            parameters["latitude"] = 37.661497
-//            parameters["longitude"] = geo.longtitude
-            parameters["longitude"] = 126.884958
+            parameters["latitude"] = geo.latitude
+//            parameters["latitude"] = 37.661497
+            parameters["longitude"] = geo.longtitude
+//            parameters["longitude"] = 126.884958
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
             parameters["date"] = dateFormatter.string(from: date)
@@ -41,11 +41,12 @@ enum MapRouter: URLRequestConvertible {
 //            parameters["mapSheepCropList"] = mapSheetCropList.map { crop in
 //                ["cropType":crop.cropType,"accuracy":crop.accuracy,"isOn":crop.isOn] as [String : Any]
 //            }
-            parameters["mapSheepCropList"] = [
-                ["cropType":0,"accuracy":0,"isOn":mapSheetCropList[0].isOn] as [String : Any],
-                ["cropType":1,"accuracy":0,"isOn":mapSheetCropList[1].isOn] as [String : Any],
-                ["cropType":2,"accuracy":0,"isOn":mapSheetCropList[2].isOn] as [String : Any],
-                ["cropType":3,"accuracy":0,"isOn":mapSheetCropList[3].isOn] as [String : Any]
+            parameters["mapSheepCropList"] =
+            [
+                ["cropType":0,"accuracy":mapSheetCropList[0].accuracy/100,"isOn":mapSheetCropList[0].isOn] as [String : Any],
+                ["cropType":1,"accuracy":mapSheetCropList[1].accuracy/100,"isOn":mapSheetCropList[1].isOn] as [String : Any],
+                ["cropType":2,"accuracy":mapSheetCropList[2].accuracy/100,"isOn":mapSheetCropList[2].isOn] as [String : Any],
+                ["cropType":3,"accuracy":mapSheetCropList[3].accuracy/100,"isOn":mapSheetCropList[3].isOn] as [String : Any]
             ]
             return parameters
         }
