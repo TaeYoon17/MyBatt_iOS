@@ -53,7 +53,7 @@ struct CropSelectView: View {
                             })),id:\.self){ key in
                                 HStack{
                                     (
-                                        Text("\(Diagnosis.koreanTable[key] ?? "") 계수: ")
+                                        Text("\(Diagnosis.koreanTable[key] ?? "") 개수: ")
                                         .font(.footnote).fontWeight(.semibold)
                                     + Text("\(myDiagnosis[key] ?? 0)").font(.footnote)
                                      )

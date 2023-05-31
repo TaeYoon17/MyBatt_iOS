@@ -59,6 +59,7 @@ final class UserVM: ObservableObject{
             } receiveValue: {[weak self] (receivedUser: LogInResponse) in
                 self?.userModel.userKey = receivedUser.key
                 self?.userModel.token = UserDefaultsManager.shared.getTokens()
+                print(UserDefaultsManager.shared.getTokens())
                 self?.checkToken()
                 self?.loginSuccess.send()
             }.store(in: &subscription)

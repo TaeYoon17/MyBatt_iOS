@@ -18,6 +18,6 @@ final class ApiLogger: EventMonitor {
     
     // Event called whenever a DataRequest has parsed a response.
     func request<Value>(_ request: DataRequest, didParseResponse response: DataResponse<Value, AFError>) {
-        debugPrint("ApiLogger - Finished: \(response.error)")
+        debugPrint("ApiLogger - Finished: \(response.value)")
     }
 }

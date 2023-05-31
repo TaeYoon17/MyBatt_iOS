@@ -129,6 +129,7 @@
 		63F5D3072A262C2D00D8BB78 /* MapQueryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F5D3062A262C2D00D8BB78 /* MapQueryModel.swift */; };
 		63F5D3092A262DC000D8BB78 /* MapQueryDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F5D3082A262DC000D8BB78 /* MapQueryDataService.swift */; };
 		63F5D30B2A269EB900D8BB78 /* AlbumPickerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F5D30A2A269EB900D8BB78 /* AlbumPickerVM.swift */; };
+		63F5D30D2A26D17A00D8BB78 /* SickListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F5D30C2A26D17A00D8BB78 /* SickListResponse.swift */; };
 		63F7E2D52A040C90006E8B3E /* InfoMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F7E2D42A040C90006E8B3E /* InfoMainView.swift */; };
 /* End PBXBuildFile section */
 
@@ -255,6 +256,7 @@
 		63F5D3062A262C2D00D8BB78 /* MapQueryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapQueryModel.swift; sourceTree = "<group>"; };
 		63F5D3082A262DC000D8BB78 /* MapQueryDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapQueryDataService.swift; sourceTree = "<group>"; };
 		63F5D30A2A269EB900D8BB78 /* AlbumPickerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumPickerVM.swift; sourceTree = "<group>"; };
+		63F5D30C2A26D17A00D8BB78 /* SickListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SickListResponse.swift; sourceTree = "<group>"; };
 		63F7E2D42A040C90006E8B3E /* InfoMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoMainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -595,6 +597,7 @@
 			isa = PBXGroup;
 			children = (
 				63A582822A1FD24C0007D317 /* Item.swift */,
+				63F5D30C2A26D17A00D8BB78 /* SickListResponse.swift */,
 			);
 			path = SearchModel;
 			sourceTree = "<group>";
@@ -874,6 +877,7 @@
 				630500912A1B751C007BF769 /* ImageAppeaerBtnView.swift in Sources */,
 				630500832A1B5EF0007BF769 /* AlbumPickerView.swift in Sources */,
 				63DC15EA29D180ED0062691D /* ContentView.swift in Sources */,
+				63F5D30D2A26D17A00D8BB78 /* SickListResponse.swift in Sources */,
 				63F096F92A135B1A005DA59C /* CropSelectView.swift in Sources */,
 				63F20AC02A17644500896597 /* UserRouter.swift in Sources */,
 				63139C3A2A22220E000CDBBA /* ExpertMailView.swift in Sources */,

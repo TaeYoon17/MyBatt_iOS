@@ -65,7 +65,7 @@ struct DiagnosisItem: Codable,Identifiable{
 struct Diagnosis{
     static let koreanTable:[DiagnosisType:String] = [
         .PepperNormal:"정상",.TomatoNormal:"정상",.LettuceNormal:"정상",.StrawberryNormal:"정상",
-        .PepperMildMotle:"고추 마일드 모틀 바이러스",.PepperSpot:"고추 점무늬병",
+        .PepperMildMotle:"고추 마일드모틀바이러스",.PepperSpot:"고추 점무늬병",
         .StrawberryGrayMold:"딸기 잿빛곰팡이병",.StrawberryPowderyMildew:"딸기 흰가루병",
         .LettuceMycosis:"상추 균핵병",.LettuceDownyMildew:"상추 노균병",
         .TomatoLeafFungus:"토마토 잎곰팡이병",.TomatoYellowLeafRoll:"토마토 황화잎말이바이러스",

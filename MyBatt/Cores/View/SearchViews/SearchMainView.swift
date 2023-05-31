@@ -9,6 +9,7 @@ import SwiftUI
 struct SearchMainView: View{
     @State private var searchTerm = ""
     @StateObject var oo = SeaerchMainVM()
+    @EnvironmentObject var appManager: AppManager
     @Environment(\.isSearching) private var isSearching
     @Environment(\.dismissSearch) private var dismissSearch
     var body: some View {
@@ -41,6 +42,7 @@ struct SearchMainView: View{
         }.onSubmit(of:.search) {
             print(isSearching)
             print("검색 실행")
+            oo.requestSickList(cropName: searchTerm, sickNameKor: nil, displayCount: nil, startPoint: nil)
         }
     }
 }
@@ -61,7 +63,7 @@ fileprivate struct SearchedView: View {
                             .resizable()
                             .scaledToFit().frame(width:80)
                             .foregroundColor(.gray)
-                        Text("궁금하면 물어봐!!")
+                        Text("작물 이름을 입력하세요!!")
                     }
                 }else{
                     Text("검색하기 전 기본 뷰")

@@ -20,13 +20,13 @@ struct InfoMainView: View {
         Form {
             Section{
                 HStack{
-                    Text("아이디: ").frame(width: 60,alignment: .trailing)
+                    Text("아이디: ").frame(width: 60,alignment: .leading)
                         .font(.subheadline)
                     TextField("입력하세요", text: $myId)
                     Spacer()
                 }
                 HStack(spacing:0){
-                    Text("비밀번호: ").frame(width: 60,alignment: .trailing)
+                    Text("비밀번호: ").frame(width: 60,alignment: .leading)
                         .font(.subheadline)
                     HStack {
                         Image(systemName: "")
