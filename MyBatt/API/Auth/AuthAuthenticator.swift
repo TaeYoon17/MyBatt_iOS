@@ -89,3 +89,16 @@ class AuthAuthenticator : Authenticator {
         // return urlRequest.headers["Authorization"] == bearerToken
     }
 }
+extension AuthAuthenticator{
+    static var getAuthInterceptor:AuthenticationInterceptor<OAuthAuthenticator>{
+        let storedTokenData = UserDefaultsManager.shared.getTokens()
+        
+        let credential = OAuthCredential(accessToken: storedTokenData.accessToken,
+                                         refreshToken: storedTokenData.refreshToken,
+                                         expiration: Date(timeIntervalSinceNow: 60 * 60))
+        // Create the interceptor
+        let authenticator = OAuthAuthenticator()
+        let authInterceptor = AuthenticationInterceptor(authenticator: authenticator,credential: credential)
+        return authInterceptor
+    }
+}

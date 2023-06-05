@@ -1,26 +1,27 @@
 //
-//  GroupBoxExtension.swift
+//  DisclosureGroupExtension.swift
 //  MyBatt
 //
-//  Created by 김태윤 on 2023/05/16.
+//  Created by 김태윤 on 2023/06/02.
 //
 
 import SwiftUI
-extension GroupBox{
-    func bgColor(_ color: Color,paddingSize: CGFloat = 8)->some View{
-        self.groupBoxStyle(CustomGroupBoxStyle(color: color,paddingSize: paddingSize))
-    }
+
+extension DisclosureGroup{
+//    func bgColor(_ color: Color,paddingSize: CGFloat = 8)->some View{
+//        self.groupBoxStyle(CustomGroupBoxStyle(color: color,paddingSize: paddingSize))
+//    }
 }
-fileprivate struct CustomGroupBoxStyle: GroupBoxStyle{
+ struct CustomDisclosureGroupStyle: DisclosureGroupStyle{
     let color: Color
     let paddingSize: CGFloat
     func makeBody(configuration: Configuration) -> some View {
         VStack {
             HStack {
                 configuration.label
-                    .font(.headline)
+                    .font(.title2)
                 Spacer()
-            }
+            }.background(Color.lightGray)
             configuration.content
         }
         .padding(.all,paddingSize)

@@ -7,17 +7,17 @@
 
 import Foundation
 struct SickListResponse: Codable {
-    let totalCnt: Int?
-    let sickList: [SickItem]?
+    let totalCnt: Int
+    let sickList: [SickItem]
     enum CodingKeys : String, CodingKey{
         case totalCnt
         case sickList
       }
 }
 struct SickItem:Codable{
-    let sickKey: String?
-    let cropName: String?
-    let sickNameKor, sickNameEng: String?
+    let sickKey: String
+    let cropName: String
+    let sickNameKor, sickNameEng: String
     let thumbImg: String?
     enum CodingKeys : String, CodingKey{
         case sickKey

@@ -15,6 +15,9 @@ extension Color{
     static var ambientColor: Self{
         Color("AmbientColor")
     }
+    static var lightAmbientColor: Self{
+        Color("LightAmbient")
+    }
     init(hex:String){
         // Scanner에서 
         let scanner: Scanner = Scanner(string: hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted))

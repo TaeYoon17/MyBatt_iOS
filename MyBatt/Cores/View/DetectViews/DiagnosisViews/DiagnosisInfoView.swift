@@ -24,7 +24,9 @@ struct DiagnosisInfoView: View {
             }
             Spacer()
             Button{
-                self.diagnosisVM.requestInfo(key: code)
+            //MARK: -- 여기에서 자세한 결과 요청을 보냄
+                self.diagnosisVM.tempInfo()
+//                self.diagnosisVM.requestInfo(key: code)
             } label: {
                 HStack{
                     Text("상세정보").font(.caption)
@@ -36,9 +38,6 @@ struct DiagnosisInfoView: View {
             
         }
     .modifier(DiagnosisInfoViewModifier(paddingSize: 16))
-//        .cornerRadius(8)
-        
-            
     }
 }
 

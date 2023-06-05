@@ -11,10 +11,14 @@ import Alamofire
 final class DiagnosisVM:ObservableObject{
     private var subscription = Set<AnyCancellable>()
     lazy var requestInfoSuccess = PassthroughSubject<DiseaseDetail,Never>()
+    var tempInfoSuccess = PassthroughSubject<(),Never>()
     deinit{
         subscription.forEach { ca in
             ca.cancel()
         }
+    }
+    func tempInfo(){
+        self.tempInfoSuccess.send()
     }
     func requestInfo(key: String){
                 print("DiagnosisVM - requestInfo() called")

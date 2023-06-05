@@ -12,15 +12,15 @@ struct DiagnosisView: View {
     @State private var isLoading = true
     @EnvironmentObject var appManager: AppManager
     @EnvironmentObject var userVM: UserVM
-    @StateObject var diagnosisVM: DiagnosisVM = DiagnosisVM()
+    
     @Environment(\.dismiss) private var dismiss
     @State private var diagnosisResponse: DiagnosisResponse?
     @State private var isFailed = false
     @State var naviStackIdx = 0
     var body: some View {
         ZStack{
-            if isLoading{
-//            if false{
+//            if isLoading{
+            if false{
                 self.loadingView
                     .onReceive(userVM.diagnosisFail) { str in
                         if let str = str{
@@ -43,10 +43,15 @@ struct DiagnosisView: View {
                     } label: {
                         EmptyView()
                     }
-                    self.diagnosisView.navigationTitle("병해 진단 결과")
-                        .onReceive(diagnosisVM.requestInfoSuccess) { output in
-                            self.naviStackIdx = appManager.linkAction()
-                            print("진단 결과를 받았습니다!!")
+                    DiagnosisResultView(diagnosisImage: userVM.diagnosisImage!, diagnosisResponse: diagnosisResponse)
+                        .navigationTitle("병해 진단 결과")
+//                        .onReceive(diagnosisVM.requestInfoSuccess) { output in
+//                            self.naviStackIdx = appManager.linkAction()
+//                            print("진단 결과를 받았습니다!!")
+//                        }
+                        .onDisappear(){
+                            appManager.isDiagnosisActive = false
+                            appManager.isTabbarHidden = false
                         }
                 }
             }
@@ -170,7 +175,6 @@ struct DiagnosisView: View {
             EmptyView()
         }
         .isDetailLink(false)
-        
     }
 }
 

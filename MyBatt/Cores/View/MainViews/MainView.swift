@@ -66,11 +66,6 @@ struct MainView: View {
                             .cornerRadius(10)
                         //MARK: -- 도움말
                         HStack(alignment: .top,spacing:20){
-                            //                                ScrollView{
-                            //                                    Text("wow world")
-                            //                                }.navigationTitle("Hello World").searchable(text: .constant("여기에서 검색"))
-                            //                                    .navigationBarTitleDisplayMode(.large)
-                            
                             MainRequestBtn(labelImage: "questionmark.circle.fill",
                                            labelText: "서비스 가이드"){
                                 activeLink(.none)
@@ -126,7 +121,7 @@ struct MainView: View {
             case .Map:
                 MapMainView()
             case .CropManage:
-                Text("Crop Manage View")
+                CM_MainView()
             case .Camera:
                 Text("EmptyView")
             case .Search:

@@ -15,21 +15,17 @@ final class SeaerchMainVM: ObservableObject{
     @Published var sickListResponse:SickListResponse?
     var subscription = Set<AnyCancellable>()
     func requestSickList(cropName:String?,sickNameKor:String?,displayCount: Int?,startPoint:Int?){
-        let storedTokenData = UserDefaultsManager.shared.getTokens()
-
-        let credential = OAuthCredential(accessToken: storedTokenData.accessToken,
-                                         refreshToken: storedTokenData.refreshToken,
-                                         expiration: Date(timeIntervalSinceNow: 60 * 60))
-        // Create the interceptor
-        let authenticator = OAuthAuthenticator()
-        let authInterceptor = AuthenticationInterceptor(authenticator: authenticator,
-                                                        credential: credential)
-
-        ApiClient.shared.session.request(CropInfoRouter.SickList(cropName: cropName ?? "", sickNameKor: sickNameKor ?? "", displayCount: 10, startPoint: 1),interceptor: authInterceptor)
-//            .publishString()
-//            .sink { response in
-//                print(String(data: response.data!, encoding: .utf8))
-//            }.cancel()
+//        let storedTokenData = UserDefaultsManager.shared.getTokens()
+//
+//        let credential = OAuthCredential(accessToken: storedTokenData.accessToken,
+//                                         refreshToken: storedTokenData.refreshToken,
+//                                         expiration: Date(timeIntervalSinceNow: 60 * 60))
+//        // Create the interceptor
+//        let authenticator = OAuthAuthenticator()
+//        let authInterceptor = AuthenticationInterceptor(authenticator: authenticator,
+//                                                        credential: credential)
+//        
+        ApiClient.shared.session.request(CropInfoRouter.SickList(cropName: cropName ?? "", sickNameKor: sickNameKor ?? "", displayCount: 10, startPoint: 1),interceptor: AuthAuthenticator.getAuthInterceptor)
             .publishDecodable(type: ResponseWrapper<SickListResponse>.self)
             .value()
             .sink(receiveCompletion: { completion in
