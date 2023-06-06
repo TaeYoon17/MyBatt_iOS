@@ -9,22 +9,17 @@ import Foundation
 import Alamofire
 import Combine
 final class SeaerchMainVM: ObservableObject{
-    @Published var searchText = ""
-    @Published var data:[Item] = dummies()
-    @Published var searchResults: [Item] = []
+    @Published var searchResults: [SickItem] = []
     @Published var sickListResponse:SickListResponse?
+    @Published var prevCropName = ""
+    @Published var prevSickName = ""
     var subscription = Set<AnyCancellable>()
     func requestSickList(cropName:String?,sickNameKor:String?,displayCount: Int?,startPoint:Int?){
-//        let storedTokenData = UserDefaultsManager.shared.getTokens()
-//
-//        let credential = OAuthCredential(accessToken: storedTokenData.accessToken,
-//                                         refreshToken: storedTokenData.refreshToken,
-//                                         expiration: Date(timeIntervalSinceNow: 60 * 60))
-//        // Create the interceptor
-//        let authenticator = OAuthAuthenticator()
-//        let authInterceptor = AuthenticationInterceptor(authenticator: authenticator,
-//                                                        credential: credential)
-//        
+        if !(prevCropName == cropName && prevSickName == sickNameKor){
+            searchResults = []
+            prevCropName = cropName ?? ""
+            prevSickName = sickNameKor ?? ""
+        }
         ApiClient.shared.session.request(CropInfoRouter.SickList(cropName: cropName ?? "", sickNameKor: sickNameKor ?? "", displayCount: 10, startPoint: 1),interceptor: AuthAuthenticator.getAuthInterceptor)
             .publishDecodable(type: ResponseWrapper<SickListResponse>.self)
             .value()
@@ -36,8 +31,11 @@ final class SeaerchMainVM: ObservableObject{
                     print("가져오기 실패")
                     print(error.localizedDescription)
                 }
-            }, receiveValue: { output in
-                print(output.data?.sickList)
+            }, receiveValue: {[weak self] output in
+                guard let response: SickListResponse = output.data else { return }
+                
+                self?.searchResults.append(contentsOf: response.sickList)
+                
             }).store(in: &subscription)
     }
 }

@@ -16,7 +16,7 @@ struct DiagnosisResultView: View {
     var body: some View{
         ZStack{
             NavigationLink(isActive: $goToNextView) {
-                DiseaseInfoView()
+//                DiseaseInfoView(sickKey: "D00001545")
             } label: {
                 EmptyView()
             }

@@ -6,15 +6,30 @@
 //
 
 import SwiftUI
+import Combine
 private enum InfoType:CaseIterable{
     case PictureType
     case EnvironmentType
     case Symptom
 }
 struct DiseaseInfoView: View {
+    @EnvironmentObject var appManager: AppManager
+    @Environment(\.dismiss) private var dismiss
     @State private var toggleStates = [true,true,true,true]
     @State private var goNextView = false
     @State private var imageWidth: CGFloat = 0
+    @State private var errorMsg = ""
+    @State private var isError = false
+    @StateObject private var vm: DiseaseInfoVM
+    let sickKey: String
+    let sickName: String
+    let cropName: String
+    init(sickKey:String,sickName: String,cropName: String){
+        self.sickKey = sickKey
+        self.cropName = cropName
+        self.sickName = sickName
+        self._vm = StateObject(wrappedValue: DiseaseInfoVM(sickKey: sickKey))
+    }
     var body: some View {
         VStack(spacing:0){
             NavigationLink(isActive: $goNextView) {
@@ -28,7 +43,7 @@ struct DiseaseInfoView: View {
             //MARK: -- 헤더 뷰
             HStack(alignment:.center, spacing:4){
                 ScrollView(.horizontal){
-                    Text("버거씨 병")
+                    Text("\(cropName) \(sickName)")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.black)
@@ -38,16 +53,26 @@ struct DiseaseInfoView: View {
             .padding(.horizontal)
             .padding(.bottom)
             ScrollView(showsIndicators: false){
+                let nonFound = "검색 결과가 없습니다."
                 VStack(spacing: 12){
                     self.imageInfo
-                    self.textInfoView(text: "병원 균은 뭐ㅜ머러민ㅇ럼니", label: "발생환경",toggleState: $toggleStates[1])
-                    self.textInfoView(text: "병원 균은 뭐ㅜ머러민ㅇ럼니", label: "증상",
+                    self.textInfoView(text: vm.diseaseInfoModel?.developmentCondition ?? nonFound, label: "발생환경",toggleState: $toggleStates[1])
+                    self.textInfoView(text: vm.diseaseInfoModel?.symptoms ?? nonFound, label: "증상",
                                       toggleState: $toggleStates[2])
-                    self.textInfoView(text: "와라랄라라라라랄라라라\nasdfasdfasd\nasdfsadfasdf\nasdfasdf\nsadfasdfaf\nsadfsad\nasfdasdf\nsadfasd\nsadfasdf\nsadfas", label: "방제방법",
+                    self.textInfoView(text: vm.diseaseInfoModel?.preventionMethod ?? nonFound, label: "방제방법",
                                       toggleState: $toggleStates[3])
                     Rectangle().fill(Color.white).frame(height:100)
                 }.padding(.all)
             }
+            
+        }
+        .onReceive(vm.errorMessage) { output in
+            //            print("뷰 모델의 에러 감지")
+            self.errorMsg = output
+            self.isError = true
+        }
+        .alert(errorMsg,isPresented: $isError){
+            Button("뒤로가기", role: .cancel) { self.dismiss() }
         }
         .padding(.vertical)
         .background(Color.white)
@@ -62,7 +87,6 @@ struct DiseaseInfoView: View {
                     HStack(spacing:4){
                         Image(systemName: "cross.case")
                             .imageScale(.small)
-                        
                         Text("농약 정보")
                             .font(.system(size:16).weight(.semibold))
                     }
@@ -83,24 +107,38 @@ extension DiseaseInfoView{
         DisclosureGroup(isExpanded: $toggleStates[0]) {
             ScrollView(.horizontal,showsIndicators: false){
                 HStack{
-                    Image("picture_demo").resizable().aspectRatio(1,contentMode: .fit).frame(width: imageWidth)
-                        .cornerRadius(8)
-                    Image("picture_demo").resizable()
-                        .aspectRatio(1,contentMode: .fit).frame(width: imageWidth)
-                        .cornerRadius(8)
-                    Image("picture_demo").resizable().aspectRatio(1,contentMode: .fit).frame(width: imageWidth)
-                        .cornerRadius(8)
-                    Image("picture_demo").resizable().aspectRatio(1,contentMode: .fit).frame(width: imageWidth)
-                        .cornerRadius(8)
-                    Image("picture_demo").resizable().aspectRatio(1,contentMode: .fit).frame(width: imageWidth)
-                        .cornerRadius(8)
+                    if let imageList = self.vm.diseaseInfoModel?.imageList{
+                        ForEach(imageList){image in
+                            AsyncImage(url: URL(string: image.imagePath ?? "")) { phase in
+                                switch phase {
+                                case .empty:
+                                    ProgressView()
+                                case .success(let image):
+                                    image.resizable()
+                                        .aspectRatio(1,contentMode: .fill)
+                                        .cornerRadius(8)
+                                case .failure:
+                                    Image(systemName: "logo_demo")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .cornerRadius(8)
+                                @unknown default:
+                                    // Since the AsyncImagePhase enum isn't frozen,
+                                    // we need to add this currently unused fallback
+                                    // to handle any new cases that might be added
+                                    // in the future:
+                                    EmptyView()
+                                }
+                            }
+                        }
+                    }
                 }
             }
             .background(GeometryReader{
                 proxy in
                 Color.clear.onAppear(){
                     self.imageWidth = proxy.size.width / 1.6
-                 
+                    
                 }
             })
             .padding(.all,8)
@@ -144,7 +182,7 @@ extension DiseaseInfoView{
 struct DiseaseInfoView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            DiseaseInfoView()
+            DiseaseInfoView(sickKey: "D00001545",sickName: "버거씨병", cropName: "토마토")
         }
     }
 }

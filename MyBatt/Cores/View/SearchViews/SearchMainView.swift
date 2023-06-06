@@ -8,56 +8,18 @@
 import SwiftUI
 struct SearchMainView: View{
     @State private var searchTerm = ""
-    @StateObject var oo = SeaerchMainVM()
+    @StateObject var vm = SeaerchMainVM()
     @EnvironmentObject var appManager: AppManager
     @Environment(\.isSearching) private var isSearching
     @Environment(\.dismissSearch) private var dismissSearch
-    
     var body: some View {
         GeometryReader { proxy in
             let insets = proxy.safeAreaInsets
-            _SearchMainView(topInset: insets.top)
+            _SearchMainView(topInset: insets.top).environmentObject(vm)
                 .edgesIgnoringSafeArea(.all)
         }
-        .navigationTitle("작물 검색하기")
+        .navigationTitle("병해 정보 검색하기")
         .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-
-extension SearchMainView{
-    var prevView: some View{
-        VStack{
-            SearchedView()
-                .padding()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .navigationTitle("병해 정보 검색")
-            Rectangle().frame(height:100).foregroundColor(.white)
-        }
-        .navigationBarTitleDisplayMode(.large)
-        .searchable(text: $searchTerm){
-            ForEach(oo.searchResults) { item in
-                HStack{
-                    Text("\(item.name)-\(item.title)")
-                        .foregroundColor(.black)
-                }.frame(height: 100)
-                    .padding(.vertical,4)
-            }
-        }
-        .onChange(of: searchTerm) { newValue in
-            print(isSearching)
-            if searchTerm.isEmpty && !isSearching {
-                //Search cancelled here
-                print("검색 취소")
-            }
-            oo.searchResults = oo.data.filter({ item in
-                item.name.lowercased().contains(newValue.lowercased())
-            })
-        }.onSubmit(of:.search) {
-            print(isSearching)
-            print("검색 실행")
-            oo.requestSickList(cropName: searchTerm, sickNameKor: nil, displayCount: nil, startPoint: nil)
-        }
     }
 }
 
@@ -92,15 +54,19 @@ fileprivate struct SearchedView: View {
 struct _SearchMainView: View {
     let topInset: CGFloat
     @Namespace var animation
-    
+    @EnvironmentObject var vm : SeaerchMainVM
     @State private var cropNameField:String = ""
     @State private var diseaseNameField:String = ""
     @State var isShow = true
     @State private var goNextView:Bool = false
+    @State private var searchResult: [SickItem] = []
+    @State private var sickKey = ""
+    @State private var sickName = ""
+    @State private var cropName = ""
     var body: some View {
         VStack(spacing:0){
             NavigationLink(isActive: $goNextView) {
-                DiseaseInfoView()
+                DiseaseInfoView(sickKey: self.sickName, sickName: self.sickName, cropName: self.cropName)
             } label: {
                 EmptyView()
             }
@@ -114,17 +80,21 @@ struct _SearchMainView: View {
                     // MARK: -- 콘텐츠 배치
                     Rectangle().fill(.white).frame(height: 12)
                     LazyVStack(spacing: 12) {
-                        ForEach(1...10,id:\.self){_ in
+                        ForEach(vm.searchResults){ item in
                             Button{
+                                self.sickKey = item.sickKey
+                                self.sickName = item.sickNameKor
+                                self.cropName = item.cropName
                                 self.goNextView = true
                             } label: {
-                                SearchItemView()
+                                SearchItemView(imageURL:
+                                                item.thumbImg, cropName: item.cropName, sickName: item.sickNameKor, sickEng: item.sickNameEng)
                                     .padding()
                                     .background(Color.lightGray)
                                     .cornerRadius(12)
                                     .padding(.horizontal)
                                     .cornerRadius(12)
-                            }
+                            }.tint(Color.black)
                         }
                     }
                 }
@@ -160,17 +130,18 @@ struct _SearchMainView: View {
         }
     }
 }
+//MARK: -- 검색 앱 바
 private extension _SearchMainView{
     var appBar: some View{
         VStack(spacing:0){
             if isShow{
                 HStack(alignment:.bottom, spacing:4){
-                    Text("21개 ")
+                    Text("\(vm.searchResults.count)개 ")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.accentColor)
                     ScrollView(.horizontal){
-                        Text("토마토 버거씨병")
+                        Text((vm.prevCropName == "" && vm.prevSickName == "") ? "작물과 병해 이름을 검색하세요" : "\(vm.prevCropName) \(vm.prevSickName)")
                             .font(.title2)
                             .fontWeight(.bold)
                     }
@@ -193,6 +164,10 @@ private extension _SearchMainView{
                     TextField("병해명",text: $diseaseNameField)
                         .textFieldStyle(.roundedBorder)
                 }
+            }
+            .onSubmit {
+//                print("Submit Called!!")
+                self.vm.requestSickList(cropName: self.cropNameField, sickNameKor: self.diseaseNameField, displayCount: nil, startPoint: nil)
             }
             .padding()
             .background(Color.lightGray)

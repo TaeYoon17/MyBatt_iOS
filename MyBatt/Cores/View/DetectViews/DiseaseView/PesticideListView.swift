@@ -119,11 +119,11 @@ extension PesticideListView{
         }
     }
 }
-struct PesticideList_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            DiseaseInfoView()
-        }
-    }
-}
+//struct PesticideList_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationView {
+//            DiseaseInfoView(sickKey: "D00001545")
+//        }
+//    }
+//}
 

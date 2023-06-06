@@ -12,8 +12,7 @@ enum CropInfoRouter: URLRequestConvertible {
     case SickDetail(sickKey:String)
     case SickList(cropName:String,sickNameKor:String,displayCount:Int,startPoint:Int)
     case NoticeList
-    case PsisList(cropName:String,diseaseWeedName:String,displayCount:String,startPoint:String)
-    case PsisDetail(pestiCode:String,diseaseUseSeq:String,displayCount:String,startPoint:String)
+
     var baseURL: URL {
         return URL(string: ApiClient.BASE_URL)!
     }
@@ -22,36 +21,30 @@ enum CropInfoRouter: URLRequestConvertible {
     }
     var endPoint: String {
         switch self{
-        case .SickDetail(let sickKey):
-            return "crop/sickDetail?sickKey=\(sickKey)"
+        case .SickDetail:
+            return "crop/sickDetail"
         case .SickList:
             return "crop/sickList"
         case .NoticeList:
             return "crop/noticeList"
-        case .PsisList:
-            return "crop/psisList"
-        case .PsisDetail:
-            return "crop/psisDetail"
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .PsisList, .PsisDetail: return .post
+        
         default: return .get
         }
     }
     
     var parameters: Parameters{
         switch self {
-        case let .PsisDetail(pestiCode: code, diseaseUseSeq: seq, displayCount: cnt, startPoint: startPoint):
-            return Parameters()
-        case let .PsisList(cropName: cropName, diseaseWeedName: diseaseWeedName, displayCount: cnt, startPoint: startPoint):
-            return Parameters()
         case let .NoticeList:
             return Parameters()
-        case let .SickDetail:
-            return Parameters()
+        case let .SickDetail(sickKey: keyy):
+            var params = Parameters()
+            params["sickKey"] = keyy
+            return params
         case let .SickList(cropName: cropName, sickNameKor: sickNameKor, displayCount: displayCnt, startPoint: startPt):
             var params = Parameters()
             params["cropName"] = cropName

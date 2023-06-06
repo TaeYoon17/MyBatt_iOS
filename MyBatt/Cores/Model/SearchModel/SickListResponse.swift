@@ -14,7 +14,8 @@ struct SickListResponse: Codable {
         case sickList
       }
 }
-struct SickItem:Codable{
+struct SickItem:Codable,Identifiable{
+    var id = UUID()
     let sickKey: String
     let cropName: String
     let sickNameKor, sickNameEng: String

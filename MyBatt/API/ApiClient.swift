@@ -13,7 +13,7 @@ final class ApiClient {
     
     static let shared = ApiClient()
     
-    static let BASE_URL = "http://15.164.23.13:8080/"
+    static let BASE_URL = "https://mybatboo.kr/"
     
     let interceptors = Interceptor(interceptors: [
         BaseInterceptor() // application/json
