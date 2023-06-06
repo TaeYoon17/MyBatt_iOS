@@ -64,12 +64,18 @@ struct MainView: View {
                             .frame(minHeight: 60,maxHeight: 80)
                             .background(Color.lightGray)
                             .cornerRadius(10)
-                        //MARK: -- 도움말
+                        
                         HStack(alignment: .top,spacing:20){
-                            MainRequestBtn(labelImage: "questionmark.circle.fill",
-                                           labelText: "서비스 가이드"){
-                                activeLink(.none)
-                            }
+                            //MARK: -- 도움말
+                            
+                            
+                                MainRequestBtn(labelImage: "questionmark.circle.fill",
+                                               labelText: "서비스 가이드"){
+                                    if let url = URL(string: "https://www.youtube.com/watch?v=RTHg8laviaM") {
+                                        UIApplication.shared.open(url)
+                                    }
+                                }
+                            
                             MainRequestBtn(labelImage: "headphones",
                                            labelText: "전문가에게 추가 문의하기"){
                                 activeLink(.ExpertRequest)
@@ -95,10 +101,6 @@ struct MainView: View {
                         .frame(width: 32,height: 32)
                         .offset(x:-10)
                 }
-//                ToolbarItem(id: "Alert",placement: .navigationBarTrailing) {
-//                    Image(systemName: "bell").foregroundColor(.accentColor)
-//                        .font(.system(.body).bold())
-//                }
             })
             .navigationBarTitleDisplayMode(.inline)
         }.navigationViewStyle(.stack)

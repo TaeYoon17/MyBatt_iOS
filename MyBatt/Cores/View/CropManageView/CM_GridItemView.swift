@@ -18,7 +18,7 @@ struct CM_GridItemView: View {
                 Button{
                     goNextView = true
                 }label:{
-                    GroupBox {
+            GroupBox {
                         VStack(alignment:.leading){
                             Divider()
                             Text("병해 진단 후 카테고리가 설정되지 않은 작물들입니다.")

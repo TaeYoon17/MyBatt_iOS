@@ -120,7 +120,6 @@ struct _SearchMainView: View {
                             } label: {
                                 SearchItemView()
                                     .padding()
-                                    
                                     .background(Color.lightGray)
                                     .cornerRadius(12)
                                     .padding(.horizontal)

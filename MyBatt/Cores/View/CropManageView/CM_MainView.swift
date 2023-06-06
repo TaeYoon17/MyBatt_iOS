@@ -53,14 +53,20 @@ struct CM_MainView: View {
     // 카테고리 그룹 그리드
     @ViewBuilder
     var categoryGridView: some View{
-        ScrollView{
-            LazyVGrid(columns: [GridItem(.flexible(),spacing: 20),GridItem(.flexible(),spacing: 20)],
-                      spacing: 20,content: {                ForEach(0...10,id:\.self) { idx in
-                CM_GridItemView(isEditting: $isEditting, goNextView: $goNextView)
+        
+            ScrollView{
+                LazyVGrid(columns: [GridItem(.flexible(),spacing: 20),GridItem(.flexible(),spacing: 20)],
+                          spacing: 20,content: {
+                    ForEach(0...10,id:\.self) { idx in
+                        CM_GridItemView(isEditting: $isEditting, goNextView: $goNextView)
+                    }
+                    
+                })
+                .padding()
+                Spacer()
+                Rectangle().fill(.clear).frame(height: 100)
             }
-            })
-            .padding()
-        }
+        
     }
 }
 

@@ -22,6 +22,7 @@ struct ExpertMailView: View {
             VStack(spacing: 8){
                 HStack{
                     Text(title == "" ? "새로운 메시지" : title)
+                        .minimumScaleFactor(0.5)
                     Spacer()
                     Button{
                         print("보내기 버튼 클릭")

@@ -141,28 +141,6 @@ extension DiseaseInfoView{
         
     }
 }
-extension DiseaseInfoView{
-    var controlView: some View{
-        DisclosureGroup(isExpanded: $toggleStates[3]) {
-            Text("와라라랄라라\n asdfsdaf\n asdfasdf\n sadfsadf\n sadfsdaf").multilineTextAlignment(.leading)
-            Spacer()
-                .padding(.all,12)
-                .background(.white)
-                .padding(.top,4)
-                .cornerRadius(12)
-        } label: {
-            HStack{
-                Text("방제 방법")
-                    .font(.title2.weight(.heavy))
-                Spacer()
-            }
-        }
-        .padding(.all)
-        .background(Color.lightGray)
-        .cornerRadius(12)
-    }
-}
-
 struct DiseaseInfoView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {

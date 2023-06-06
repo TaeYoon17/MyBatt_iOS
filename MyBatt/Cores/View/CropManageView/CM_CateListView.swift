@@ -60,6 +60,7 @@ struct CM_CateListView: View {
         .navigationTitle("미분류 작물")
         .navigationBarBackButtonHidden(isEditting)
         .navigationBarTitleDisplayMode(.large)
+        //MARK: -- Navigation Bar 설정
         .toolbar {
             ToolbarItemGroup(placement:.navigationBarLeading) {
                     if isEditting{

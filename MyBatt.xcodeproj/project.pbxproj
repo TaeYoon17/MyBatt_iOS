@@ -93,6 +93,7 @@
 		63A582802A1FD22A0007D317 /* SearchMainVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A5827F2A1FD22A0007D317 /* SearchMainVM.swift */; };
 		63A582832A1FD24C0007D317 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A582822A1FD24C0007D317 /* Item.swift */; };
 		63AA67C42A1F45E800071D00 /* CropInfoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AA67C32A1F45E800071D00 /* CropInfoRouter.swift */; };
+		63B4492F2A2E3F330010A983 /* ExpertMsgView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B4492E2A2E3F330010A983 /* ExpertMsgView.swift */; };
 		63B70A442A1C9FA800527D0D /* BorderModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B70A432A1C9FA800527D0D /* BorderModifier.swift */; };
 		63B70A462A1CA21E00527D0D /* SignUpSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B70A452A1CA21E00527D0D /* SignUpSheetView.swift */; };
 		63B8D93C2A0B35E0004EC7FC /* DiagnosisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B8D93B2A0B35E0004EC7FC /* DiagnosisView.swift */; };
@@ -234,6 +235,7 @@
 		63A5827F2A1FD22A0007D317 /* SearchMainVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchMainVM.swift; sourceTree = "<group>"; };
 		63A582822A1FD24C0007D317 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		63AA67C32A1F45E800071D00 /* CropInfoRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropInfoRouter.swift; sourceTree = "<group>"; };
+		63B4492E2A2E3F330010A983 /* ExpertMsgView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpertMsgView.swift; sourceTree = "<group>"; };
 		63B70A432A1C9FA800527D0D /* BorderModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderModifier.swift; sourceTree = "<group>"; };
 		63B70A452A1CA21E00527D0D /* SignUpSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpSheetView.swift; sourceTree = "<group>"; };
 		63B8D93B2A0B35E0004EC7FC /* DiagnosisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosisView.swift; sourceTree = "<group>"; };
@@ -332,6 +334,7 @@
 			children = (
 				63139C372A221DAA000CDBBA /* ExpertMainView.swift */,
 				63139C392A22220E000CDBBA /* ExpertMailView.swift */,
+				63B4492E2A2E3F330010A983 /* ExpertMsgView.swift */,
 			);
 			path = ExpertView;
 			sourceTree = "<group>";
@@ -938,6 +941,7 @@
 				636001C129F3C50500BC1F7F /* Appearances.swift in Sources */,
 				630500912A1B751C007BF769 /* ImageAppeaerBtnView.swift in Sources */,
 				630500832A1B5EF0007BF769 /* AlbumPickerView.swift in Sources */,
+				63B4492F2A2E3F330010A983 /* ExpertMsgView.swift in Sources */,
 				63DC15EA29D180ED0062691D /* ContentView.swift in Sources */,
 				63F5D30D2A26D17A00D8BB78 /* SickListResponse.swift in Sources */,
 				63F096F92A135B1A005DA59C /* CropSelectView.swift in Sources */,
