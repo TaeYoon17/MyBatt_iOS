@@ -18,6 +18,4 @@ final class OutBreakViewMoel: ObservableObject{
             $0.cancel()
         }
     }
-    func downloadData(){}
-    
 }

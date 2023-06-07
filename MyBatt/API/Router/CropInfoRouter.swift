@@ -11,6 +11,7 @@ import Alamofire
 enum CropInfoRouter: URLRequestConvertible {
     case SickDetail(sickKey:String)
     case SickList(cropName:String,sickNameKor:String,displayCount:Int,startPoint:Int)
+    case PsisList(cropName: String,diseaseWeedName:String,displayCount:Int,startPoint:Int)
     case NoticeList
 
     var baseURL: URL {
@@ -27,12 +28,15 @@ enum CropInfoRouter: URLRequestConvertible {
             return "crop/sickList"
         case .NoticeList:
             return "crop/noticeList"
+        case .PsisList:
+            return "crop/psisList"
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        
+        case .PsisList:
+            return .post
         default: return .get
         }
     }
@@ -49,6 +53,13 @@ enum CropInfoRouter: URLRequestConvertible {
             var params = Parameters()
             params["cropName"] = cropName
             params["sickNameKor"] = sickNameKor
+            params["displayCount"] = String(displayCnt)
+            params["startPoint"] = String(startPt)
+            return params
+        case let .PsisList(cropName: cropName, diseaseWeedName: diseaseName, displayCount: displayCnt, startPoint: startPt):
+            var params = Parameters()
+            params["cropName"] = cropName
+            params["diseaseWeedName"] = diseaseName
             params["displayCount"] = String(displayCnt)
             params["startPoint"] = String(startPt)
             return params
@@ -82,14 +93,15 @@ extension CropInfoRouter{
         request.method = self.method
         return request
     }
-    var postRequest:URLRequest{
+    var postRequest: URLRequest{
         let url = baseURL.appendingPathComponent(endPoint)
-        guard var urlComponents = URLComponents(url: url,resolvingAgainstBaseURL: true) else {return URLRequest(url: url)}
-        urlComponents.queryItems = self.parameters.map { key, value in
-            URLQueryItem(name: key, value: value as? String ?? "")
-        }
-        var request = URLRequest(url: urlComponents.url!)
+//        guard var urlComponents = URLComponents(url: url,resolvingAgainstBaseURL: true) else {return URLRequest(url: url)}
+//        urlComponents.queryItems = self.parameters.map { key, value in
+//            URLQueryItem(name: key, value: value as? String ?? "")
+//        }
+        var request = URLRequest(url: url)
         request.method = self.method
+        request.httpBody = try? JSONEncoding.default.encode(request, with: parameters).httpBody
         return request
     }
 }

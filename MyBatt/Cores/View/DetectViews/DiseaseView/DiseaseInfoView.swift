@@ -35,7 +35,7 @@ struct DiseaseInfoView: View {
             NavigationLink(isActive: $goNextView) {
                 GeometryReader{ proxy in
                     let topInset = proxy.safeAreaInsets.top
-                    PesticideListView(topInset: topInset)
+                    PesticideListView(topInset: topInset,cropName: "딸기",sickName:"세균")
                 }
             } label: {
                 EmptyView()

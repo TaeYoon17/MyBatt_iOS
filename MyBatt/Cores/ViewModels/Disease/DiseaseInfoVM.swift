@@ -44,7 +44,6 @@ final class DiseaseInfoVM: ObservableObject{
 //                self?.brChange(&response.preventionMethod)
                 
                 self?.diseaseInfoModel = response
-                print(response.infectionRoute,response.symptoms)
             }).store(in: &subscription)
     }
     private func brChange( str: inout String){

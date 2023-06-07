@@ -54,6 +54,8 @@
 		633F69612A227FAC00FFC891 /* Pesticide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633F69602A227FAC00FFC891 /* Pesticide.swift */; };
 		633F69642A2280BB00FFC891 /* DiseaseDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633F69632A2280BB00FFC891 /* DiseaseDetail.swift */; };
 		633F69662A2288D900FFC891 /* DiagnosisDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633F69652A2288D900FFC891 /* DiagnosisDetailView.swift */; };
+		6342FAD22A3053D00021B2EC /* PsisInfoVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6342FAD12A3053D00021B2EC /* PsisInfoVM.swift */; };
+		6342FAD42A3055400021B2EC /* PsisInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6342FAD32A3055400021B2EC /* PsisInfoModel.swift */; };
 		6345E9432A0BD7D50023CB4F /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 6345E9422A0BD7D50023CB4F /* Lottie */; };
 		6347CBFA29F6E325001B99B6 /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6347CBF929F6E325001B99B6 /* AppManager.swift */; };
 		634AE16C2A0B9A86005811FB /* TakenBtnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AE16B2A0B9A86005811FB /* TakenBtnView.swift */; };
@@ -196,6 +198,8 @@
 		633F69602A227FAC00FFC891 /* Pesticide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pesticide.swift; sourceTree = "<group>"; };
 		633F69632A2280BB00FFC891 /* DiseaseDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiseaseDetail.swift; sourceTree = "<group>"; };
 		633F69652A2288D900FFC891 /* DiagnosisDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosisDetailView.swift; sourceTree = "<group>"; };
+		6342FAD12A3053D00021B2EC /* PsisInfoVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PsisInfoVM.swift; sourceTree = "<group>"; };
+		6342FAD32A3055400021B2EC /* PsisInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PsisInfoModel.swift; sourceTree = "<group>"; };
 		6347CBF929F6E325001B99B6 /* AppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppManager.swift; sourceTree = "<group>"; };
 		634AE16B2A0B9A86005811FB /* TakenBtnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakenBtnView.swift; sourceTree = "<group>"; };
 		634DB8FA2A27BB7900DED6D7 /* AlamofireExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireExtension.swift; sourceTree = "<group>"; };
@@ -343,6 +347,7 @@
 			isa = PBXGroup;
 			children = (
 				63255F382A2FA7E7008EF09D /* DiseaseInfoVM.swift */,
+				6342FAD12A3053D00021B2EC /* PsisInfoVM.swift */,
 			);
 			path = Disease;
 			sourceTree = "<group>";
@@ -351,6 +356,7 @@
 			isa = PBXGroup;
 			children = (
 				63255F3B2A2FAB41008EF09D /* DiseaseInfoModel.swift */,
+				6342FAD32A3055400021B2EC /* PsisInfoModel.swift */,
 			);
 			path = DiseaseModel;
 			sourceTree = "<group>";
@@ -1045,6 +1051,7 @@
 				63A135A72A018CD0003A0C2D /* Camera.swift in Sources */,
 				63B8D93E2A0B3B4B004EC7FC /* DiagnosisVM.swift in Sources */,
 				63E3A8C229F3C8F900C5F24D /* ViewfinderView.swift in Sources */,
+				6342FAD22A3053D00021B2EC /* PsisInfoVM.swift in Sources */,
 				633CACA92A0B68DC00D23033 /* CIImageExtension.swift in Sources */,
 				63F20AC52A17650100896597 /* UserData.swift in Sources */,
 				6385AE362A07B8B200D6CA76 /* NetworkingManager.swift in Sources */,
@@ -1055,6 +1062,7 @@
 				6354344029E850830037D6CD /* LottieView.swift in Sources */,
 				63CC701F2A291D1B0050589E /* DiseaseInfoView.swift in Sources */,
 				632680682A2CA91200B23E35 /* CM_GridItemView.swift in Sources */,
+				6342FAD42A3055400021B2EC /* PsisInfoModel.swift in Sources */,
 				6320EABB2A2A015700558362 /* PesticideDetailSheet.swift in Sources */,
 				633F69642A2280BB00FFC891 /* DiseaseDetail.swift in Sources */,
 				634DB8FB2A27BB7900DED6D7 /* AlamofireExtension.swift in Sources */,

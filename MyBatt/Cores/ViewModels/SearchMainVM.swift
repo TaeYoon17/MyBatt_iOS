@@ -10,10 +10,16 @@ import Alamofire
 import Combine
 final class SeaerchMainVM: ObservableObject{
     @Published var searchResults: [SickItem] = []
+    @Published var searchCnt = 0
     @Published var sickListResponse:SickListResponse?
     @Published var prevCropName = ""
     @Published var prevSickName = ""
     var subscription = Set<AnyCancellable>()
+    deinit{
+        subscription.forEach { ele in
+            ele.cancel()
+        }
+    }
     func requestSickList(cropName:String?,sickNameKor:String?,displayCount: Int?,startPoint:Int?){
         if !(prevCropName == cropName && prevSickName == sickNameKor){
             searchResults = []
@@ -33,9 +39,10 @@ final class SeaerchMainVM: ObservableObject{
                 }
             }, receiveValue: {[weak self] output in
                 guard let response: SickListResponse = output.data else { return }
-                
+                if self?.searchCnt != response.totalCnt{
+                    self?.searchCnt = response.totalCnt
+                }
                 self?.searchResults.append(contentsOf: response.sickList)
-                
             }).store(in: &subscription)
     }
 }

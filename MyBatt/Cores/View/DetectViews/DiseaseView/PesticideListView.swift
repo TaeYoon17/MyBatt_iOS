@@ -8,10 +8,20 @@
 import SwiftUI
 
 struct PesticideListView: View {
+    @StateObject private var vm: PsisInfoVM
     let topInset: CGFloat
     @Namespace var animation
     @State private var isShow = true
     @State private var present = false
+    @State private var item: PsisInfo? = nil
+    let cropName: String
+    let sickName: String
+    init(topInset: CGFloat,cropName: String,sickName: String){
+        self.topInset = topInset
+        self.cropName = cropName
+        self.sickName = sickName
+        self._vm = StateObject(wrappedValue: PsisInfoVM(cropName: cropName, sickNameKor: sickName))
+    }
     var body: some View {
         VStack(spacing:0){
             // App Bar...
@@ -24,13 +34,19 @@ struct PesticideListView: View {
                     // MARK: -- 콘텐츠 배치
                     Rectangle().fill(.white).frame(height: 12)
                     LazyVStack(spacing: 12) {
-                        ForEach(1...100,id:\.self){_ in
+                        ForEach(self.vm.psisList){ item in
                             Button{
+                                self.item = item
                                 self.present = true
                             }label:{
-                                PesticideListItem().frame(height: 44)
-                                    .background(.gray.opacity(0.07))
-                                    .foregroundColor(.black)
+                                PesticideListItem(pestiKorName: item.pestiKorName,
+                                                  pestiBrandName: item.pestiBrandName,
+                                                  compName: item.compName)
+                                .frame(height: 60)
+                                .background(.gray.opacity(0.07))
+                                .foregroundColor(.black)
+                                .cornerRadius(8)
+                                .padding(.horizontal)
                             }
                         }
                     }
@@ -46,7 +62,7 @@ struct PesticideListView: View {
         .navigationTitle("농약 정보")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $present) {
-            PesticideDetailView(isShow: $present)
+            PesticideDetailView(isShow: $present,psisInfo: self.item)
         }.presentationDetents([.medium])
     }
 }
@@ -84,34 +100,36 @@ extension PesticideListView{
         VStack(spacing:0){
             if isShow{
                 HStack(alignment:.bottom, spacing:4){
-                    Text("21개")
+                    Text("\(vm.maxCnt)개 ")
                         .font(.title)
                         .fontWeight(.bold)
                     ScrollView(.horizontal){
-                        Text(" 버거씨병")
+                        Text("\(cropName) \(sickName)")
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(.black)
                     }
                     Spacer()
                 }.foregroundColor(.accentColor)
-                .padding(.horizontal)
+                    .padding(.horizontal)
             }
-            HStack(alignment: .center, spacing: 24){
-                HStack{
-                    Text("농약명")
-                    Spacer()
-                }
-                    .frame(width: 100)
-                HStack{
-                    Text("상표명")
-                    Spacer()
-                }
-                    .frame(width: 70)
-                Text("회사명")
-                Spacer()
-            }
+            
+                GeometryReader{ proxy in
+                    HStack (alignment:.center, spacing: 16){
+                        Rectangle().fill(.clear).overlay(alignment:.leading) {
+                            Text("농약명")
+                        }.frame(width: proxy.size.width / 4)
+                        Rectangle().fill(.clear).overlay(alignment:.leading){
+                            Text("상표명")
+                        }.frame(width: proxy.size.width / 5)
+                        Text("회사명")
+                        Spacer()
+                    }
+                    
+                }.frame(height: 24)
+            
             .font(.headline.weight(.semibold))
+            .padding(.horizontal)
             .padding(.vertical,8)
             .padding(.horizontal)
             .background(.gray.opacity(0.2))

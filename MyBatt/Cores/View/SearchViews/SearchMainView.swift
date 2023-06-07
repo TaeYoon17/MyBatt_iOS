@@ -66,7 +66,7 @@ struct _SearchMainView: View {
     var body: some View {
         VStack(spacing:0){
             NavigationLink(isActive: $goNextView) {
-                DiseaseInfoView(sickKey: self.sickName, sickName: self.sickName, cropName: self.cropName)
+                DiseaseInfoView(sickKey: self.sickKey, sickName: self.sickName, cropName: self.cropName)
             } label: {
                 EmptyView()
             }
