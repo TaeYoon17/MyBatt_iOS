@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CM_MainView: View {
     @EnvironmentObject var appManager: AppManager
+//    @EnvironmentObject var userVM: UserVM
+    @StateObject var vm: CM_MainVM = CM_MainVM()
     @State private var isEditting: Bool = false
     @State private var addFolderSheet: Bool = false
     @State private var goNextView = false
@@ -53,14 +55,16 @@ struct CM_MainView: View {
     // 카테고리 그룹 그리드
     @ViewBuilder
     var categoryGridView: some View{
-        
             ScrollView{
                 LazyVGrid(columns: [GridItem(.flexible(),spacing: 20),GridItem(.flexible(),spacing: 20)],
                           spacing: 20,content: {
-                    ForEach(0...10,id:\.self) { idx in
-                        CM_GridItemView(isEditting: $isEditting, goNextView: $goNextView)
+                    if let unclassfied = vm.unclassfiedGroup{
+                        
+                        CM_GridItemView(isEditting: $isEditting, memo: "병해 진단 후 카테고리가 설정되지 않은 작물들입니다.", cnt: unclassfied.cnt, color: .lightGray, name: "미분류 그룹")
                     }
-                    
+                    ForEach(vm.cm_GroupList) { item in
+                        CM_GridItemView(isEditting: $isEditting, memo: item.memo, cnt: item.cnt, color: .lightAmbientColor, name: item.name)
+                    }  
                 })
                 .padding()
                 Spacer()

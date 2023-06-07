@@ -9,34 +9,34 @@ import SwiftUI
 
 struct CM_GridItemView: View {
     @Binding var isEditting: Bool
-    @Binding var goNextView: Bool
+    let memo: String
+    let cnt: Int
+    let color: Color
+    let name: String
     var body: some View {
-        RoundedRectangle(cornerRadius: 10 )
+        RoundedRectangle(cornerRadius: 10)
             .fill(Color.lightGray)
             .aspectRatio(1,contentMode: .fit)
             .overlay(alignment:.top){
-                Button{
-                    goNextView = true
-                }label:{
-            GroupBox {
-                        VStack(alignment:.leading){
-                            Divider()
-                            Text("병해 진단 후 카테고리가 설정되지 않은 작물들입니다.")
-                                .font(Font.callout)
-                                .multilineTextAlignment(.leading)
-                            Spacer()
-                        }
-                    } label: {
-                        HStack{
-                            Text("미분류 그룹 (1)").font(.subheadline.weight(.semibold))
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.secondary)
-                                .imageScale(.small)
-                        }
-                    }.groupBoxStyle(GroupBoxBackGround(color:Color.lightAmbientColor))
-                        .foregroundColor(.black)
-                }
+                GroupBox {
+                    VStack(alignment:.leading){
+                        Divider()
+                        Text(memo)
+                            .font(Font.callout)
+                            .multilineTextAlignment(.leading)
+                        Spacer()
+                    }
+                } label: {
+                    HStack{
+                        Text("\(name) (\(cnt))").font(.subheadline.weight(.semibold))
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.secondary)
+                            .imageScale(.small)
+                    }
+                }.groupBoxStyle(GroupBoxBackGround(color:color))
+                    .foregroundColor(.black)
+                
             }
             .overlay(alignment:.topLeading) {
                 if isEditting{

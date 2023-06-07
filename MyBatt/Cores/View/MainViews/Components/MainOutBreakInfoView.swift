@@ -42,14 +42,15 @@ enum OutBreakType:CaseIterable,Identifiable{
 }
 struct MainOutBreakInfoView: View {
     @EnvironmentObject var userVM: UserVM
+    @EnvironmentObject var appManager: AppManager
     @State private var pickerNumber = 1
     // 바인딩을 통한 값 변환
     @State private var outBreakType:OutBreakType = .Forecast
+    @State var goNextView: Bool = false
+    @State var sickKey:String = ""
+    @State var sickNameKor:String = ""
+    @State var cropName:String = ""
     let bgColor: Color = .white
-    let datas = [
-        "(토마토) 반점위조바이러스",
-        "(딸기) 흰가루병"
-    ]
     var body: some View {
         VStack{
             Divider().frame(minHeight: 5)
@@ -57,6 +58,12 @@ struct MainOutBreakInfoView: View {
                 self.customPicker
                 self.content
             }
+            NavigationLink(isActive: $goNextView) {
+                DiseaseInfoView(sickKey: self.sickKey, sickName: self.sickNameKor, cropName: self.cropName)
+            } label: {
+                EmptyView()
+            }
+
         }.onAppear(){
             userVM.fetchOutbreakList()
         }
@@ -116,6 +123,12 @@ struct MainOutBreakInfoView: View {
                         Spacer()
                     }
                 }.padding(.leading,14)
+                    .onTapGesture {
+                        self.cropName = data.cropName
+                        self.sickNameKor = data.sickNameKor
+                        self.sickKey = data.sickKey ?? ""
+                        self.goNextView = true
+                    }
             }
             if datas.isEmpty{
                 Rectangle().frame(height: 1).foregroundColor(.white)

@@ -67,8 +67,6 @@ struct MainView: View {
                         
                         HStack(alignment: .top,spacing:20){
                             //MARK: -- 도움말
-                            
-                            
                                 MainRequestBtn(labelImage: "questionmark.circle.fill",
                                                labelText: "서비스 가이드"){
                                     if let url = URL(string: "https://www.youtube.com/watch?v=RTHg8laviaM") {
