@@ -7,6 +7,15 @@
 
 import UIKit
 final class Appearances{
+    static func navigationBar(color: UIColor){
+        let appeaernce = UINavigationBarAppearance()
+        appeaernce.configureWithDefaultBackground()
+        appeaernce.backgroundColor = color
+        appeaernce.shadowColor = color
+        UINavigationBar.appearance().standardAppearance = appeaernce
+        UINavigationBar.appearance().compactAppearance = appeaernce
+        UINavigationBar.appearance().scrollEdgeAppearance = appeaernce
+    }
     static func navigationBarWhite(){
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()

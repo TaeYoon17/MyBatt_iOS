@@ -12,8 +12,9 @@ struct CM_MainView: View {
 //    @EnvironmentObject var userVM: UserVM
     @StateObject var vm: CM_MainVM = CM_MainVM()
     @State private var isEditting: Bool = false
-    @State private var addFolderSheet: Bool = false
+    @State private var groupSettingSheet: Bool = false
     @State private var goNextView = false
+    @State private var type: GroupSettingType = .Add
     var body: some View {
         ZStack{
             NavigationLink(isActive: $goNextView) {
@@ -22,21 +23,38 @@ struct CM_MainView: View {
                 EmptyView()
             }
             self.categoryGridView
+            .sheet(isPresented: $groupSettingSheet, content: {
+                CM_GroupSettingView(type: self.type,isEditting: $isEditting)
+                    .environmentObject(vm)
+                        .onDisappear(){
+                            self.groupSettingSheet = false
+                        }
+                })
         }
+        .onReceive(vm.goEditView, perform: { output in
+            print(output)
+            self.type = output
+            if self.groupSettingSheet != true{
+                self.groupSettingSheet = true
+            }
+        })
+        .onReceive(vm.goToNextView, perform: { output in
+            self.goNextView = true
+        })
             .navigationTitle("내 작물 관리")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(isEditting)
             .toolbar {
+                //MARK: -- 그룹 추가
                 ToolbarItem(placement:.navigationBarLeading){
                     if isEditting{
                         Button{
-                            self.addFolderSheet = true
+                            self.type = .Add
+                            self.groupSettingSheet = true
                         }label: {
                             Image(systemName: "folder.badge.plus")
                         }.foregroundColor(.blue)
-                            .sheet(isPresented: $addFolderSheet, content: {
-                                Text("addFolderSheet")
-                            })
+                            
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -52,25 +70,51 @@ struct CM_MainView: View {
             }
     }
     
-    // 카테고리 그룹 그리드
+    //MARK: -- 카테고리 그룹 그리드
     @ViewBuilder
     var categoryGridView: some View{
             ScrollView{
                 LazyVGrid(columns: [GridItem(.flexible(),spacing: 20),GridItem(.flexible(),spacing: 20)],
                           spacing: 20,content: {
-                    if let unclassfied = vm.unclassfiedGroup{
-                        
-                        CM_GridItemView(isEditting: $isEditting, memo: "병해 진단 후 카테고리가 설정되지 않은 작물들입니다.", cnt: unclassfied.cnt, color: .lightGray, name: "미분류 그룹")
-                    }
-                    ForEach(vm.cm_GroupList) { item in
-                        CM_GridItemView(isEditting: $isEditting, memo: item.memo, cnt: item.cnt, color: .lightAmbientColor, name: item.name)
+                    CM_GridItemView(isEditting: $isEditting, item: $vm.unclassfiedGroup, color: .lightGray,isUnclassfied: true)
+                        .environmentObject(vm)
+                    ForEach(vm.cm_GroupList.indices,id:\.self) { itemIdx in
+                        let item = vm.cm_GroupList[itemIdx]
+                        CM_GridItemView(isEditting: $isEditting, item: $vm.cm_GroupList[itemIdx],color:.lightAmbientColor)
+                            .environmentObject(vm)
+                                .overlay(alignment:.topLeading) {
+                                    if isEditting{
+                                        Button {
+                                            print("삭제 아이콘 클릭")
+                                            vm.deleteGroup(id: item.id,idx:itemIdx)
+                                        } label: {
+                                            itemRemoveView
+                                        }
+                                        .offset(x:-8,y:-4)
+                                    }
+                                }
                     }  
+                })
+                .onReceive(vm.addCompleted, perform: { output in
+                    vm.getList()
+                })
+                .onReceive(vm.deleteCompleted, perform: { output in
+                    vm.cm_GroupList.remove(at: output)
                 })
                 .padding()
                 Spacer()
                 Rectangle().fill(.clear).frame(height: 100)
             }
-        
+    }
+    //MARK: -- 아이템들 삭제할 때 나오는 버튼
+    @ViewBuilder
+    var itemRemoveView: some View{
+        Image(systemName: "minus.circle")
+            .resizable()
+            .aspectRatio(1,contentMode: .fit)
+            .frame(width: 24)
+            .foregroundColor(.red)
+            .background(Circle().fill(.thickMaterial))
     }
 }
 

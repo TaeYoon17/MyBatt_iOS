@@ -11,7 +11,7 @@ struct CM_GroupListItem:Codable,Identifiable{
     var id: Int
     let userID: Int?
     let name: String
-    let cnt: Int
+    let cnt: Int?
     let memo: String
     let regDt: String
     enum CodingKeys: String, CodingKey {

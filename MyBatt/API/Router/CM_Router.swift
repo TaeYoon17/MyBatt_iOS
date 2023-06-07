@@ -10,7 +10,9 @@ import Alamofire
 
 enum CM_Router: URLRequestConvertible {
     case CM_List
-
+    case CM_GroupCreate(name: String)
+    case CM_GroupDelete(id: Int)
+    case CM_GroupUpdate(id: Int,newName: String,newMemo: String)
     var baseURL: URL {
         return URL(string: ApiClient.BASE_URL)!
     }
@@ -21,6 +23,12 @@ enum CM_Router: URLRequestConvertible {
         switch self{
         case .CM_List:
             return "crop/category/list"
+        case .CM_GroupCreate:
+            return "crop/category/create"
+        case .CM_GroupDelete:
+            return "crop/category/delete"
+        case .CM_GroupUpdate:
+            return "crop/category/update"
         }
         
     }
@@ -29,7 +37,12 @@ enum CM_Router: URLRequestConvertible {
         switch self {
         case .CM_List:
             return .get
-        default: return .get
+        case .CM_GroupCreate:
+            return .post
+        case .CM_GroupDelete:
+            return .delete
+        case .CM_GroupUpdate:
+            return .put
         }
     }
     
@@ -38,10 +51,29 @@ enum CM_Router: URLRequestConvertible {
         case .CM_List:
             var params = Parameters()
             return params
+        case let .CM_GroupCreate(name: name):
+            var params = Parameters()
+            params["name"] = name
+            return params
+        case .CM_GroupDelete(id: let id):
+            var params = Parameters()
+            params["categoryId"] = String(id)
+            return params
+        case let .CM_GroupUpdate(id: id, newName: name, newMemo: memo):
+            var params = Parameters()
+            params["id"] = String(id)
+            params["changeName"] = name
+            params["changeMemo"] = memo
+            return params
         }
     }
     
     func asURLRequest() throws -> URLRequest {
+        switch self{
+        case .CM_GroupCreate,.CM_GroupDelete,.CM_GroupUpdate:
+            return self.getRequest
+        default: break
+        }
         switch self.method{
         case .get:
             return self.getRequest
