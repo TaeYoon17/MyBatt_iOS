@@ -115,18 +115,16 @@ extension DiseaseInfoView{
                                     ProgressView()
                                 case .success(let image):
                                     image.resizable()
-                                        .aspectRatio(1,contentMode: .fill)
+                                        .aspectRatio(1,contentMode: .fit)
                                         .cornerRadius(8)
+                                    // MARK: -- 선넘는 크기 조절하기
+                                        .frame(maxHeight:400)
                                 case .failure:
                                     Image(systemName: "logo_demo")
                                         .resizable()
                                         .scaledToFit()
                                         .cornerRadius(8)
                                 @unknown default:
-                                    // Since the AsyncImagePhase enum isn't frozen,
-                                    // we need to add this currently unused fallback
-                                    // to handle any new cases that might be added
-                                    // in the future:
                                     EmptyView()
                                 }
                             }

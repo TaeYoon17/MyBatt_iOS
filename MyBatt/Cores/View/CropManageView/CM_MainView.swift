@@ -15,10 +15,11 @@ struct CM_MainView: View {
     @State private var groupSettingSheet: Bool = false
     @State private var goNextView = false
     @State private var type: GroupSettingType = .Add
+    @State private var nextViewGroup: (String,Int) = ("",0)
     var body: some View {
         ZStack{
             NavigationLink(isActive: $goNextView) {
-                CM_CateListView()
+                CM_CateListView(listName: self.nextViewGroup.0, id:self.nextViewGroup.1)
             } label: {
                 EmptyView()
             }
@@ -39,6 +40,7 @@ struct CM_MainView: View {
             }
         })
         .onReceive(vm.goToNextView, perform: { output in
+            self.nextViewGroup = output
             self.goNextView = true
         })
             .navigationTitle("내 작물 관리")

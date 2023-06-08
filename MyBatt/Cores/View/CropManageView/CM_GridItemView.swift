@@ -24,7 +24,7 @@ struct CM_GridItemView: View {
                             vm.goEditView.send(.Edit(id: item.id, name: item.name, memo: item.memo))
                         }
                     }else{
-                        vm.goToNextView.send()
+                        vm.goToNextView.send((item.name,item.id))
                     }
                 }label:{
                     GroupBox {

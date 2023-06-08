@@ -33,7 +33,7 @@ final class DiagnosisVM:ObservableObject{
                                                                 credential: credential)
     
             ApiClient.shared.session
-            .request(CropInfoRouter.SickDetail(sickKey: "D00000189"), interceptor: authInterceptor)
+            .request(CropInfoRouter.SickDetail(sickKey: key), interceptor: authInterceptor)
                     .publishDecodable(type: ResponseWrapper<DiseaseDetail>.self)
                     .value()
                     .sink(receiveCompletion: { completion in

@@ -40,9 +40,6 @@ struct DiagnosisResponse:Codable{
     }
 }
 
-
-
-
 struct DiagnosisItem: Codable,Identifiable{
     var id = UUID()
     let diseaseCode: Int?

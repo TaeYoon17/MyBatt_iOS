@@ -15,7 +15,6 @@ struct SearchItemView: View {
     var body: some View {
         HStack(spacing: 24){
             Rectangle().fill(.ultraThinMaterial).frame(width: 80,height: 80)
-            
                 .overlay(alignment:.center) {
                     AsyncImage(url: URL(string: imageURL ?? "")) { phase in
                         switch phase {

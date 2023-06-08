@@ -13,6 +13,7 @@ enum CM_Router: URLRequestConvertible {
     case CM_GroupCreate(name: String)
     case CM_GroupDelete(id: Int)
     case CM_GroupUpdate(id: Int,newName: String,newMemo: String)
+    case CM_GroupRecord(id: Int)
     var baseURL: URL {
         return URL(string: ApiClient.BASE_URL)!
     }
@@ -29,13 +30,15 @@ enum CM_Router: URLRequestConvertible {
             return "crop/category/delete"
         case .CM_GroupUpdate:
             return "crop/category/update"
+        case .CM_GroupRecord:
+            return "crop/category/record"
         }
         
     }
     
     var method: HTTPMethod {
         switch self {
-        case .CM_List:
+        case .CM_List,.CM_GroupRecord:
             return .get
         case .CM_GroupCreate:
             return .post
@@ -64,6 +67,10 @@ enum CM_Router: URLRequestConvertible {
             params["id"] = String(id)
             params["changeName"] = name
             params["changeMemo"] = memo
+            return params
+        case let .CM_GroupRecord(id: id):
+            var params = Parameters()
+            params["categoryId"] = String(id)
             return params
         }
     }

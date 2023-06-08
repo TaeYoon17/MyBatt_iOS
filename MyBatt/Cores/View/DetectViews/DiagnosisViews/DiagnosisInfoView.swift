@@ -10,10 +10,10 @@ import SwiftUI
 struct DiagnosisInfoView: View {
 //    let diagnosisName: String = "고추 점무늬병"
 //    let accuracy: Int = 86
-    @EnvironmentObject var diagnosisVM: DiagnosisVM
     let accuracy: Double
     let diagnosisNumber: Int
     let code :String
+    var completion:()->()
     var body: some View {
         HStack{
             VStack(alignment: .leading,spacing:8){
@@ -25,8 +25,8 @@ struct DiagnosisInfoView: View {
             Spacer()
             Button{
             //MARK: -- 여기에서 자세한 결과 요청을 보냄
-                self.diagnosisVM.tempInfo()
-//                self.diagnosisVM.requestInfo(key: code)
+//                self.diagnosisVM.tempInfo()
+                completion()
             } label: {
                 HStack{
                     Text("상세정보").font(.caption)
@@ -45,6 +45,8 @@ struct DiagnosisInfoView: View {
 
 struct DiagnosisInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        DiagnosisInfoView(accuracy: 0.86, diagnosisNumber: 7,code:"5885")
+        DiagnosisInfoView(accuracy: 0.86, diagnosisNumber: 7,code:"5885"){
+            print("Hello world")
+        }
     }
 }

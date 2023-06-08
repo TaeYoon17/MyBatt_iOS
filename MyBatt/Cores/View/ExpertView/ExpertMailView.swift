@@ -11,11 +11,12 @@ struct ExpertMailView: View {
     @State private var message = ""
     @State private var title = ""
     @State private var isSelected = false
-    @State private var diagnosisResponse:DiagnosisResponse? = nil
-    
+    @State private var diagnosisResponse:DiagnosisResponse?
+    //외부에 passthroughSubject로 성공 여부를 전송하기 때문
+    @EnvironmentObject var vm : ExpertSheetVM
     @Environment(\.dismiss) private var dismiss
     init(diagnosisResponse: DiagnosisResponse? = nil){
-        self.diagnosisResponse = diagnosisResponse
+        self._diagnosisResponse = State(wrappedValue: diagnosisResponse)
     }
     var body: some View {
         NavigationView {
@@ -26,14 +27,14 @@ struct ExpertMailView: View {
                     Spacer()
                     Button{
                         print("보내기 버튼 클릭")
+                        self.vm.requestToExpert(id: self.diagnosisResponse?.id ?? 0, title: self.title, contents: self.message)
                         self.dismiss()
                     }label:{
                         Image(systemName: "arrow.up.circle")
                             .imageScale(.large)
-                            
                     }
                     .tint(.blue)
-                    .disabled(checkSendDisable())
+                    .disabled(checkSendDisable)
                 }.font(.system(size: 36,weight: .semibold))
                     .frame(height: 40)
                     .padding(.bottom,8)
@@ -83,9 +84,16 @@ struct ExpertMailView: View {
                 }
             }
         }
+        .onAppear(){
+                self.vm.getLocation(latitude: diagnosisResponse?.userLatitude ?? 0,
+                                    longtitude: diagnosisResponse?.userLongitude ?? 0
+                )
+        }
     }
-    func checkSendDisable()->Bool{
-        true
+    var checkSendDisable: Bool{
+        guard self.title != "" else { return true }
+        guard self.diagnosisResponse != nil else {return true}
+        return false
     }
 }
 
@@ -93,21 +101,49 @@ struct ExpertMailView: View {
 extension ExpertMailView{
     var demoItem: some View{
         HStack(spacing: 16){
-            Image("logo_demo")
-                .resizable()
-                .scaledToFit()
-                .background(Color.ambientColor)
-                .cornerRadius(8)
+            AsyncImage(url:URL(string: self.diagnosisResponse?.imagePath ?? "")){ phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .background(Color.ambientColor)
+                        .cornerRadius(8)
+                case .failure:
+                    Image("logo_demo")
+                        .resizable()
+                        .scaledToFit()
+                        .background(Color.ambientColor)
+                        .cornerRadius(8)
+                @unknown default:
+                    // Since the AsyncImagePhase enum isn't frozen,
+                    // we need to add this currently unused fallback
+                    // to handle any new cases that might be added
+                    // in the future:
+                    EmptyView()
+                }
+            }
+
             VStack(alignment: .leading,spacing: 4){
                 HStack{
-                    Text("토마토").font(.headline)
-                    Text("2023.06.04 20:24").font(.subheadline)
+                    Text("\(Crop.koreanTable[CropType(rawValue:self.diagnosisResponse?.cropType ?? -1) ?? .none] ?? "")")
+                        .font(.headline)
+                    Text(Date.changeDateFormat(dateString: self.diagnosisResponse?.regDate ?? "날짜 정보 없슴")).font(.subheadline)
                     Spacer()
                 }
                 .padding(.top,12)
                 HStack{
                     Text("병해:").font(.headline)
-                    Text("잎 곰팡이병 (52%)").font(.subheadline)
+                    Text("\(Diagnosis.koreanTable[DiagnosisType(rawValue: self.diagnosisResponse?.diagnosisResults?[0].diseaseCode ?? -1) ?? .none] ?? "") (\(Int((self.diagnosisResponse?.diagnosisResults?[0].accuracy ?? 0) * 100))%)")
+                        .font(.subheadline)
+                    Spacer()
+                }
+                HStack{
+                    Text("위치:").font(.headline)
+                    Text(self.vm.location ?? "위치 정보가 없습니다.")
+                        .font(.subheadline)
                     Spacer()
                 }
                 Spacer()

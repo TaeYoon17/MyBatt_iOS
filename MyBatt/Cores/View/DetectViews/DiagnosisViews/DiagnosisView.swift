@@ -43,7 +43,7 @@ struct DiagnosisView: View {
                     } label: {
                         EmptyView()
                     }
-                    DiagnosisResultView(diagnosisImage: userVM.diagnosisImage!, diagnosisResponse: diagnosisResponse)
+                    DiagnosisResultView(image: userVM.diagnosisImage!, response: diagnosisResponse)
                         .navigationTitle("병해 진단 결과")
 //                        .onReceive(diagnosisVM.requestInfoSuccess) { output in
 //                            self.naviStackIdx = appManager.linkAction()
@@ -69,103 +69,6 @@ struct DiagnosisView: View {
             Button("취소하고 돌아기기") {
                 dismiss()
             }.buttonStyle(.bordered)
-        }
-    }
-    var diagnosisView: some View{
-        ScrollView(showsIndicators: false){
-            VStack(spacing:8){
-                ZStack{
-                    Rectangle()
-                        .fill(.thickMaterial)
-                        .frame(width: screenWidth,height:screenWidth/1.2)
-                        .overlay {
-                            userVM.diagnosisImage!
-                                .resizable()
-                                .padding(.horizontal)
-                                .frame(width: screenWidth)
-                                .clipped()
-                        }
-                }
-                diagnosisBody
-                    .padding(.horizontal)
-                Rectangle().frame(height: 120).foregroundColor(.white)
-            }
-        }
-        .onDisappear(){
-            appManager.isTabbarHidden = false
-        }
-        .onDisappear(){
-            appManager.isDiagnosisActive = false
-            appManager.isTabbarHidden = false
-        }
-
-    }
-    var diagnosisBody: some View{
-        VStack(spacing:8){
-            HStack(alignment:.bottom){
-                Text(Crop.koreanTable[CropType(rawValue: self.diagnosisResponse?.cropType ?? -1)!] ?? "진단 실패")
-                    .font(.headline.bold())
-                    .padding(.horizontal,8)
-                    .padding(.vertical,4)
-                    .foregroundColor(.white)
-                    .background(Color.accentColor.opacity(0.6))
-//                    .background(.ultraThinMaterial)
-                    .cornerRadius(8)
-                Text(Date.changeDateFormat(dateString: self.diagnosisResponse?.regDate ?? "날짜 정보 없음")).font(.callout)
-                    .padding(.bottom,2)
-                Spacer()
-            }
-//            ScrollView(showsIndicators: true) {
-                //MARK: -- 가장 유사한 결과
-                GroupBox {
-                    if let result = self.diagnosisResponse?.diagnosisResults?[0]{
-                        DiagnosisInfoView(accuracy:result.accuracy ?? 0,
-                                          diagnosisNumber:result.diseaseCode ?? -1,code:result.sickKey ?? "-1")
-                    }
-                } label: {
-                    Text("가장 유사한 결과")
-                }.bgColor(.white,paddingSize: 4)
-                    
-                //MARK: -- 다른 유사 결과
-                GroupBox {
-                    LazyVStack{
-                        if let results: [DiagnosisItem] = self.diagnosisResponse?.diagnosisResults{
-                            ForEach(results){ result in
-                                if let first = results.first{
-                                    if result.id != first.id{
-                                        DiagnosisInfoView(accuracy:result.accuracy ?? 0, diagnosisNumber:result.diseaseCode ?? -1,code:result.sickKey ?? "0")
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } label: {
-                    Text("다른 유사 결과")
-                }.bgColor(.white,paddingSize: 4)
-                
-                GroupBox{
-                    Button{
-                        print("전문가 결과 보여주기")
-                    }label:{
-                        HStack{
-                            Image(systemName: "questionmark.circle")
-                                .font(.system(size: 18,weight: .semibold))
-                                .imageScale(.large)
-                                .padding(.trailing,4)
-                            Text("진단 결과에 대해 더 궁금한게 있다면?\n전문가에게 질문을 남겨보세요!")
-                                .lineLimit(2)
-                                .multilineTextAlignment(.leading)
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .padding(.trailing,12)
-                        }
-                        .padding()
-                        .foregroundColor(.accentColor)
-                        .font(.subheadline)
-                        .background(Color.accentColor.opacity(0.08))
-                    }.modifier(DiagnosisInfoViewModifier(paddingSize: 0))
-                }.bgColor(.white,paddingSize: 4)
-//            }
         }
     }
     var naviLinkController: some View{

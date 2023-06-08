@@ -84,8 +84,6 @@ struct MapMainView: View {
                 }.padding(.horizontal, -8)
             }
             ToolbarItem(placement: .principal) {
-//                Text("경기도 구리시 인창동")
-//                Text("\(self.center.latitude) - \(self.center.longtitude)")
                 Text("\(vm.locationName ?? "")")
                     .fontWeight(.semibold)
             }

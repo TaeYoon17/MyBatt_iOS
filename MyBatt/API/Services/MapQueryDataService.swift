@@ -6,19 +6,23 @@
 //
 
 import Foundation
-
 import Combine
 final class MapQueryDataService{
-    static private let urlString = "https://dapi.kakao.com/v2/local/search/address?query="
+    static private let baseURL = "https://dapi.kakao.com/v2/local/"
+    static private let queryURL = "search/address?query="
+    static private let geoURL = "geo/coord2address.json?"
     var mapQueryDataCancellable: AnyCancellable?
+    var subscription = Set<AnyCancellable>()
+    var geoPassthrough = PassthroughSubject<String,Never>()
     @Published var queryResult: MapQueryModel? = nil
-    init(){
-    }
+    init(){}
     deinit{
-        self.mapQueryDataCancellable?.cancel()
+        subscription.forEach { ele in
+            ele.cancel()
+        }
     }
     func getMapCoordinate(query:String){
-        let urlStr = "\(MapQueryDataService.urlString)\(query)"
+        let urlStr = "\(MapQueryDataService.baseURL)\(MapQueryDataService.queryURL)\(query)"
         let encodedStr = urlStr.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         guard let url = URL(string: encodedStr) else {
             print("출력이 안돼요")
@@ -28,19 +32,7 @@ final class MapQueryDataService{
         request.httpMethod = "GET"
         request.setValue("KakaoAK \(Bundle.getKakaoRestApi)", forHTTPHeaderField: "Authorization")
         print("getMapCoordinate(query:String) 출력")
-        self.mapQueryDataCancellable = NetworkingManager.upload(request: request)
-//            .sink(receiveCompletion: { completion in
-//                switch completion{
-//                case .finished:
-//                    print("finished")
-//                case .failure(let fail):
-//                    print(fail)
-//                }
-//            }, receiveValue: { data in
-//                if let jsonString = String(data: data, encoding: .utf8) {
-//                    print(jsonString)
-//                }
-//            })
+        NetworkingManager.upload(request: request)
             .tryMap({ (data) -> MapQueryModel in
                 guard let queryResult = try? JSONDecoder().decode(MapQueryModel.self, from: data) else{
                     throw fatalError("맵 쿼리 요청 오류")
@@ -49,5 +41,6 @@ final class MapQueryDataService{
             }).sink(receiveCompletion: NetworkingManager.handleCompletion(completion:), receiveValue: { [weak self] queryResult in
                 self?.queryResult = queryResult
             })
+            .store(in: &subscription)
     }
 }

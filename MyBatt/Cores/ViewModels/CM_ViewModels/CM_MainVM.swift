@@ -13,7 +13,7 @@ final class CM_MainVM: ObservableObject{
     @Published var unclassfiedGroup: CM_GroupListItem = .init(id: 0, userID: nil, name: "", cnt: nil, memo: "", regDt: "")
     var addCompleted = PassthroughSubject<Void,Never>()
     var deleteCompleted = PassthroughSubject<Int,Never>()
-    var goToNextView = PassthroughSubject<Void,Never>()
+    var goToNextView = PassthroughSubject<(String,Int),Never>()
     var goEditView = PassthroughSubject<GroupSettingType,Never>()
     var subscription = Set<AnyCancellable>()
     init(){
