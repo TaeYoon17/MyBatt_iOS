@@ -66,6 +66,6 @@ struct Diagnosis{
         .StrawberryGrayMold:"딸기 잿빛곰팡이병",.StrawberryPowderyMildew:"딸기 흰가루병",
         .LettuceMycosis:"상추 균핵병",.LettuceDownyMildew:"상추 노균병",
         .TomatoLeafFungus:"토마토 잎곰팡이병",.TomatoYellowLeafRoll:"토마토 황화잎말이바이러스",
-        .none : "진단 실패"
+        .none : "진단 오류"
     ]
 }

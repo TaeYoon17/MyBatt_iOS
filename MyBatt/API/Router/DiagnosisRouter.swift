@@ -20,7 +20,6 @@ enum DiagnosisRouter: URLRequestConvertible {
         case .Record:
             return "crop/diagnosisRecord"
         }
-        
     }
     
     var method: HTTPMethod {

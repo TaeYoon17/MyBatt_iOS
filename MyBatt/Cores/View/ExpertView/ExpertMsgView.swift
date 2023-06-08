@@ -10,13 +10,20 @@ import SwiftUI
 struct ExpertMsgView: View {
     let width = UIScreen.main.bounds.width
     @Environment(\.dismiss) private var dismiss
-    @State private var myRequest: String? = "이게 왜 안되는 거냐고오~~"
+//    @State private var myRequest: String? = "이게 왜 안되는 거냐고오~~"
     @State private var expertResult: String? = nil
+    let diagnosis: DiagnosisResponse?
+    let sendModel: ExpertSendModel?
+//    @StateObject private var vm: ExpertMsgVM
+    init(sendModel: ExpertSendModel?,diagnosis:DiagnosisResponse?){
+        self.sendModel = sendModel
+        self.diagnosis = diagnosis
+    }
     var body: some View {
         NavigationView {
             VStack(spacing:0){
                 HStack(alignment:.center, spacing:4){
-                        Text("토마토 버거씨병 같은데 아니래용")
+                    Text(sendModel?.title ?? "")
                             .font(.title)
                             .fontWeight(.bold)
                             .multilineTextAlignment(.leading)
@@ -26,9 +33,14 @@ struct ExpertMsgView: View {
                     Spacer()
                 }.padding(.bottom)
                 ScrollView {
-                    demoItem
+//                    demoItem
+                    MsgItemView(imgString: diagnosis?.imagePath ?? "",
+                                cropName: diagnosis?.cropType ?? -1,
+                                date: diagnosis?.regDate ?? "날짜 정보가 없습니다",
+                                disesName: diagnosis?.diagnosisResults?[0].diseaseCode ?? -1,
+                                accuracy: diagnosis?.diagnosisResults?[0].accuracy ?? 0)
                     divider
-                    if let myRequest = myRequest, myRequest != ""{
+                    if let myRequest = sendModel?.contents, myRequest != ""{
                         myQuestion(myRequest: myRequest)
                         divider
                     }
@@ -67,36 +79,70 @@ struct ExpertMsgView: View {
             .padding(.top,8)
             .padding(.horizontal)
     }
-    var demoItem: some View{
+    
+}
+fileprivate struct MsgItemView:View{
+    let imgString: String
+    let cropName: Int
+    let date: String
+    let disesName:Int
+    let accuracy: Double
+    var body:some View{
         HStack(spacing: 16){
-            Image("logo_demo")
-                .resizable()
-                .scaledToFit()
-                .background(Color.ambientColor)
-                .cornerRadius(8)
+            AsyncImage(url:URL(string: self.imgString)){ phase in
+                switch phase {
+                case .empty:
+                    Image("logo_demo")
+                        .resizable()
+                        .scaledToFit()
+                        .background(Color.ambientColor)
+                        .cornerRadius(8)
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .background(Color.ambientColor)
+                        .cornerRadius(8)
+                case .failure:
+                    Image("logo_demo")
+                        .resizable()
+                        .scaledToFit()
+                        .background(Color.ambientColor)
+                        .cornerRadius(8)
+                @unknown default:
+                    // Since the AsyncImagePhase enum isn't frozen,
+                    // we need to add this currently unused fallback
+                    // to handle any new cases that might be added
+                    // in the future:
+                    EmptyView()
+                }
+            }
             VStack(alignment: .leading,spacing: 4){
                 HStack{
-                    Text("토마토").font(.headline)
-                    Text("2023.06.04 20:24").font(.subheadline)
+                    Text("\(Crop.koreanTable[CropType(rawValue: cropName) ?? .none] ?? "")")
+                        .font(.headline)
+                    Text("\(Date.changeDateFormat(dateString: date))")
+                        .font(.subheadline)
                     Spacer()
                 }
                 HStack(alignment:.top){
                     Text("병해:").font(.headline)
-                    Text("고추 마일드 모틀바이러스 (52%)").font(.subheadline)
+                    Text("\(Diagnosis.koreanTable[DiagnosisType(rawValue: disesName) ?? .none] ?? "") \(Int(accuracy * 100))%")
+                        .font(.subheadline)
                     Spacer()
                 }
                 Spacer()
-            }.overlay(alignment:.topTrailing){
-                Image(systemName: "chevron.right")
-                    .padding(.top,8)
             }
+//            .overlay(alignment:.topTrailing){
+//                Image(systemName: "chevron.right")
+//                    .padding(.top,8)
+//            }
         }
         .padding(.vertical,12)
         .background(Color.white)
         .frame(height: 120)
     }
 }
-
 extension ExpertMsgView{
     //MARK: -- Divider 설정
     var divider: some View{
@@ -136,10 +182,10 @@ extension ExpertMsgView{
     }
 }
 
-struct ExpertMsgView_Previews: PreviewProvider {
-    static var previews: some View {
-        
-            ExpertMsgView()
-        
-    }
-}
+//struct ExpertMsgView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        
+//            ExpertMsgView()
+//        
+//    }
+//}

@@ -29,10 +29,9 @@ final class ExpertSheetVM:NSObject,ObservableObject{
             print("변환을 실패한거임!!")
             return
         }
-        print("startAddressing 시작합니다아~~")
-        DispatchQueue.main.async {
+//        DispatchQueue.main.async {
             geoCoder.startFindingAddress()
-        }
+//        }
     }
     func requestToExpert(id:Int,title:String,contents:String){
         ApiClient.shared.session.request(ExpertRouter.Register(id: id, title: title, contents: contents),
