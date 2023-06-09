@@ -33,8 +33,8 @@ final class ExpertSheetVM:NSObject,ObservableObject{
             geoCoder.startFindingAddress()
 //        }
     }
-    func requestToExpert(id:Int,title:String,contents:String){
-        ApiClient.shared.session.request(ExpertRouter.Register(id: id, title: title, contents: contents),
+    func requestToExpert(diagnosisId:Int,title:String,contents:String){
+        ApiClient.shared.session.request(ExpertRouter.Register(id: diagnosisId, title: title, contents: contents),
                                          interceptor: AuthAuthenticator.getAuthInterceptor)
             .publishDecodable(type: ResponseWrapper<ExpertSendModel>.self)
             .value()

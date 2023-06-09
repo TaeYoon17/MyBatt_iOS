@@ -95,6 +95,11 @@ struct _SearchMainView: View {
                                     .padding(.horizontal)
                                     .cornerRadius(12)
                             }.tint(Color.black)
+                                .onAppear(){
+                                    if item == vm.searchResults.last{
+                                        self.vm.requestSickList(cropName: self.cropName, sickNameKor: self.sickName)
+                                    }
+                                }
                         }
                     }
                 }
@@ -136,7 +141,7 @@ private extension _SearchMainView{
         VStack(spacing:0){
             if isShow{
                 HStack(alignment:.bottom, spacing:4){
-                    Text("\(vm.searchResults.count)개 ")
+                    Text("\(vm.searchCnt)개 ")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.accentColor)
@@ -166,8 +171,9 @@ private extension _SearchMainView{
                 }
             }
             .onSubmit {
-//                print("Submit Called!!")
-                self.vm.requestSickList(cropName: self.cropNameField, sickNameKor: self.diseaseNameField, displayCount: nil, startPoint: nil)
+                self.cropName = self.cropNameField
+                self.sickName = self.diseaseNameField
+                self.vm.requestSickList(cropName: self.cropNameField, sickNameKor: self.diseaseNameField)
             }
             .padding()
             .background(Color.lightGray)

@@ -102,4 +102,18 @@ final class CM_MainVM: ObservableObject{
                 self?.deleteCompleted.send(idx)
             }).store(in: &subscription)
     }
+    func getMainViewGroupListInfo()->[(String,Int)]{
+        var list = [(self.unclassfiedGroup.name,self.unclassfiedGroup.cnt ?? 0)]
+        for v in self.cm_GroupList{
+            list.append((v.name,v.cnt ?? 0))
+        }
+        return list
+    }
+    func getGroupDialogeList()->[CM_GroupModel]{
+        var list:[CM_GroupModel] = [.init(groupId: self.unclassfiedGroup.id, name: self.unclassfiedGroup.name)]
+        for v in self.cm_GroupList{
+            list.append(.init(groupId: v.id, name: v.name))
+        }
+        return list
+    }
 }

@@ -35,7 +35,7 @@ struct DiseaseInfoView: View {
             NavigationLink(isActive: $goNextView) {
                 GeometryReader{ proxy in
                     let topInset = proxy.safeAreaInsets.top
-                    PesticideListView(topInset: topInset,cropName: "딸기",sickName:"세균")
+                    PesticideListView(topInset: topInset,cropName: self.cropName,sickName:self.sickName)
                 }
             } label: {
                 EmptyView()
@@ -43,7 +43,7 @@ struct DiseaseInfoView: View {
             //MARK: -- 헤더 뷰
             HStack(alignment:.center, spacing:4){
                 ScrollView(.horizontal){
-                    Text("\(cropName) \(sickName)")
+                    Text("\(cropName) \(sickName.replacingOccurrences(of: cropName, with: "").trimmingCharacters(in: .whitespaces))")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.black)

@@ -12,6 +12,7 @@ import SwiftUI
 import CoreLocation
 final class UserVM: ObservableObject{
     //MARK: properties
+    static let baseURL = "https://mybatboo.kr/"
     private var userModel: UserModel = UserModel()
     @Published var isUserLoggined: Bool = false
     @Published var diagnoisResult:DiagnosisResponse?
@@ -126,7 +127,7 @@ extension UserVM{
     }
     
     func requestImage( cropType:CropType,geo:CLLocationCoordinate2D,image: UIImage)->Void{
-        self.diagnosisDataService.getDiagnosis(urlString: "http://15.164.23.13:8080/crop/diagnosis",
+        self.diagnosisDataService.getDiagnosis(urlString: UserVM.baseURL+"crop/diagnosis",
                                       geo: Geo(Double(geo.latitude),Double(geo.longitude)),
                                       cropType: cropType, image: image)
     }

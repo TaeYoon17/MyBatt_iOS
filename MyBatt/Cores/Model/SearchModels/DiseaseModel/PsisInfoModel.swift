@@ -14,8 +14,8 @@ struct PsisInfoResponseWrapper: Codable{
     
 }
 struct PsisInfoResponse: Codable{
-    let totalCount: Int
-    let buildTime: String
+    let totalCount: Int?
+    let buildTime: String?
     let list: PsisInfoList?
     let displayCount, startPoint: Int
     enum CodingKeys: String, CodingKey {
@@ -26,18 +26,18 @@ struct PsisInfoResponse: Codable{
     }
 }
 struct PsisInfoList:Codable{
-    let item: [PsisInfo]
+    let item: [PsisInfo]?
     enum CodingKeys: String, CodingKey{
         case item
     }
 }
 
-struct PsisInfo:Codable,Identifiable{
+struct PsisInfo:Codable,Identifiable,Equatable{
     var id = UUID()
-    let pestiCode, diseaseUseSeq: Int
-    let cropName,diseaseWeedName, useName, pestiKorName, pestiBrandName, compName: String
-    let engName,cmpaItmNm,indictSymbl, applyFirstRegDate, cropCD, cropLrclCD, cropLrclNm, pestiUse: String
-    let dilutUnit, useSuittime, useNum, wafindex: String
+    let pestiCode, diseaseUseSeq: Int?
+    let cropName,diseaseWeedName, useName, pestiKorName, pestiBrandName, compName: String?
+    let engName,cmpaItmNm,indictSymbl, applyFirstRegDate, cropCD, cropLrclCD, cropLrclNm, pestiUse: String?
+    let dilutUnit, useSuittime, useNum, wafindex: String?
 
     enum CodingKeys: String, CodingKey {
         case pestiCode, diseaseUseSeq, cropName, diseaseWeedName, useName, pestiKorName, pestiBrandName, compName, engName, cmpaItmNm, indictSymbl, applyFirstRegDate

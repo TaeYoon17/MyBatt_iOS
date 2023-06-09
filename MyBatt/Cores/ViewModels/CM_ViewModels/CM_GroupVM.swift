@@ -23,6 +23,7 @@ final class CM_GroupVM:NSObject,ObservableObject{
     @Published var cm_groupItems:[CM_GroupItem] = []
     @Published var cm_diagnosisItem:DiagnosisResponse?
     var diagnosisResponseCompleted = PassthroughSubject<Void,Never>()
+    var changeGroupCompleted = PassthroughSubject<Void,Never>()
     var geoCoders:[(MTMapReverseGeoCoder?,Int)] = []
     var subscription = Set<AnyCancellable>()
     let id: Int
@@ -90,6 +91,24 @@ final class CM_GroupVM:NSObject,ObservableObject{
                 guard let response = output.data else {return}
                 self?.cm_diagnosisItem = response
                 self?.diagnosisResponseCompleted.send()
+            }).store(in: &subscription)
+    }
+    func changeItemGroup(toGroupId: Int, itemId: Int){
+        ApiClient.shared.session.request(CM_Router.CM_GroupItemChange(groupId: toGroupId, itemId: itemId),
+                                         interceptor: AuthAuthenticator.getAuthInterceptor)
+            .publishDecodable(type: ResponseWrapper<DiagnosisResponse>.self)
+            .value()
+            .sink(receiveCompletion: { completion in
+                switch completion{
+                case .finished:
+                    print("가져오기 성공")
+                case .failure(let error):
+                    print("가져오기 실패")
+                    print(error.localizedDescription)
+                }
+            }, receiveValue: {[weak self] output in
+                self?.changeGroupCompleted.send()
+                self?.getList()
             }).store(in: &subscription)
     }
 }

@@ -17,6 +17,7 @@ struct MainView: View {
     @State private var pickerNumber = 1
     @EnvironmentObject var appManager:AppManager
     @EnvironmentObject var userVM: UserVM
+    @StateObject var cm_mainVM = CM_MainVM()
     @State var linkView = MainLinkViewType.none
     @State var naviStackIdx = 0
     @State var isAnimating = false
@@ -52,7 +53,7 @@ struct MainView: View {
                             }.shadow(radius: 5,x:3,y:3)
                                 .scaledToFit()
                             //MARK: -- 내 작물 관리
-                            MainManagementBtn {
+                            MainManagementBtn(itemList: cm_mainVM.getMainViewGroupListInfo()) {
                                 self.activeLink(.CropManage)
                             }
                         }
@@ -122,6 +123,7 @@ struct MainView: View {
                 MapMainView()
             case .CropManage:
                 CM_MainView()
+                    .environmentObject(cm_mainVM)
             case .Camera:
                 Text("EmptyView")
             case .Search:
@@ -129,6 +131,7 @@ struct MainView: View {
             case .Album:
                 AlbumPickerView()
                     .onDisappear(){
+                        self.appManager.isTabbarHidden = false
                         if appManager.isDiagnosisActive{
                             self.activeLink(.Diagnosis)
                         }

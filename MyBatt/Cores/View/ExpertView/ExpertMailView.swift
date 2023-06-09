@@ -27,7 +27,7 @@ struct ExpertMailView: View {
                     Spacer()
                     Button{
                         print("보내기 버튼 클릭")
-                        self.vm.requestToExpert(id: self.diagnosisResponse?.id ?? 0, title: self.title, contents: self.message)
+                        self.vm.requestToExpert(diagnosisId: self.diagnosisResponse?.diagnosisRecordID ?? -1, title: self.title, contents: self.message)
                         self.dismiss()
                     }label:{
                         Image(systemName: "arrow.up.circle")

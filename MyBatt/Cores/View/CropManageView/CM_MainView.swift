@@ -10,7 +10,7 @@ import SwiftUI
 struct CM_MainView: View {
     @EnvironmentObject var appManager: AppManager
 //    @EnvironmentObject var userVM: UserVM
-    @StateObject var vm: CM_MainVM = CM_MainVM()
+    @EnvironmentObject var vm: CM_MainVM
     @State private var isEditting: Bool = false
     @State private var groupSettingSheet: Bool = false
     @State private var goNextView = false
@@ -19,7 +19,9 @@ struct CM_MainView: View {
     var body: some View {
         ZStack{
             NavigationLink(isActive: $goNextView) {
-                CM_CateListView(listName: self.nextViewGroup.0, id:self.nextViewGroup.1)
+                CM_CateListView(listName: self.nextViewGroup.0, id:self.nextViewGroup.1, groupModels: vm.getGroupDialogeList())
+                    .environmentObject(vm)
+                    
             } label: {
                 EmptyView()
             }

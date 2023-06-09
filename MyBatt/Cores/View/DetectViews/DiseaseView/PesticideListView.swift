@@ -39,21 +39,25 @@ struct PesticideListView: View {
                                 self.item = item
                                 self.present = true
                             }label:{
-                                PesticideListItem(pestiKorName: item.pestiKorName,
-                                                  pestiBrandName: item.pestiBrandName,
-                                                  compName: item.compName)
+                                PesticideListItem(pestiKorName: item.pestiKorName ?? "",
+                                                  pestiBrandName: item.pestiBrandName ?? "",
+                                                  compName: item.compName ?? "")
                                 .frame(height: 60)
                                 .background(.gray.opacity(0.07))
                                 .foregroundColor(.black)
                                 .cornerRadius(8)
                                 .padding(.horizontal)
+                            }.onAppear(){
+                                if item == self.vm.psisList[self.vm.psisList.count - 2] {
+                                    self.vm.requestSickList()
+                                }
                             }
                         }
                     }
                     //MARK: -- 아래 패딩
                     Rectangle()
                         .fill(Color.white)
-                        .frame(height: 44)
+                        .frame(height: 120)
                 }
             }
             .background()
@@ -71,7 +75,7 @@ extension PesticideListView{
     var scrollReader: some View{
         GeometryReader{ proxy -> AnyView in
             let yAxis: CGFloat = proxy.frame(in: .named("content")).minY
-            print(yAxis)
+//            print(yAxis)
             if -16 > yAxis && isShow{
                 print("줄입니다.")
                 DispatchQueue.main.async {
@@ -104,7 +108,7 @@ extension PesticideListView{
                         .font(.title)
                         .fontWeight(.bold)
                     ScrollView(.horizontal){
-                        Text("\(cropName) \(sickName)")
+                        Text("\(cropName) \(sickName.replacingOccurrences(of: cropName, with: "").trimmingCharacters(in: .whitespaces))")
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(.black)

@@ -11,6 +11,7 @@ import Alamofire
 enum ExpertRouter: URLRequestConvertible {
     case Register(id: Int,title:String,contents: String)
     case List
+    case Reply(id:Int)
     var baseURL: URL {
         return URL(string: ApiClient.BASE_URL)!
     }
@@ -23,13 +24,15 @@ enum ExpertRouter: URLRequestConvertible {
             return "crop/inquiry/register"
         case .List:
             return "crop/inquiry/list"
+        case .Reply(id:let id):
+            return "crop/reply/\(id)"
         }
     }
     var method: HTTPMethod {
         switch self {
         case .Register:
             return .post
-        case .List:
+        case .List,.Reply:
             return .get
         }
     }
@@ -42,12 +45,22 @@ enum ExpertRouter: URLRequestConvertible {
                 "contents":contents
             ]
             return params
-        case .List:
+        case .List,.Reply:
             return Parameters()
         }
     }
     
     func asURLRequest() throws -> URLRequest {
+        switch self{
+        case .Reply:
+            let url = baseURL.appendingPathComponent(endPoint)
+            var request = URLRequest(url: url)
+            request.method = self.method
+            return request
+         default:
+            break
+        }
+        
         switch self.method{
         case .get:
             return self.getRequest

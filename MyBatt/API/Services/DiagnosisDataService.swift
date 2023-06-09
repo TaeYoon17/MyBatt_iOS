@@ -29,7 +29,7 @@ final class DiagnosisDataService{
             return
         }
         let diagnosis = """
-            { "userLatitue":\"\(geo.latitude)\",
+            { "userLatitude":\"\(geo.latitude)\",
                 "userLongitude":\"\(geo.longtitude)\",
                 "regDate":\"\(Date().formatted(.iso8601))\",
             "cropType":\"\(cropType.rawValue)\"
@@ -48,6 +48,7 @@ final class DiagnosisDataService{
             })
             .sink(receiveCompletion: NetworkingManager.handleCompletion(completion:)) { [weak self] (diagnosis: ResponseWrapper<DiagnosisResponse>) in
                 print("DiagnosisResponse sinked")
+                print(geo.latitude,geo.longtitude)
                 self?.diagnosisResponse = diagnosis.data
                 self?.diagnosisCode = diagnosis.code
             }

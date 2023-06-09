@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MainManagementBtn: View {
+    let itemList:[(String,Int)]
     var linkAction: ()->()
     var body: some View {
         RoundedRectangle(cornerRadius: 10).foregroundColor(Color.lightGray)
@@ -17,16 +18,17 @@ struct MainManagementBtn: View {
                         Divider()
                         VStack(alignment: .leading,spacing: 5){
                             //MARK: -- 여기 작성 - 작물 관리 폴더 이름
-                            //                            ForEach(0...2,id:\.self){ idx in
-                            //                                HStack{
-                            //                                    Text("Hello world")
-                            //                                    Spacer()
-                            //                                }
-                            //                            }
-                            HStack{
-                                Text("Hello world")
-                                Spacer()
-                            }
+                                                        ForEach(0...3,id:\.self){ idx in
+                                                            if idx < itemList.count{
+                                                                HStack{
+                                                                    Text("\(itemList[idx].0 == "unclassified" ? "미분류 그룹" : itemList[idx].0)").font(.subheadline).bold()
+                                                                     .lineLimit(1)
+                                                                    Spacer()
+                                                                    Text("(\(itemList[idx].1))").font(.footnote)
+                                                                        .lineLimit(1)
+                                                                }
+                                                            }
+                                                        }
                         }
                     }
                 } label: {
@@ -48,7 +50,7 @@ struct MainManagementBtn: View {
 
 struct MainManagementBtn_Previews: PreviewProvider {
     static var previews: some View {
-        MainManagementBtn(linkAction: {
+        MainManagementBtn(itemList: [("없는 작물",0)], linkAction: {
             print("Hello world")
         })
     }

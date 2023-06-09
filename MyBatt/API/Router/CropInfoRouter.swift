@@ -59,7 +59,8 @@ enum CropInfoRouter: URLRequestConvertible {
         case let .PsisList(cropName: cropName, diseaseWeedName: diseaseName, displayCount: displayCnt, startPoint: startPt):
             var params = Parameters()
             params["cropName"] = cropName
-            params["diseaseWeedName"] = diseaseName
+            let newDiseaseName:String = diseaseName.replacingOccurrences(of: cropName, with: "").trimmingCharacters(in: .whitespaces)
+            params["diseaseWeedName"] = newDiseaseName
             params["displayCount"] = String(displayCnt)
             params["startPoint"] = String(startPt)
             return params

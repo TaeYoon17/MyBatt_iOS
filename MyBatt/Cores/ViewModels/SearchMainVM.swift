@@ -14,19 +14,23 @@ final class SeaerchMainVM: ObservableObject{
     @Published var sickListResponse:SickListResponse?
     @Published var prevCropName = ""
     @Published var prevSickName = ""
+    @Published var nowCnt: Int = -1
+    var nowIdx = 0
     var subscription = Set<AnyCancellable>()
     deinit{
         subscription.forEach { ele in
             ele.cancel()
         }
     }
-    func requestSickList(cropName:String?,sickNameKor:String?,displayCount: Int?,startPoint:Int?){
+    func requestSickList(cropName:String?,sickNameKor:String?){
         if !(prevCropName == cropName && prevSickName == sickNameKor){
+            self.nowCnt = -1
+            self.searchCnt = 0
             searchResults = []
             prevCropName = cropName ?? ""
             prevSickName = sickNameKor ?? ""
         }
-        ApiClient.shared.session.request(CropInfoRouter.SickList(cropName: cropName ?? "", sickNameKor: sickNameKor ?? "", displayCount: 10, startPoint: 1),interceptor: AuthAuthenticator.getAuthInterceptor)
+        ApiClient.shared.session.request(CropInfoRouter.SickList(cropName: cropName ?? "", sickNameKor: sickNameKor ?? "", displayCount: 20, startPoint: nowIdx + 1),interceptor: AuthAuthenticator.getAuthInterceptor)
             .publishDecodable(type: ResponseWrapper<SickListResponse>.self)
             .value()
             .sink(receiveCompletion: { completion in
@@ -39,9 +43,11 @@ final class SeaerchMainVM: ObservableObject{
                 }
             }, receiveValue: {[weak self] output in
                 guard let response: SickListResponse = output.data else { return }
+                guard (self!.nowCnt * 20) <= response.totalCnt else {return}
                 if self?.searchCnt != response.totalCnt{
                     self?.searchCnt = response.totalCnt
                 }
+                self?.nowCnt += 1
                 self?.searchResults.append(contentsOf: response.sickList)
             }).store(in: &subscription)
     }

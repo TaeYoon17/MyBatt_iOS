@@ -11,13 +11,16 @@ struct ExpertMsgView: View {
     let width = UIScreen.main.bounds.width
     @Environment(\.dismiss) private var dismiss
 //    @State private var myRequest: String? = "이게 왜 안되는 거냐고오~~"
-    @State private var expertResult: String? = nil
+    
+    @StateObject private var vm:ExpertMsgVM
     let diagnosis: DiagnosisResponse?
     let sendModel: ExpertSendModel?
 //    @StateObject private var vm: ExpertMsgVM
     init(sendModel: ExpertSendModel?,diagnosis:DiagnosisResponse?){
         self.sendModel = sendModel
         self.diagnosis = diagnosis
+        
+        self._vm = StateObject(wrappedValue: ExpertMsgVM(id:sendModel?.replyId ?? -1))
     }
     var body: some View {
         NavigationView {
@@ -170,8 +173,8 @@ extension ExpertMsgView{
                 Spacer()
                 HStack{
                     Spacer()
-                    if let result = expertResult,result != ""{
-                        makeTextBubble("이건 너가 잘 못 찍어서 잘 모르겠는뒈~",fgColor: .black ,bgColor: .ambientColor, isFlip: false)
+                    if let result = self.vm.reply?.contents,result != ""{
+                        makeTextBubble(result,fgColor: .black ,bgColor: .ambientColor, isFlip: false)
                     }else{
                         makeTextBubble("아직 답변이 오지 않았어요",fgColor: .white ,bgColor: .red, isFlip: false)
                     }

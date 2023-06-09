@@ -12,7 +12,9 @@ struct SignInSheetView: View {
     @State private var userEmail = ""
     @State private var password = ""
     @State private var showPassword = false
-    @State private var isSignIn = false
+    private var isSignIn : Bool{
+        self.userEmail != "" && self.password != ""
+    }
     @Environment(\.dismiss) var dismiss
     var body: some View {
         ScrollView{

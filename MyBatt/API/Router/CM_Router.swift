@@ -14,6 +14,7 @@ enum CM_Router: URLRequestConvertible {
     case CM_GroupDelete(id: Int)
     case CM_GroupUpdate(id: Int,newName: String,newMemo: String)
     case CM_GroupRecord(id: Int)
+    case CM_GroupItemChange(groupId: Int,itemId: Int)
     var baseURL: URL {
         return URL(string: ApiClient.BASE_URL)!
     }
@@ -32,6 +33,8 @@ enum CM_Router: URLRequestConvertible {
             return "crop/category/update"
         case .CM_GroupRecord:
             return "crop/category/record"
+        case .CM_GroupItemChange(groupId: _, itemId: let id):
+            return "crop/diagnosisRecord/\(id)/category/update"
         }
         
     }
@@ -40,7 +43,7 @@ enum CM_Router: URLRequestConvertible {
         switch self {
         case .CM_List,.CM_GroupRecord:
             return .get
-        case .CM_GroupCreate:
+        case .CM_GroupCreate,.CM_GroupItemChange:
             return .post
         case .CM_GroupDelete:
             return .delete
@@ -72,12 +75,16 @@ enum CM_Router: URLRequestConvertible {
             var params = Parameters()
             params["categoryId"] = String(id)
             return params
+        case let .CM_GroupItemChange(groupId: id, itemId: _):
+            var params = Parameters()
+            params["categoryId"] = String(id)
+            return params
         }
     }
     
     func asURLRequest() throws -> URLRequest {
         switch self{
-        case .CM_GroupCreate,.CM_GroupDelete,.CM_GroupUpdate:
+        case .CM_GroupCreate,.CM_GroupDelete,.CM_GroupUpdate,.CM_GroupItemChange:
             return self.getRequest
         default: break
         }
