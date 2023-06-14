@@ -38,10 +38,6 @@ struct CameraView: View {
         .background(Color.white)
         .onAppear(){
             Appearances.navigationBarClear()
-            //            UINavigationBar.applyCustomAppearance()
-            //            Task{
-            //                await model.camera.start()
-            //            }
         }.onDisappear(){
             Appearances.navigationBarWhite()
             model.camera.stop()

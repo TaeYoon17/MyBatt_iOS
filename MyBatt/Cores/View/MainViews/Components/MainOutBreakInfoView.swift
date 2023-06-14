@@ -8,8 +8,8 @@
 import SwiftUI
 
 enum OutBreakType:CaseIterable,Identifiable{
-    case Advisory
     case Warning
+    case Advisory
     case Forecast
     
     var id: String{
@@ -18,11 +18,11 @@ enum OutBreakType:CaseIterable,Identifiable{
     var title: String{
         switch self{
         case .Warning:
-            return "주의보"
+            return "경보"
         case .Forecast:
             return "예보"
         case .Advisory:
-            return "경보"
+            return "주의보"
         }
     }
     var icon: String{
@@ -34,8 +34,8 @@ enum OutBreakType:CaseIterable,Identifiable{
     }
     var color: Color{
         switch self{
-        case .Advisory: return Color.red
-        case .Warning: return Color.yellow
+        case .Advisory: return Color.yellow
+        case .Warning: return Color.red
         case .Forecast: return Color.green
         }
     }

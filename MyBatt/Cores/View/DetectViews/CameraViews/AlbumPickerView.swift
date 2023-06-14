@@ -59,6 +59,7 @@ struct AlbumPickerView: View {
         .onDisappear(){
             appManager.isAlbumActive = false
             appManager.isTabbarHidden = false
+            selectStep = .Pick
         }
         .sheet(item: $selectStep) { sheet in
             switch sheet{

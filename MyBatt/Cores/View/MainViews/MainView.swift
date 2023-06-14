@@ -138,6 +138,9 @@ struct MainView: View {
                     }
             case .Diagnosis:
                 DiagnosisView()
+                    .onDisappear(){
+                        self.appManager.isDiagnosisActive = false
+                    }
             case .none:
                 Text("None View")
             case .MyInfo:
