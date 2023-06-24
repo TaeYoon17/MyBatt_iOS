@@ -24,7 +24,7 @@ final class CM_GroupVM:NSObject,ObservableObject{
     @Published var cm_diagnosisItem:DiagnosisResponse?
     var diagnosisResponseCompleted = PassthroughSubject<Void,Never>()
     var changeGroupCompleted = PassthroughSubject<Void,Never>()
-    var geoCoders:[(MTMapReverseGeoCoder?,Int)] = []
+    var geoCoders:[(String?,Int)] = []
     var subscription = Set<AnyCancellable>()
     let id: Int
     let locationApiKey: String?
@@ -52,11 +52,16 @@ final class CM_GroupVM:NSObject,ObservableObject{
                 self?.geoCoders = []
                 self?.cm_groupItems = response.enumerated().map { (idx,wrapper) in
                     let item = wrapper.diagnosisRecord
-                    let geoCoder = MTMapReverseGeoCoder(mapPoint: .init(geoCoord: .init(latitude: item.userLatitude, longitude: item.userLongitude)), with: self, withOpenAPIKey: self?.locationApiKey)
-                    if let geoCoder = geoCoder{
-                        self?.geoCoders.append((geoCoder,idx))
-                    }else{
-                        self?.geoCoders.append((nil,idx))
+                    CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: item.userLatitude,longitude: item.userLongitude)) { marks, error in
+                        if let pm: CLPlacemark = marks?.first{
+                            //                        \(pm.name ?? "위치 정보 없음")
+                            let address: String = "\(pm.locality ?? "") \(pm.name ?? "")"
+                            print(address)
+                            self?.geoCoders.append((address,idx))
+                        }else{
+                            self?.geoCoders.append((nil,idx))
+                            print("찾는 위치가 없습니다.")
+                        }
                     }
                     let regDate:String = Date.changeDateFormat(dateString: item.regDate)
                     return CM_GroupItem(id:item.id,
@@ -67,11 +72,6 @@ final class CM_GroupVM:NSObject,ObservableObject{
                                         diseaseType: DiagnosisType(rawValue: wrapper.diagnosisResultList?[0].diseaseCode ?? -1) ?? .none,
                                         accuracy:wrapper.diagnosisResultList?[0].accuracy ?? 0)
                 }
-                self?.geoCoders.forEach({ (coder,idx) in
-                    if let coder = coder{
-                        coder.startFindingAddress()
-                    }
-                })
             }).store(in: &subscription)
     }
     func getDiagnosisItem(id: Int){
@@ -110,28 +110,5 @@ final class CM_GroupVM:NSObject,ObservableObject{
                 self?.changeGroupCompleted.send()
                 self?.getList()
             }).store(in: &subscription)
-    }
-}
-
-
-//MARK: -- 지도 위치 변환기
-extension CM_GroupVM:MTMapReverseGeoCoderDelegate{
-    func mtMapReverseGeoCoder(_ rGeoCoder: MTMapReverseGeoCoder!, foundAddress addressString: String!) {
-        let geoCoder = geoCoders.first { item in
-            item.0 == rGeoCoder
-        }
-        if let geoCoder = geoCoder, self.cm_groupItems.count > geoCoder.1{
-            self.cm_groupItems[geoCoder.1].address = addressString
-        }else{
-            print("geoCoder")
-        }
-    }
-    func mtMapReverseGeoCoder(_ rGeoCoder: MTMapReverseGeoCoder!, failedToFindAddressWithError error: Error!) {
-        let geoCoder = geoCoders.first { item in
-            item.0 == rGeoCoder
-        }
-        if let geoCoder = geoCoder, cm_groupItems.count > geoCoder.1{
-            self.cm_groupItems[geoCoder.1].address = "주소를 찾을 수 없습니다."
-        }
     }
 }

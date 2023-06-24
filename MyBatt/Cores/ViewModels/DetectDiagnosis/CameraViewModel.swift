@@ -18,7 +18,7 @@ import UIKit
 import Combine
 final class CameraViewModel:NSObject,ObservableObject{
     let camera = Camera()
-    lazy var locationService = LocationService()
+    lazy var locationService = LocationService.shared
     @Published var viewFinderImage: Image?
     @Published var thumbnailImage: Image?
     @Published var takenImage: Image?
@@ -42,17 +42,15 @@ final class CameraViewModel:NSObject,ObservableObject{
         }
     }
     private func addLocationSubscribers(){ // 의존성 주입
-        let locationPublisher: Published<CLLocationCoordinate2D?>.Publisher = locationService.$coordinate
         let loadingPublisher: Published<Bool>.Publisher = locationService.$isLoading
-        let addressPublisher: Published<String?>.Publisher = locationService.$address
-        locationPublisher.sink{[weak self] output in
+        locationService.locationPassthrough.sink{[weak self] output in
             print("locationService.$coordinate \(output)")
-            self?.coordinate = output
+            self?.coordinate = CLLocationCoordinate2D(geo: output)
         }.store(in: &cancellable)
         loadingPublisher.sink { [weak self] output in
             self?.isLocated = output
         }.store(in: &cancellable)
-        addressPublisher.sink { [weak self] output in
+        locationService.addressPasthrough.sink { [weak self] output in
             print("locationService.$address \(output)")
             self?.address = output
         }.store(in: &cancellable)
@@ -174,7 +172,7 @@ extension CameraViewModel{
 //                    returnImage = image
 //                    semaphore.signal()
                     print("이미지 전송 시작")
-                    completion(cropType,self.locationService.coordinate!,image)
+                    completion(cropType,self.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0),image)
                 }
             }
         }

@@ -7,17 +7,18 @@
 
 import Foundation
 import CoreLocation
+import Combine
 final class LocationService: NSObject, ObservableObject, CLLocationManagerDelegate{
-    private lazy var locationManager = CLLocationManager()
-    lazy var geocoder: MTMapReverseGeoCoder? = nil
-    @Published var coordinate: CLLocationCoordinate2D?
+    static let shared = LocationService()
+    private let locationManager = CLLocationManager()
     @Published var isLoading = false
-    @Published var address: String? = nil
-    override init() {
+//    @Published var address: String? = nil
+    lazy var locationPassthrough = PassthroughSubject<Geo,Never>()
+    lazy var addressPasthrough = PassthroughSubject<String?,Never>()
+    private override init() {
         super.init()
         print("LocationService Init!!")
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        
         locationManager.delegate = self
         switch locationManager.authorizationStatus{
         case .denied: break
@@ -29,8 +30,7 @@ final class LocationService: NSObject, ObservableObject, CLLocationManagerDelega
     deinit{
         print("사라진 거임!")
     }
-    func updateCurrent(){
-        coordinate = nil
+    func getCurrentLocation(){
         isLoading = true
         print("request start!!")
         locationManager.requestLocation()
@@ -38,47 +38,40 @@ final class LocationService: NSObject, ObservableObject, CLLocationManagerDelega
             self.isLoading = false
         }
     }
+    func startUpdatingLocation(){
+        locationManager.requestLocation()
+        locationManager.startUpdatingLocation()
+    }
+    func stopUpdatingLocation(){
+        locationManager.stopUpdatingLocation()
+    }
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         // 사용자가 장치에서 위치 서비스를 활성화하지 않았을때나,
         // 건물 내부에 있어 GPS 신호가 잡히지 않을 경우.
         // 예를 들자면 사용자에게 GPS 신호가 있는 장소로 걸어가라고 요청하는 경고를 표시하는 것이 좋습니다.
-        coordinate = nil
+        print("didFailWithError")
+        print(error.localizedDescription)
         isLoading = false
-        
     }
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    internal func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         // locations라는 배열로 현재 위치를 가져온다.
         // 첫번째 인덱스에 있는 정보로 활용이 가능하다.
         defer{
             isLoading = false
         }
-        if let location = locations.first {
-            self.coordinate = location.coordinate
-            let mtGeo = MTMapPoint(geoCoord: .init(latitude: Double(location.coordinate.latitude)
-                                                   ,longitude: Double(location.coordinate.longitude)))
-            guard let apiKey:String = Bundle.main.object(forInfoDictionaryKey: "KAKAO_APP_KEY") as? String else{
-                print("가져오기 실패")
-                isLoading = false
-                return
-            }
-            guard let geoCoder: MTMapReverseGeoCoder = MTMapReverseGeoCoder(mapPoint: mtGeo, with: self, withOpenAPIKey: apiKey) else {
-                print("에러 발생")
-                return
-            }
-            self.geocoder = geoCoder
-            self.geocoder?.startFindingAddress()
+        if let location = locations.last {
+            self.locationPassthrough.send((location.coordinate.latitude,location.coordinate.longitude))
         }
         isLoading = false
     }
-}
-extension LocationService:MTMapReverseGeoCoderDelegate{
-    func mtMapReverseGeoCoder(_ rGeoCoder: MTMapReverseGeoCoder!, foundAddress addressString: String!) {
-        guard let addressString = addressString else { return }
-        print(addressString)
-        address = addressString
-//        geocoder = nil
-    }
-    func mtMapReverseGeoCoder(_ rGeoCoder: MTMapReverseGeoCoder!, failedToFindAddressWithError error: Error!) {
-        print("에러였던거임!")
+    func requestAddress(geo:Geo){
+        CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: geo.0,longitude: geo.1)) { marks, error in
+            if let pm: CLPlacemark = marks?.first{
+                let address: String = "\(pm.locality ?? "") \(pm.name ?? "")"
+                self.addressPasthrough.send(address)
+            }else{
+                self.addressPasthrough.send(nil)
+            }
+        }
     }
 }

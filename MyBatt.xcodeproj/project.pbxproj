@@ -19,7 +19,6 @@
 		6310E1672A0E44BC0071326C /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6310E1662A0E44BC0071326C /* LocationService.swift */; };
 		63127C462A24E80A00D2962C /* MapItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63127C452A24E80A00D2962C /* MapItem.swift */; };
 		63127C482A24E89D00D2962C /* SickType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63127C472A24E89D00D2962C /* SickType.swift */; };
-		63127C492A251D0000D2962C /* DaumMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 632473632A0396E7005D7C7E /* DaumMap.framework */; };
 		63127C4C2A251D0300D2962C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 632D3F9E2A03894800DC1783 /* CoreLocation.framework */; };
 		63139C382A221DAA000CDBBA /* ExpertMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63139C372A221DAA000CDBBA /* ExpertMainView.swift */; };
 		63139C3A2A22220E000CDBBA /* ExpertMailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63139C392A22220E000CDBBA /* ExpertMailView.swift */; };
@@ -32,6 +31,8 @@
 		6320EABB2A2A015700558362 /* PesticideDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6320EABA2A2A015700558362 /* PesticideDetailSheet.swift */; };
 		63255F392A2FA7E7008EF09D /* DiseaseInfoVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63255F382A2FA7E7008EF09D /* DiseaseInfoVM.swift */; };
 		63255F3C2A2FAB41008EF09D /* DiseaseInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63255F3B2A2FAB41008EF09D /* DiseaseInfoModel.swift */; };
+		6326154E2A441AD50057B474 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6326154D2A441AD50057B474 /* MapView.swift */; };
+		632615502A441C650057B474 /* MarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6326154F2A441C650057B474 /* MarkerView.swift */; };
 		632680682A2CA91200B23E35 /* CM_GridItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632680672A2CA91200B23E35 /* CM_GridItemView.swift */; };
 		6326806A2A2CAA3600B23E35 /* CM_CateListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632680692A2CAA3600B23E35 /* CM_CateListView.swift */; };
 		632D3F542A03870800DC1783 /* MapMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632D3F532A03870800DC1783 /* MapMainView.swift */; };
@@ -40,7 +41,6 @@
 		632D3FA52A03896800DC1783 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 632D3FA42A03896800DC1783 /* libxml2.tbd */; };
 		632D3FA72A03897200DC1783 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 632D3FA62A03897200DC1783 /* libsqlite3.tbd */; };
 		632D3FA92A03898500DC1783 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 632D3FA82A03898500DC1783 /* SystemConfiguration.framework */; };
-		632D3FAD2A038AC900DC1783 /* KakaoMapVCWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632D3FAC2A038AC900DC1783 /* KakaoMapVCWrapper.swift */; };
 		63325A4929F0EFC000CF3A48 /* CustomSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63325A4829F0EFC000CF3A48 /* CustomSegmentView.swift */; };
 		63325A4B29F0F5E300CF3A48 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63325A4A29F0F5E300CF3A48 /* ViewExtension.swift */; };
 		63325A4D29F0FC7B00CF3A48 /* CornerRoundedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63325A4C29F0FC7B00CF3A48 /* CornerRoundedView.swift */; };
@@ -76,6 +76,7 @@
 		6356EB122A20F35B0094BC10 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6356EB112A20F35B0094BC10 /* DateExtension.swift */; };
 		6357C6FF2A2066A80094162C /* OutbreakItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6357C6FE2A2066A80094162C /* OutbreakItem.swift */; };
 		6357C7012A2066E80094162C /* OutbreakModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6357C7002A2066E80094162C /* OutbreakModel.swift */; };
+		6357ECDE2A4604B900A24D29 /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6357ECDD2A4604B900A24D29 /* BottomSheet.swift */; };
 		635AD49C29E7CA14006F3685 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635AD49B29E7CA14006F3685 /* UIColorExtension.swift */; };
 		636001BF29F3C1B700BC1F7F /* UIScreenExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636001BE29F3C1B700BC1F7F /* UIScreenExtension.swift */; };
 		636001C129F3C50500BC1F7F /* Appearances.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636001C029F3C50500BC1F7F /* Appearances.swift */; };
@@ -110,6 +111,11 @@
 		63B8D9402A0B3B7D004EC7FC /* DiagnosisModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B8D93F2A0B3B7D004EC7FC /* DiagnosisModel.swift */; };
 		63CC701C2A29164E0050589E /* SearchItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CC701B2A29164E0050589E /* SearchItemView.swift */; };
 		63CC701F2A291D1B0050589E /* DiseaseInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CC701E2A291D1B0050589E /* DiseaseInfoView.swift */; };
+		63D02A882A46BCCA007101A9 /* MapVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D02A872A46BCCA007101A9 /* MapVM.swift */; };
+		63D02A8A2A46BDBF007101A9 /* CLLocationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D02A892A46BDBF007101A9 /* CLLocationExtension.swift */; };
+		63D02A8C2A46C9CF007101A9 /* MapFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D02A8B2A46C9CF007101A9 /* MapFilterView.swift */; };
+		63D02A8E2A46D451007101A9 /* MapFilterVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D02A8D2A46D451007101A9 /* MapFilterVM.swift */; };
+		63D02A902A46D7EC007101A9 /* MapMainVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D02A8F2A46D7EC007101A9 /* MapMainVM.swift */; };
 		63D8A07C2A026DA300D2FBFD /* PhotoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8A07B2A026DA300D2FBFD /* PhotoCollection.swift */; };
 		63D8A07E2A0273D600D2FBFD /* TakenPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8A07D2A0273D600D2FBFD /* TakenPhotoView.swift */; };
 		63DB82712A1BC11D00842F75 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = 63DB82702A1BC11D00842F75 /* PopupView */; };
@@ -167,7 +173,6 @@
 		6310E1662A0E44BC0071326C /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		63127C452A24E80A00D2962C /* MapItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapItem.swift; sourceTree = "<group>"; };
 		63127C472A24E89D00D2962C /* SickType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SickType.swift; sourceTree = "<group>"; };
-		63127C4E2A251D1400D2962C /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		631332C42A03A0AB00CDE9B3 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		63139C372A221DAA000CDBBA /* ExpertMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpertMainView.swift; sourceTree = "<group>"; };
 		63139C392A22220E000CDBBA /* ExpertMailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpertMailView.swift; sourceTree = "<group>"; };
@@ -180,9 +185,10 @@
 		6320EABA2A2A015700558362 /* PesticideDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PesticideDetailSheet.swift; sourceTree = "<group>"; };
 		632473192A038CF0005D7C7E /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		6324731B2A038DE9005D7C7E /* KakaoBridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KakaoBridging.h; sourceTree = "<group>"; };
-		632473632A0396E7005D7C7E /* DaumMap.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DaumMap.framework; path = Resources/DaumMap.framework; sourceTree = "<group>"; };
 		63255F382A2FA7E7008EF09D /* DiseaseInfoVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiseaseInfoVM.swift; sourceTree = "<group>"; };
 		63255F3B2A2FAB41008EF09D /* DiseaseInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiseaseInfoModel.swift; sourceTree = "<group>"; };
+		6326154D2A441AD50057B474 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		6326154F2A441C650057B474 /* MarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerView.swift; sourceTree = "<group>"; };
 		632680672A2CA91200B23E35 /* CM_GridItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CM_GridItemView.swift; sourceTree = "<group>"; };
 		632680692A2CAA3600B23E35 /* CM_CateListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CM_CateListView.swift; sourceTree = "<group>"; };
 		632D3F532A03870800DC1783 /* MapMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapMainView.swift; sourceTree = "<group>"; };
@@ -192,7 +198,6 @@
 		632D3FA42A03896800DC1783 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		632D3FA62A03897200DC1783 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		632D3FA82A03898500DC1783 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		632D3FAC2A038AC900DC1783 /* KakaoMapVCWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoMapVCWrapper.swift; sourceTree = "<group>"; };
 		63325A4829F0EFC000CF3A48 /* CustomSegmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentView.swift; sourceTree = "<group>"; };
 		63325A4A29F0F5E300CF3A48 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		63325A4C29F0FC7B00CF3A48 /* CornerRoundedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CornerRoundedView.swift; sourceTree = "<group>"; };
@@ -226,6 +231,7 @@
 		6356EB112A20F35B0094BC10 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		6357C6FE2A2066A80094162C /* OutbreakItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutbreakItem.swift; sourceTree = "<group>"; };
 		6357C7002A2066E80094162C /* OutbreakModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutbreakModel.swift; sourceTree = "<group>"; };
+		6357ECDD2A4604B900A24D29 /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
 		635AD49B29E7CA14006F3685 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		636001BE29F3C1B700BC1F7F /* UIScreenExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreenExtension.swift; sourceTree = "<group>"; };
 		636001C029F3C50500BC1F7F /* Appearances.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearances.swift; sourceTree = "<group>"; };
@@ -261,6 +267,11 @@
 		63B8D93F2A0B3B7D004EC7FC /* DiagnosisModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosisModel.swift; sourceTree = "<group>"; };
 		63CC701B2A29164E0050589E /* SearchItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchItemView.swift; sourceTree = "<group>"; };
 		63CC701E2A291D1B0050589E /* DiseaseInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiseaseInfoView.swift; sourceTree = "<group>"; };
+		63D02A872A46BCCA007101A9 /* MapVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVM.swift; sourceTree = "<group>"; };
+		63D02A892A46BDBF007101A9 /* CLLocationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationExtension.swift; sourceTree = "<group>"; };
+		63D02A8B2A46C9CF007101A9 /* MapFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFilterView.swift; sourceTree = "<group>"; };
+		63D02A8D2A46D451007101A9 /* MapFilterVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFilterVM.swift; sourceTree = "<group>"; };
+		63D02A8F2A46D7EC007101A9 /* MapMainVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapMainVM.swift; sourceTree = "<group>"; };
 		63D8A07B2A026DA300D2FBFD /* PhotoCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollection.swift; sourceTree = "<group>"; };
 		63D8A07D2A0273D600D2FBFD /* TakenPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakenPhotoView.swift; sourceTree = "<group>"; };
 		63DC15E429D180ED0062691D /* MyBatt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyBatt.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -316,7 +327,6 @@
 				632D3FA72A03897200DC1783 /* libsqlite3.tbd in Frameworks */,
 				632D3FA52A03896800DC1783 /* libxml2.tbd in Frameworks */,
 				630500882A1B5F7A007BF769 /* CropViewController in Frameworks */,
-				63127C492A251D0000D2962C /* DaumMap.framework in Frameworks */,
 				63F20AAB2A175F6E00896597 /* Alamofire in Frameworks */,
 				632D3FA32A03895C00DC1783 /* libc++.tbd in Frameworks */,
 				632D3FA12A03894F00DC1783 /* QuartzCore.framework in Frameworks */,
@@ -399,7 +409,6 @@
 		632D3F4F2A03856D00DC1783 /* MapHelper */ = {
 			isa = PBXGroup;
 			children = (
-				632D3FAC2A038AC900DC1783 /* KakaoMapVCWrapper.swift */,
 			);
 			path = MapHelper;
 			sourceTree = "<group>";
@@ -407,8 +416,6 @@
 		632D3F9B2A03892200DC1783 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				63127C4E2A251D1400D2962C /* OpenGLES.framework */,
-				632473632A0396E7005D7C7E /* DaumMap.framework */,
 				632473192A038CF0005D7C7E /* Metal.framework */,
 				632D3FA82A03898500DC1783 /* SystemConfiguration.framework */,
 				632D3FA62A03897200DC1783 /* libsqlite3.tbd */,
@@ -427,6 +434,10 @@
 				633E65102A12446E00E50EC5 /* MapSheetView.swift */,
 				63F096F82A135B1A005DA59C /* CropSelectView.swift */,
 				63F096FA2A135B37005DA59C /* CropDurationView.swift */,
+				6326154D2A441AD50057B474 /* MapView.swift */,
+				6326154F2A441C650057B474 /* MarkerView.swift */,
+				6357ECDD2A4604B900A24D29 /* BottomSheet.swift */,
+				63D02A8B2A46C9CF007101A9 /* MapFilterView.swift */,
 			);
 			path = MapViews;
 			sourceTree = "<group>";
@@ -467,6 +478,7 @@
 				633CACA82A0B68DC00D23033 /* CIImageExtension.swift */,
 				6356EB112A20F35B0094BC10 /* DateExtension.swift */,
 				634DB8FA2A27BB7900DED6D7 /* AlamofireExtension.swift */,
+				63D02A892A46BDBF007101A9 /* CLLocationExtension.swift */,
 			);
 			path = Others;
 			sourceTree = "<group>";
@@ -511,13 +523,13 @@
 		6347CBF829F6DCA8001B99B6 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				63D02A862A46BCAB007101A9 /* MapVM */,
 				634280432A31DFEE007415AA /* ExpertVM */,
 				63A3660D2A307D9B00EBEA02 /* CM_ViewModels */,
 				63255F372A2FA7DA008EF09D /* Disease */,
 				63F096F32A134DE3005DA59C /* UserVM.swift */,
 				63A4BABA2A13E7EB0018E891 /* DetectDiagnosis */,
 				63517A1A2A079FFC006DA928 /* OutBreakViewMoel.swift */,
-				63F096FC2A135B52005DA59C /* MapSheetVM.swift */,
 				63A5827F2A1FD22A0007D317 /* SearchMainVM.swift */,
 			);
 			path = ViewModels;
@@ -735,6 +747,17 @@
 				6320EABA2A2A015700558362 /* PesticideDetailSheet.swift */,
 			);
 			path = DiseaseView;
+			sourceTree = "<group>";
+		};
+		63D02A862A46BCAB007101A9 /* MapVM */ = {
+			isa = PBXGroup;
+			children = (
+				63D02A8F2A46D7EC007101A9 /* MapMainVM.swift */,
+				63D02A8D2A46D451007101A9 /* MapFilterVM.swift */,
+				63F096FC2A135B52005DA59C /* MapSheetVM.swift */,
+				63D02A872A46BCCA007101A9 /* MapVM.swift */,
+			);
+			path = MapVM;
 			sourceTree = "<group>";
 		};
 		63DC15DB29D180ED0062691D = {
@@ -1002,6 +1025,7 @@
 				635AD49C29E7CA14006F3685 /* UIColorExtension.swift in Sources */,
 				633CACA72A0B61A000D23033 /* DiagnosisDataService.swift in Sources */,
 				6320EAB52A29E45E00558362 /* DisclosureGroupExtension.swift in Sources */,
+				63D02A8E2A46D451007101A9 /* MapFilterVM.swift in Sources */,
 				63A4BABE2A13EB280018E891 /* TakenPhotoVM.swift in Sources */,
 				63F20ABE2A17642E00896597 /* AuthRouter.swift in Sources */,
 				636001C129F3C50500BC1F7F /* Appearances.swift in Sources */,
@@ -1016,6 +1040,7 @@
 				63139C3A2A22220E000CDBBA /* ExpertMailView.swift in Sources */,
 				63F096FD2A135B52005DA59C /* MapSheetVM.swift in Sources */,
 				63F096F42A134DE3005DA59C /* UserVM.swift in Sources */,
+				6326154E2A441AD50057B474 /* MapView.swift in Sources */,
 				63E173DB2A220DAE006877EC /* MapRouter.swift in Sources */,
 				63027B002A2DD31F00630CDC /* DiagnosisResultView.swift in Sources */,
 				63139C3C2A223FD9000CDBBA /* InquiryRouter.swift in Sources */,
@@ -1029,7 +1054,7 @@
 				638AEF7C29FBF166004BD2BE /* MainManagementBtn.swift in Sources */,
 				63F20ACB2A17664000896597 /* OnboardingView.swift in Sources */,
 				63255F392A2FA7E7008EF09D /* DiseaseInfoVM.swift in Sources */,
-				632D3FAD2A038AC900DC1783 /* KakaoMapVCWrapper.swift in Sources */,
+				63D02A8C2A46C9CF007101A9 /* MapFilterView.swift in Sources */,
 				63E173DD2A220F24006877EC /* MapSheetCrop.swift in Sources */,
 				63A582802A1FD22A0007D317 /* SearchMainVM.swift in Sources */,
 				6351AAD62A1E100C00B7A370 /* OAuthAuthenticator.swift in Sources */,
@@ -1049,6 +1074,7 @@
 				63B70A462A1CA21E00527D0D /* SignUpSheetView.swift in Sources */,
 				63201F1429E97AFD00EB5D4E /* MainRequestBtn.swift in Sources */,
 				63F20AB72A17629600896597 /* BaseInterceptor.swift in Sources */,
+				63D02A902A46D7EC007101A9 /* MapMainVM.swift in Sources */,
 				636D83F429FFAC2D003F4347 /* Camera_ex.swift in Sources */,
 				63F5D30B2A269EB900D8BB78 /* AlbumPickerVM.swift in Sources */,
 				63861CB22A2A37A900BB769E /* NavTrailingBtn.swift in Sources */,
@@ -1064,6 +1090,7 @@
 				63DC15E829D180ED0062691D /* MyBattApp.swift in Sources */,
 				63B8D9402A0B3B7D004EC7FC /* DiagnosisModel.swift in Sources */,
 				63861CAF2A2A367900BB769E /* CM_MainView.swift in Sources */,
+				63D02A8A2A46BDBF007101A9 /* CLLocationExtension.swift in Sources */,
 				637F5AB82A1CE3B100D0A5C2 /* UserModel.swift in Sources */,
 				634280422A31DE46007415AA /* ExpertRouter.swift in Sources */,
 				63F20AAE2A17614400896597 /* UserDefaultManager.swift in Sources */,
@@ -1078,6 +1105,7 @@
 				63B2D0B42A30E52400F4FA04 /* CM_GroupVM.swift in Sources */,
 				63D8A07C2A026DA300D2FBFD /* PhotoCollection.swift in Sources */,
 				638E119129E3F996005CA2EA /* MainView.swift in Sources */,
+				632615502A441C650057B474 /* MarkerView.swift in Sources */,
 				63B70A442A1C9FA800527D0D /* BorderModifier.swift in Sources */,
 				63325A5029F1006500CF3A48 /* SearchMainView.swift in Sources */,
 				63F20ABC2A17638700896597 /* AuthCredential.swift in Sources */,
@@ -1110,6 +1138,8 @@
 				63B2D0B62A30E79E00F4FA04 /* CM_RecordModels.swift in Sources */,
 				6351AAD82A1E258A00B7A370 /* ResponseWrapper.swift in Sources */,
 				63DC15F629D180FC0062691D /* UploadImageView.swift in Sources */,
+				63D02A882A46BCCA007101A9 /* MapVM.swift in Sources */,
+				6357ECDE2A4604B900A24D29 /* BottomSheet.swift in Sources */,
 				6354344029E850830037D6CD /* LottieView.swift in Sources */,
 				634280402A31B512007415AA /* DiagnosisRouter.swift in Sources */,
 				63CC701F2A291D1B0050589E /* DiseaseInfoView.swift in Sources */,
@@ -1161,7 +1191,6 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = /Users/kimtaeyoon/Documents/MyBatt/Resources/DaumMap.framework;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1224,7 +1253,6 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = /Users/kimtaeyoon/Documents/MyBatt/Resources/DaumMap.framework;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1237,6 +1265,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = /Users/kimtaeyoon/Documents/MyBatt/MyBatt/Helper/MapHelper/KakaoBridgeHeader.h;
@@ -1273,7 +1302,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
@@ -1323,7 +1352,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;

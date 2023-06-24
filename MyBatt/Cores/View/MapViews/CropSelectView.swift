@@ -10,7 +10,7 @@ struct CropSelectView: View {
     @Binding var pageSheetCrop:MapSheetCrop
     @Binding var myDiagnosis: [DiagnosisType:Int]?
     @State private var acc: Double = 50
-    let accRange: AccRange = MapSheetVM.accRange
+    let accRange: AccRange = MapFilterVM.accRange
     var body: some View {
         VStack{
             Toggle(isOn: $pageSheetCrop.isOn) {

@@ -24,8 +24,7 @@ struct ExpertMainView: View {
     var body: some View {
         ScrollView(showsIndicators: false){
             VStack(spacing: 12){
-                self.textInfoView(
-                    label: "요청 중인 메시지",toggleState: $toggleStates[1]){
+                self.textInfoView(label: "요청 중인 메시지",toggleState: $toggleStates[1]){
                         LazyVStack(spacing:8){
                             ForEach(vm.unResponseItem.indices,id:\.self){ idx in
                                 Button{
@@ -89,7 +88,6 @@ struct ExpertMainView: View {
             }.padding(.all)
             //MARK: -- Sheet Router
                 .sheet(item: $sheetType){ item in
-                    //                let item:ExpertSheetType? = item
                     switch item{
                     case .Info:
                         ExpertMsgView(sendModel: self.requestItem, diagnosis: self.itemDiagnosis)
@@ -108,14 +106,14 @@ struct ExpertMainView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             //MARK: -- 나중에 추가해야할 추가버튼
-//            ToolbarItem(placement: .navigationBarTrailing, content: {
-//                Button{
-//                    self.sheetType = .Request
-//                }label: {
-//                    Image(systemName: "square.and.pencil")
-//                        .foregroundColor(.blue)
-//                }
-//            })
+            //            ToolbarItem(placement: .navigationBarTrailing, content: {
+            //                Button{
+            //                    self.sheetType = .Request
+            //                }label: {
+            //                    Image(systemName: "square.and.pencil")
+            //                        .foregroundColor(.blue)
+            //                }
+            //            })
         }
         
     }
@@ -183,7 +181,7 @@ fileprivate struct ListItem: View{
                     EmptyView()
                 }
             }
-
+            
             VStack(alignment: .leading,spacing: 4){
                 HStack(alignment:.top){
                     Text("제목:").font(.headline)

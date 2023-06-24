@@ -84,7 +84,7 @@ struct TakenPhotoView: View {
             }
         }
         .onDisappear(){
-            cameraModel.locationService.address = nil
+            cameraModel.address = nil
         }
     }
     func imageAppearView(image:Image)-> some View{

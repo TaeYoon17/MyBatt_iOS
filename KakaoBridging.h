@@ -8,6 +8,4 @@
 #ifndef KakaoBridging_h
 #define KakaoBridging_h
 
-#import <DaumMap/MTMapView.h>
-#import <DaumMap/MTMapReverseGeoCoder.h>
 #endif /* KakaoBridging_h */

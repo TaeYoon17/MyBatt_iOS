@@ -6,13 +6,12 @@
 //
 
 import Foundation
-struct MapItem:Equatable{
+struct MapItem:Equatable,Markerable{
+    var id = UUID()
+    var geo: Geo
     static func == (lhs: MapItem, rhs: MapItem) -> Bool {
         lhs.diseaseCode == rhs.diseaseCode && lhs.geo == rhs.geo
     }
-    
     let cropType: CropType
-    let geo: Geo
     let diseaseCode: DiagnosisType
-    
 }

@@ -13,4 +13,5 @@ enum DurationType:String, CaseIterable{
     case month = "한달 전"
     case quarter = "3달 전"
     case custom = "자체 설정"
+    
 }

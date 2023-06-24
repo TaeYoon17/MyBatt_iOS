@@ -121,6 +121,7 @@ struct MainView: View {
                 Text("OutBreakInfo")
             case .Map:
                 MapMainView()
+
             case .CropManage:
                 CM_MainView()
                     .environmentObject(cm_mainVM)

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CropDurationView: View {
-    @EnvironmentObject var vm: MapSheetVM
+    @EnvironmentObject var vm: MapFilterVM
     
     private var today: (Int,Int,Int) {
         let date = Date()
@@ -31,17 +31,20 @@ struct CropDurationView: View {
                            in:vm.dateRange, displayedComponents: .date,
                            label: {
                     Text("오늘: ").fontWeight(.semibold) + Text("\(String(today.0))년 \(today.1)월 \(today.2)일")
-                })
-                .onChange(of: vm.selectDate) { newValue in
-                }
+                }).padding(.horizontal,4)
             }
         } label:{
             labelView
-        }.bgColor(.white)
+        }
+        .bgColor(Color.lightGray)
+        .cornerRadius(8)
     }
     private var labelView: some View{
         HStack(alignment: .center){
             Text("검색 기간")
+                .font(.title2.weight(.bold))
+                .foregroundColor(.accentColor)
+                .padding(.leading,4)
             Spacer()
             Picker("설정", selection:$vm.durationType) {
                 ForEach(DurationType.allCases,id:\.self) { duration in
@@ -49,7 +52,7 @@ struct CropDurationView: View {
                 }
             }
             .pickerStyle(.menu)
-            .background(.white)
+//            .background(.white)
             .onChange(of: vm.durationType) { newValue in
                 //여기서 네트워킹
                 let currentDate = Date()
@@ -83,6 +86,7 @@ struct CropDurationView: View {
 
 struct CropDurationView_Previews: PreviewProvider {
     static var previews: some View {
-        CropDurationView().environmentObject(MapSheetVM())
+        CropDurationView()
+            .environmentObject(MapSheetVM())
     }
 }

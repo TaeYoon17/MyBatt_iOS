@@ -8,56 +8,61 @@
 import SwiftUI
 import NativePartialSheet
 import CoreLocation
+import MapKit
+import Combine
+
 struct MapMainView: View {
+    
     @EnvironmentObject var appManager: AppManager
-    @StateObject private var vm = MapSheetVM()
-    @State var isPresent = false
+    @StateObject private var vm = MapMainVM()
+    @StateObject private var sheetVm = MapSheetVM()
+    //    @StateObject private var mapVM = MapVM<Marker>()
     @State var detent: Detent = .height(70)
     @State var zoomLevel:Int = 1
-    let circles: [Geo] = []
+    @State var isPresent = false
+    @State var isFilter = false
+    @State var offset: CGFloat = 0
     var body: some View {
-        ZStack{
-            KakaoMapViewWrapper(zoomLevel: $zoomLevel,center: $vm.center,
-                                address: $vm.locationName,isTrackingMode: $vm.isGPSOn,
-                                mapDiseaseResult: $vm.mapDiseaseResult
-            )
-                .ignoresSafeArea()
-                .overlay(alignment: .top, content: {
-//                    VStack{
-//                        Text(zoomLevel.description)
-//                            .background(.white)
-//                        Button("주변 정보 요정") {
-//                            //MARK: -- 위치 주변 request 시작
-//                            vm.requestNearDisease()
-//                        }
-//                    }
-                })
-                .sheet(isPresented: $isPresent){
-                    MapSheetView().environmentObject(vm)
-                    .onChange(of: vm.crops, perform: {output in
-                        })
-                }
-                .presentationDetents([.large,.height(70)],selection: $detent)
-                .cornerRadius(16)
-                .presentationDragIndicator(.hidden)
-                .sheetColor(.clear)
-                .edgeAttachedInCompactHeight(true)
-                .scrollingExpandsWhenScrolledToEdge(true)
-                .widthFollowsPreferredContentSizeWhenEdgeAttached(true)
-                .largestUndimmedDetent(.height(70))
-                .interactiveDismissDisabled(false,
-                                            onWillDismiss: {
-                    print("willDismiss")
-                },
-                                            onDidDismiss: {
-                    print("isDismissed")
-                })
-            
-                
+        ZStack(alignment: Alignment(horizontal: .center, vertical: .bottom)){
+                MapView()
+                    .environmentObject(vm)
+                    .ignoresSafeArea()
+                    .sheet(isPresented: $isPresent){
+                        MapSheetView(isGPSOn: $vm.isGPSOn)
+                            .environmentObject(vm)
+                            .environmentObject(sheetVm)
+                    }
+                    .presentationDetents([.large,.height(70)],selection: $detent)
+                    .cornerRadius(16)
+                    .presentationDragIndicator(.hidden)
+                    .sheetColor(.clear)
+                    .edgeAttachedInCompactHeight(true)
+                    .scrollingExpandsWhenScrolledToEdge(true)
+                    .widthFollowsPreferredContentSizeWhenEdgeAttached(true)
+                    .largestUndimmedDetent(.height(70))
+                    .interactiveDismissDisabled(false,
+                                                onWillDismiss: {
+                        print("willDismiss")
+                    },
+                                                onDidDismiss: {
+                        print("isDismissed")
+                    })
+            NavigationLink(isActive: $isFilter) {
+                MapFilterView()
+                    .environmentObject(vm)
+                    .onAppear(){
+                        DispatchQueue.main.async{
+                            self.isPresent = false
+                        }
+                    }
+            } label: {
+                EmptyView()
+            }
         }
-        .onTapGesture {
-            isPresent.toggle()
-        }
+        .onChange(of: vm.isPresent, perform: { newValue in
+            print(newValue)
+            self.isPresent = newValue
+        })
         .onAppear(){
             appManager.isTabbarHidden = true
             self.vm.isGPSOn = true
@@ -66,15 +71,19 @@ struct MapMainView: View {
             }
         }
         .onDisappear(){
+            print("이게 사라지네...")
+            vm.isPresent = false
             withAnimation(.easeOut(duration: 0.2)) {
-                appManager.isTabbarHidden = false
+                if !isFilter{
+                    appManager.isTabbarHidden = false
+                }
             }
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button{
-                    self.isPresent = false
+                    vm.isPresent = false
                     appManager.goRootView()
                 } label: {
                     HStack(spacing:4){
@@ -84,8 +93,18 @@ struct MapMainView: View {
                 }.padding(.horizontal, -8)
             }
             ToolbarItem(placement: .principal) {
-                Text("\(vm.locationName ?? "")")
+                Text("\(vm.locationName)")
                     .fontWeight(.semibold)
+                    .frame(width: 200,height: 44)
+                //                    .background(Color.blue)
+                    .minimumScaleFactor(0.5)
+                    .lineLimit(1)
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                NavTrailingBtn(btnAction: {
+                    print("팝업")
+                    self.isFilter = true
+                }, imgName: "line.3.horizontal.decrease.circle", labelName: "필터", textColor: .white, bgColor: .accentColor)
             }
         }
     }
