@@ -78,7 +78,6 @@ struct CropDurationView: View {
                     let week: TimeInterval = 60 * 60 * 24 * 7
                     vm.selectDate = currentDate.addingTimeInterval(-week)
                 }
-                print(newValue.rawValue)
             }
         }
     }

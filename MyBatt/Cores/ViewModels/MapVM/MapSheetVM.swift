@@ -21,16 +21,7 @@ final class MapSheetVM:ObservableObject{
     var subscription = Set<AnyCancellable>()
     
     lazy var mapQueryDataService: MapQueryDataService = MapQueryDataService()
-    init(){
-        mapQueryDataService.$queryResult.sink { model in
-            if let result = model?.documents?.first{
-                guard let x: Double = Double(result.x ?? "") else { return }
-                guard let y: Double = Double(result.y ?? "") else { return }
-                let geo: Geo = Geo(y,x)
-//                centerPassthrough.send(geo)
-            }
-        }.store(in: &subscription)
-    }
+    init(){}
     deinit{
         subscription.forEach { can in
             can.cancel()

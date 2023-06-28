@@ -74,4 +74,11 @@ final class LocationService: NSObject, ObservableObject, CLLocationManagerDelega
             }
         }
     }
+    func requestAddressAsync(geo:Geo) async -> String{
+        let s:[CLPlacemark]? = try? await CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: geo.0,longitude: geo.1))
+        if let pm = s?.first{
+            return "\(pm.locality ?? "") \(pm.name ?? "")"
+        }
+        return "찾을 수 없는 값!!"
+    }
 }

@@ -25,4 +25,9 @@ extension Date{
         let week: TimeInterval = 60 * 60 * 24 * 7
         return date.addingTimeInterval(-week)
     }
+    var getKoreanString:String{
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yy년 MM월 dd일"
+        return formatter.string(from: self)
+    }
 }

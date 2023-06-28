@@ -9,7 +9,11 @@ import SwiftUI
 import Alamofire
 import Combine
 import CoreLocation
-struct CM_GroupItem:Identifiable{
+struct CM_GroupItem:Identifiable,Equatable{
+    static func == (lhs: CM_GroupItem, rhs: CM_GroupItem) -> Bool {
+        lhs.id == rhs.id
+    }
+    
     let id:Int
     let imgPath:String
     var address:String
@@ -17,6 +21,7 @@ struct CM_GroupItem:Identifiable{
     let cropType: CropType
     let diseaseType: DiagnosisType
     let accuracy:Double
+    var geo: Geo
 }
 final class CM_GroupVM:NSObject,ObservableObject{
 //    @Published var cm_recordWrapper:[CM_RecordWrapper] = []
@@ -70,7 +75,7 @@ final class CM_GroupVM:NSObject,ObservableObject{
                                         regDate:regDate,
                                         cropType: CropType(rawValue: item.cropType) ?? .none,
                                         diseaseType: DiagnosisType(rawValue: wrapper.diagnosisResultList?[0].diseaseCode ?? -1) ?? .none,
-                                        accuracy:wrapper.diagnosisResultList?[0].accuracy ?? 0)
+                                        accuracy:wrapper.diagnosisResultList?[0].accuracy ?? 0, geo: (item.userLatitude,item.userLongitude))
                 }
             }).store(in: &subscription)
     }

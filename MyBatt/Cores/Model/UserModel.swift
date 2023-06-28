@@ -7,6 +7,7 @@
 
 import Foundation
 typealias Geo = (latitude: Double,longtitude: Double)
+
 struct UserModel{
     var token: TokenData? = UserDefaultsManager.shared.getTokens()
     var userKey: String?

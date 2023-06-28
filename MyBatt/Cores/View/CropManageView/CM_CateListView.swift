@@ -191,7 +191,6 @@ fileprivate struct ItemView:View{
                 Image(systemName: "chevron.right")
                     .padding(.top,16)
             }
-            //            .background(Color.blue)
             
         }
         .padding(.all,12)

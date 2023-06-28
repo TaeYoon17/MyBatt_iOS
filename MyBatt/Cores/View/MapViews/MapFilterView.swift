@@ -40,11 +40,6 @@ struct MapFilterView: View {
         .cornerRadius(20)
         //            내부 뷰에 cornerradius를 주고 꽉차게 만드려면 넣어줘야함
         .ignoresSafeArea(.all,edges: .bottom)
-//        .onReceive(mainVM.passthroughNearDiseaseItems, perform: { result in
-//            print("MapSheetView에 center정보 전달 됨")
-//            vm.makeDiseaseCnt(diseaseResult: result)
-//        })
-//        .background(Material.thinMaterial.opacity(0.8))
         .background(.thickMaterial)
         .ignoresSafeArea(.all,edges: .bottom)
         .onAppear(){

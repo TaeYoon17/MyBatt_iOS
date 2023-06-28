@@ -21,6 +21,7 @@ final class MapFilterVM:ObservableObject{
     // 작물 종류 - 진단 타입 - 계수
     @Published var mapDiseaseCnt: [CropType:[DiagnosisType:Int]] = [:]
     var subscription = Set<AnyCancellable>()
+    var isInit = true
     var dateRange: ClosedRange<Date>{
         let calendar = Calendar.current
         let currentDate = Date()
@@ -68,14 +69,18 @@ extension MapFilterVM{
         self.crops = mainVM.crops
         self.selectDate = mainVM.selectDate
         self.durationType = mainVM.durationType
-        self.$crops.sink {val in
+        self.$crops.sink {[weak self]val in
+            guard self?.isInit == false else { return }
             mainVM.crops = val
         }.store(in: &subscription)
-        self.$selectDate.sink { val in
+        self.$selectDate.sink {[weak self] val in
+            guard self?.isInit == false else { return }
             mainVM.selectDate = val
         }.store(in: &subscription)
-        self.$durationType.sink { type in
-            mainVM.durationType = type
+        self.$durationType.sink {[weak self] val in
+            guard self?.isInit == false else { return }
+            mainVM.durationType = val
         }.store(in: &subscription)
+        self.isInit = false
     }
 }

@@ -9,6 +9,7 @@ import Foundation
 struct MapItem:Equatable,Markerable{
     var id = UUID()
     var geo: Geo
+    var info: CM_GroupItem
     static func == (lhs: MapItem, rhs: MapItem) -> Bool {
 //        lhs.diseaseCode == rhs.diseaseCode && lhs.geo == rhs.geo
         lhs.id == rhs.id

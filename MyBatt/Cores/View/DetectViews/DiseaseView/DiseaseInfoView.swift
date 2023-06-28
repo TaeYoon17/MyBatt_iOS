@@ -109,7 +109,7 @@ extension DiseaseInfoView{
                 HStack{
                     if let imageList = self.vm.diseaseInfoModel?.imageList{
                         ForEach(imageList){image in
-                            AsyncImage(url: URL(string: image.imagePath ?? "")) { phase in
+                            AsyncImage(url: URL(string: image.imagePath)) { phase in
                                 switch phase {
                                 case .empty:
                                     ProgressView()

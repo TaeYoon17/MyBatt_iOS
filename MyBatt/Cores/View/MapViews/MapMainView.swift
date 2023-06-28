@@ -21,6 +21,7 @@ struct MapMainView: View {
     @State var isFilter = true
     @State var isToolbarFilter = true
     @State var offset: CGFloat = 0
+    @State var tappedItem: (any Markerable)? = nil
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .center, vertical: .bottom)){
                 MapView()
@@ -46,13 +47,27 @@ struct MapMainView: View {
                                                 onDidDismiss: {
                         self.vm.isPresent = false
                     }).zIndex(0)
+            if let tapped =  tappedItem{
+                let item = tapped.info
+                MapItemView(item: item,bgColor: .white.opacity(0.8))
+                        .padding(.bottom,100)
+                        .padding(.horizontal)
+                        .transition(.opacity.animation(.easeInOut(duration: 0.5)))
+                        .zIndex(1)
+            }else{
+                EmptyView()
+            }
             if isFilter{
                 MapFilterView()
                 .environmentObject(vm)
                 .transition(.move(edge: .bottom))
-                .zIndex(1)
+                .zIndex(2)
             }
         }
+        .onReceive(vm.$tappedItem, perform: { output in
+                print("vm.$tappedItem, perform: { output in")
+                self.tappedItem = output
+        })
         .onReceive(vm.$isPresent, perform: { output in
             self.isPresent = output
         })
@@ -64,7 +79,6 @@ struct MapMainView: View {
             }
         }
         .onDisappear(){
-            print("이게 사라지네...")
             withAnimation(.easeOut(duration: 0.2)) {
                 if !isFilter{
                     appManager.isTabbarHidden = false
@@ -72,11 +86,6 @@ struct MapMainView: View {
             }
         }
         .navigationBarBackground({
-//            if isFilter {
-//                Color.clear
-//            }else{
-//                Color.white
-//            }
             Color.clear
         })
         .navigationBarBackButtonHidden(true)
@@ -112,6 +121,7 @@ struct MapMainView: View {
                 NavTrailingBtn(btnAction: {
                     print("팝업")
                     vm.isPresent = self.isFilter
+                    vm.tappedItem = nil
                     self.isToolbarFilter.toggle()
                     withAnimation(.linear(duration: 0.25)) {
                         self.isFilter.toggle()
@@ -136,11 +146,3 @@ struct MapMainView_Previews: PreviewProvider {
         }
     }
 }
-
-
-
-//            let isPresented = false
-//            guard let window = UIApplication.shared.keyWindow else { return }
-//            guard let rootViewController = window.rootViewController else { return }
-//            let presentedViewController = rootViewController.presentedViewController
-//            rootViewController.dismiss(animated: false)

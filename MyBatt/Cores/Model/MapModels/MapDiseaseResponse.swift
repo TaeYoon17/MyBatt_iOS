@@ -7,7 +7,7 @@
 
 import Foundation
 struct MapDiseaseResponse: Codable,Identifiable {
-    let id, responseCode: Int?
+    let id, responseCode: Int
     let diagnosisRecord: DiagnosisRecord
     let diseaseCode: Int?
     let sickKey: String?
@@ -17,7 +17,7 @@ struct MapDiseaseResponse: Codable,Identifiable {
 
 // MARK: - DiagnosisRecord
 struct DiagnosisRecord: Codable,Identifiable {
-    let id, userID: Int?
+    let id, userID: Int
     let userLatitude, userLongitude: Double
     let regDate: String
     let cropType: Int

@@ -16,6 +16,7 @@ final class MapMainVM: ObservableObject{
     @Published var isGPSOn = false
     @Published var locationName = ""
     @Published var nearDiseaseItems: [CropType:[MapDiseaseResponse]]?
+    @Published var tappedItem: (any Markerable)? = nil
     @Published var crops: [MapSheetCrop] = CropType.allCases.map { type in
         MapSheetCrop(cropType: type.rawValue, accuracy: MapMainVM.accRange.start > 80.0 ? MapMainVM.accRange.start : 80,isOn: false)
     }
@@ -32,15 +33,16 @@ final class MapMainVM: ObservableObject{
     }
     
     func addSubscriber(){
-        self.$center.sink { [weak self] _ in
+        self.$center.delay(for: 0.2, scheduler: DispatchQueue.global())
+            .sink { [weak self] _ in
             self?.requestNearDisease()
         }.store(in: &subscription)
-        self.$crops.sink { [weak self] _ in
-            self?.requestNearDisease()
-        }.store(in: &subscription)
-        self.$selectDate.sink{ [weak self] _ in
-            self?.requestNearDisease()
-        }.store(in: &subscription)
+        self.$crops.delay(for: 0.2, scheduler: DispatchQueue.global())
+            .sink { [weak self] _ in self?.requestNearDisease()}
+            .store(in: &subscription)
+        self.$selectDate.delay(for: 0.2, scheduler: DispatchQueue.global())
+            .sink{ [weak self] _ in self?.requestNearDisease()}
+            .store(in: &subscription)
     }
     private func requestNearDisease(){
         print("requestNearDisease called!! \(center)")
@@ -63,10 +65,18 @@ final class MapMainVM: ObservableObject{
             if let nullableData: [MapDiseaseResponse] = output.data{
                 print(nullableData)
                 let nearDiseaseItems = self?.makeDiseaseResult(nullableData.filter { response in
-                    let type:DiagnosisType = DiagnosisType(rawValue: response.diseaseCode ?? -1) ?? .none
-                    switch type{
-                    case .none,.LettuceNormal,.PepperNormal,.TomatoNormal,.StrawberryNormal: return false
-                    default: return true
+                    let diseasetype:DiagnosisType = DiagnosisType(rawValue: response.diseaseCode ?? -1) ?? .none
+                    let cropType: CropType = CropType(rawValue:response.diagnosisRecord.cropType) ?? .none
+                    switch (diseasetype, cropType) {
+                    case (.none,_), (.LettuceNormal,_), (.PepperNormal,_), (.TomatoNormal,_) ,(.StrawberryNormal,_):
+                        return false
+                    case (.TomatoLeafFungus, .Tomato), (.TomatoYellowLeafRoll, .Tomato),
+                         (.LettuceMycosis, .Lettuce), (.LettuceDownyMildew, .Lettuce),
+                         (.StrawberryGrayMold, .StrawBerry), (.StrawberryPowderyMildew, .StrawBerry),
+                         (.PepperSpot, .Pepper), (.PepperMildMotle, .Pepper):
+                        return true
+                    default:
+                        return false
                     }
                 })
                 self?.passthroughNearDiseaseItems.send(nearDiseaseItems)
@@ -91,17 +101,17 @@ final class MapMainVM: ObservableObject{
     
     
     //MARK: -- 응답받은 주변 병해 정보를 맵 마커용 데이터로 바꿔주는 메서드
-    private func makeDiseaseResult(data: [MapDiseaseResponse])->MapDiseaseResult{
-        var returnVal: [CropType:[MapItem]] = CropType.allCases.reduce(into: [:]) { partialResult, type in
-            if type != .none { partialResult[type] = [] }
-        }
-        data.forEach { res in
-            guard let cropType:CropType = CropType(rawValue: res.diagnosisRecord.cropType ) else {return}
-            guard let diseaseCode:DiagnosisType = DiagnosisType(rawValue: res.diseaseCode ?? -2) else {return}
-            let geo = Geo(res.diagnosisRecord.userLatitude,res.diagnosisRecord.userLongitude)
-            returnVal[cropType]?.append(MapItem(geo: geo, cropType: cropType, diseaseCode: diseaseCode))
-        }
-        return MapDiseaseResult(results: returnVal)
-    }
+//    private func makeDiseaseResult(data: [MapDiseaseResponse])->MapDiseaseResult{
+//        var returnVal: [CropType:[MapItem]] = CropType.allCases.reduce(into: [:]) { partialResult, type in
+//            if type != .none { partialResult[type] = [] }
+//        }
+//        data.forEach { res in
+//            guard let cropType:CropType = CropType(rawValue: res.diagnosisRecord.cropType ) else {return}
+//            guard let diseaseCode:DiagnosisType = DiagnosisType(rawValue: res.diseaseCode ?? -2) else {return}
+//            let geo = Geo(res.diagnosisRecord.userLatitude,res.diagnosisRecord.userLongitude)
+//            returnVal[cropType]?.append(MapItem(id: res.id,geo: geo, cropType: cropType, diseaseCode: diseaseCode))
+//        }
+//        return MapDiseaseResult(results: returnVal)
+//    }
 }
 

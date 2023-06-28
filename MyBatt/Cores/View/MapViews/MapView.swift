@@ -80,14 +80,22 @@ extension MapVM{
         locationName.sink { name in
             mainVM.locationName = name
         }.store(in: &self.subscription)
+        self.$tappedItem.throttle(for: 0.2, scheduler: DispatchQueue.main, latest: true)
+            .sink { output in
+                mainVM.tappedItem = output
+            }.store(in: &subscription)
     }
     func setMapItems(nearDiseaseItems:[CropType:[MapDiseaseResponse]]){
         let wow : [T] = nearDiseaseItems.reduce(into: []) { (partialResult, arg1) in
             let (key, value) = arg1
             let items: [T] = value.map{
-                let record = $0.diagnosisRecord
+                _ = $0.diagnosisRecord
                 let diseaseType = DiagnosisType(rawValue: $0.diseaseCode ?? -1) ?? .none
-                return MapItem(geo: (record.userLatitude,record.userLongitude), cropType: key, diseaseCode: diseaseType) as! T
+                let dateStr = Date.changeDateFormat(dateString: $0.diagnosisRecord.regDate)
+                let geo = Geo($0.diagnosisRecord.userLatitude,$0.diagnosisRecord.userLongitude)
+                let info = CM_GroupItem(id: $0.id, imgPath: $0.diagnosisRecord.imagePath, address: "", regDate: dateStr, cropType: key, diseaseType: diseaseType, accuracy: $0.accuracy,geo: geo)
+                return MapItem(geo: geo, info:info,
+                               cropType: key, diseaseCode: diseaseType) as! T
             }
             partialResult.append(contentsOf: items)
         }
