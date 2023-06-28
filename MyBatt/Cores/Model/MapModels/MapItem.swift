@@ -10,7 +10,8 @@ struct MapItem:Equatable,Markerable{
     var id = UUID()
     var geo: Geo
     static func == (lhs: MapItem, rhs: MapItem) -> Bool {
-        lhs.diseaseCode == rhs.diseaseCode && lhs.geo == rhs.geo
+//        lhs.diseaseCode == rhs.diseaseCode && lhs.geo == rhs.geo
+        lhs.id == rhs.id
     }
     let cropType: CropType
     let diseaseCode: DiagnosisType

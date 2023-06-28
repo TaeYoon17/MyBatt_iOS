@@ -37,9 +37,9 @@ struct CameraView: View {
         }
         .background(Color.white)
         .onAppear(){
-            Appearances.navigationBarClear()
+            Appearances.navigationBar(color: .black)
         }.onDisappear(){
-            Appearances.navigationBarWhite()
+            Appearances.navigationBar(color:.white)
             model.camera.stop()
         }
     }

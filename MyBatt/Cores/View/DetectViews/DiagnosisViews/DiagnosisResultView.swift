@@ -94,7 +94,8 @@ struct DiagnosisResultView: View {
                     Rectangle().frame(height: 120).foregroundColor(.white)
                 }
             }
-        }.popup(isPresented: $expertSheetVM.isSendCompleted) {
+        }
+        .popup(isPresented: $expertSheetVM.isSendCompleted) {
             Text("요청을 전송했어요!!")
                 .font(.subheadline).bold()
                 .padding()
@@ -105,7 +106,9 @@ struct DiagnosisResultView: View {
             $0.type(.floater())
                 .position(.top).dragToDismiss(true).autohideIn(2)
         }
-
+        .navigationBarBackground {
+            Color.white
+        }
     }
     var diagnosisBody: some View{
         VStack(spacing:8){

@@ -27,39 +27,35 @@ struct MapView: View {
                     .animation(.easeInOut(duration: 0.2), value: vm.tappedItem == item)
                     .onTapGesture {
                         print("marker tapped!!")
-                        isMarkerTapped = true
-                        vm.centerOnMarker(item)
+                        DispatchQueue.main.async{
+                            vm.tappedItem = item
+                        }
                     }
             }
         }
         .onReceive(self.mainVM.passthroughCenter, perform: { output in
-            self.vm.center = output
+            print("self.mainVM.passthroughCenter, perform: { output in")
             self.vm.region.center = CLLocationCoordinate2D(geo: output)
         })
         .onReceive(self.mainVM.passthroughIsGPSOn, perform: { output in
             print("MapView isGPSOn onReceive \(output)")
             self.vm.isGPSOn = output
         })
-        .onReceive(self.mainVM.passthroughDiseaseResult, perform: { output in
+        .onReceive(self.mainVM.passthroughNearDiseaseItems, perform: { output in
+            guard let output = output else { return }
             print("self.mainVM.passthroughDiseaseResult")
-            self.vm.getMarkerInfo(result: output)
+            self.vm.setMapItems(nearDiseaseItems: output)
+            //            self.vm.getMarkerInfo(result: output)
         })
         .onTapGesture {
-            mainVM.isPresent.toggle()
-            DispatchQueue.main.async {
-                if isMarkerTapped{
-                    isMarkerTapped = false
-                }else{
-                    if vm.tappedItem != nil{
-                        vm.tappedItem = nil
-                    }
+            if !mainVM.isPresent && vm.tappedItem == nil{
+                DispatchQueue.main.async {
+                    mainVM.isPresent = true
                 }
             }
+            vm.tappedItem = nil
         }
         .onAppear(){
-            DispatchQueue.main.asyncAfter(deadline:.now()+1) {
-                mainVM.isPresent = true
-            }
             vm.addSubscriber(mainVM: self.mainVM)
             vm.getNowLocation()
         }
@@ -74,28 +70,28 @@ struct MapView_Previews: PreviewProvider {
 }
 extension MapVM{
     func addSubscriber(mainVM: MapMainVM) {
-        let center: Published<Geo>.Publisher = self.$center
-        center.sink { geo in
-            print("위치가 바뀜!! \(geo)")
+        self.$center.sink { output in
+            print("위치가 바뀜!! \(output)")
             DispatchQueue.main.async {
-                mainVM.center = geo
+                mainVM.center = output
             }
-        }.store(in: &self.subscription)
+        }.store(in: &subscription)
         let locationName: Published<String>.Publisher = self.$locationName
         locationName.sink { name in
             mainVM.locationName = name
         }.store(in: &self.subscription)
     }
-    func getMarkerInfo(result:MapDiseaseResult?){
-        if let res = result{
-            var items :[T] = []
-            res.results.forEach { (key,value) in
-                if let val:[T] = value as? [T]{
-                    items.append(contentsOf: val)
-                }
+    func setMapItems(nearDiseaseItems:[CropType:[MapDiseaseResponse]]){
+        let wow : [T] = nearDiseaseItems.reduce(into: []) { (partialResult, arg1) in
+            let (key, value) = arg1
+            let items: [T] = value.map{
+                let record = $0.diagnosisRecord
+                let diseaseType = DiagnosisType(rawValue: $0.diseaseCode ?? -1) ?? .none
+                return MapItem(geo: (record.userLatitude,record.userLongitude), cropType: key, diseaseCode: diseaseType) as! T
             }
-            self.items = items
+            partialResult.append(contentsOf: items)
         }
+        self.items = wow
     }
 }
 

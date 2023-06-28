@@ -82,8 +82,12 @@ struct CM_CateListView: View {
             .padding(.bottom,120)
             .listStyle(.plain)
         }
+        
         .onReceive(self.vm.changeGroupCompleted, perform: { _ in
             mainVM.getList()
+        })
+        .navigationBarBackground({
+            Color.white
         })
         .navigationTitle(self.listName == "unclassified" ? "미분류 그룹" : self.listName)
         .navigationBarBackButtonHidden(isEditting)

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct CM_MainView: View {
     @EnvironmentObject var appManager: AppManager
-//    @EnvironmentObject var userVM: UserVM
     @EnvironmentObject var vm: CM_MainVM
     @State private var isEditting: Bool = false
     @State private var groupSettingSheet: Bool = false
@@ -48,6 +47,7 @@ struct CM_MainView: View {
             .navigationTitle("내 작물 관리")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(isEditting)
+            .navigationBarBackground({ Color.white })
             .toolbar {
                 //MARK: -- 그룹 추가
                 ToolbarItem(placement:.navigationBarLeading){
@@ -73,7 +73,6 @@ struct CM_MainView: View {
                 }
             }
     }
-    
     //MARK: -- 카테고리 그룹 그리드
     @ViewBuilder
     var categoryGridView: some View{

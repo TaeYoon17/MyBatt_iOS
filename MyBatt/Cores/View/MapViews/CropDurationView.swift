@@ -13,7 +13,6 @@ struct CropDurationView: View {
     private var today: (Int,Int,Int) {
         let date = Date()
         let calendar = Calendar.current
-        
         let components = calendar.dateComponents([.year, .month, .day], from: date)
         if let year = components.year,
            let month = components.month,
@@ -48,9 +47,10 @@ struct CropDurationView: View {
             Spacer()
             Picker("설정", selection:$vm.durationType) {
                 ForEach(DurationType.allCases,id:\.self) { duration in
-                    Text(duration.rawValue)
+                    Text(duration.rawValue).foregroundColor(.black)
                 }
             }
+            .foregroundColor(.black)
             .pickerStyle(.menu)
 //            .background(.white)
             .onChange(of: vm.durationType) { newValue in

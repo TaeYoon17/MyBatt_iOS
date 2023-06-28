@@ -10,27 +10,43 @@ import SwiftUI
 struct MapFilterView: View {
     @EnvironmentObject var mainVM: MapMainVM
     @StateObject var vm = MapFilterVM()
-    @State var isPresent = false
+    @State var isPresent = true
     var body: some View {
         ScrollView(.vertical,showsIndicators: false){
             VStack(spacing: 8){
-                CropDurationView().environmentObject(vm)
-                textInfoView(label: "작물 선택", toggleState: $isPresent) {
-                    LazyVStack(spacing:8){
-                            ForEach(vm.crops.indices,id:\.self){ idx in
-                                if idx != vm.crops.endIndex-1{
-                                    CropSelectView(pageSheetCrop: $vm.crops[idx], myDiagnosis: $vm.mapDiseaseCnt[CropType(rawValue: vm.crops[idx].cropType) ?? .none])
-                                }
-                            }
-                    }.padding(.vertical,12)
-                        .cornerRadius(8)
-                }
+                HStack(spacing: 8){
+                    Text("주변 병해 필터").font(.title.weight(.black))
+                    Spacer()
+                }.padding(.top)
             }
-        }.onReceive(mainVM.passthroughDiseaseResult, perform: { result in
-            print("MapSheetView에 center정보 전달 됨")
-            vm.makeDiseaseCnt(diseaseResult: result)
-        })
-        .padding()
+            CropDurationView()
+                .environmentObject(vm)
+                .padding(.bottom,8)
+            textInfoView(label: "작물 선택", toggleState: $isPresent) {
+                LazyVStack(spacing:8){
+                    ForEach(vm.crops.indices,id:\.self){ idx in
+                        if idx != vm.crops.endIndex-1{
+                            CropSelectView(pageSheetCrop: $vm.crops[idx], myDiagnosis: $vm.mapDiseaseCnt[CropType(rawValue: vm.crops[idx].cropType) ?? .none])
+                        }
+                    }
+                }.padding(.vertical,12)
+                    .cornerRadius(8)
+            }
+            Spacer()
+        }
+        .padding(.horizontal)
+        .padding(.top)
+        .background(.white)
+        .cornerRadius(20)
+        //            내부 뷰에 cornerradius를 주고 꽉차게 만드려면 넣어줘야함
+        .ignoresSafeArea(.all,edges: .bottom)
+//        .onReceive(mainVM.passthroughNearDiseaseItems, perform: { result in
+//            print("MapSheetView에 center정보 전달 됨")
+//            vm.makeDiseaseCnt(diseaseResult: result)
+//        })
+//        .background(Material.thinMaterial.opacity(0.8))
+        .background(.thickMaterial)
+        .ignoresSafeArea(.all,edges: .bottom)
         .onAppear(){
             mainVM.isPresent = false
             vm.addSubscribers(mainVM: mainVM)
@@ -46,7 +62,8 @@ extension MapFilterView{
         } label: {
             HStack{
                 Text(label)
-                    .font(.title2.weight(.bold))
+                    .font(.title3.weight(.bold))
+                    
                 Spacer()
             }
         }
@@ -57,6 +74,6 @@ extension MapFilterView{
 }
 struct MapFilterView_Previews: PreviewProvider {
     static var previews: some View {
-        MapFilterView()
+        MapFilterView().environmentObject(MapMainVM())
     }
 }

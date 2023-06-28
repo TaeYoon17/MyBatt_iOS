@@ -101,7 +101,9 @@ struct ExpertMainView: View {
                     }
                 }
         }
-        
+        .navigationBarBackground({
+            Color.white
+        })
         .navigationTitle("전문가 문의")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

@@ -28,8 +28,7 @@ struct ContentView: View {
 
 extension ContentView{
     var tabView: some View{
-            MainView(isCameraActive: $isCameraActive
-            )
+            MainView(isCameraActive: $isCameraActive)
     }
     var bottomTabs: some View{
         ZStack(alignment:.bottom){

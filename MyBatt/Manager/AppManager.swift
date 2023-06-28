@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 final class AppManager:ObservableObject{
     lazy var lastCropType: CropType = .Lettuce
+    @Published var navigationBarColor: UIColor = .blue
     @Published private var viewStacks:[Bool] = []{
         didSet{
             print("\(oldValue) \(viewStacks)")

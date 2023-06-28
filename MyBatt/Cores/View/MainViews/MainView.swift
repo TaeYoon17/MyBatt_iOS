@@ -21,7 +21,6 @@ struct MainView: View {
     @State var linkView = MainLinkViewType.none
     @State var naviStackIdx = 0
     @State var isAnimating = false
-    //    @Binding var naviStackIdx: Int
     var body: some View {
         NavigationView {
             ZStack{
@@ -88,6 +87,9 @@ struct MainView: View {
             .opacity(isAnimating ? 1 : 0)
             .disabled(appManager.getBindingStack(idx: self.naviStackIdx).wrappedValue)
             .disabled(appManager.isAction)
+            .navigationBarBackground({
+                Rectangle().fill(.white)
+            })
             .toolbar(content: {
                 ToolbarItem(id: "Title",placement: .navigationBarLeading) {
                     //여기 폰트 수정
@@ -113,6 +115,7 @@ struct MainView: View {
                     isAnimating.toggle()
                 }
             }
+            
     }
     var naviLinkController: some View{
         NavigationLink(isActive:appManager.getBindingStack(idx: naviStackIdx)){
@@ -121,7 +124,6 @@ struct MainView: View {
                 Text("OutBreakInfo")
             case .Map:
                 MapMainView()
-
             case .CropManage:
                 CM_MainView()
                     .environmentObject(cm_mainVM)
@@ -165,7 +167,6 @@ struct MainView: View {
                 }
             }
         }
-        
     }
 }
 

@@ -11,12 +11,11 @@ import Alamofire
 typealias AccRange = (start:Double,end:Double)
 final class MapMainVM: ObservableObject{
     static let accRange: AccRange = (start:50,end:95)
-    @Published var isFilter = false
     @Published var isPresent = false
     @Published var center: Geo = Geo(0,0)
     @Published var isGPSOn = false
     @Published var locationName = ""
-    @Published var diseaseResult: MapDiseaseResult?
+    @Published var nearDiseaseItems: [CropType:[MapDiseaseResponse]]?
     @Published var crops: [MapSheetCrop] = CropType.allCases.map { type in
         MapSheetCrop(cropType: type.rawValue, accuracy: MapMainVM.accRange.start > 80.0 ? MapMainVM.accRange.start : 80,isOn: false)
     }
@@ -25,7 +24,7 @@ final class MapMainVM: ObservableObject{
     // sheetvm에서 mapvm으로 전달해줌 -> 단방향
     var passthroughCenter = PassthroughSubject<Geo,Never>()
     var passthroughIsGPSOn = PassthroughSubject<Bool,Never>()
-    var passthroughDiseaseResult = PassthroughSubject<MapDiseaseResult?,Never>()
+    var passthroughNearDiseaseItems = PassthroughSubject<[CropType:[MapDiseaseResponse]]?,Never>()
     var subscription = Set<AnyCancellable>()
     
     init(){
@@ -33,6 +32,9 @@ final class MapMainVM: ObservableObject{
     }
     
     func addSubscriber(){
+        self.$center.sink { [weak self] _ in
+            self?.requestNearDisease()
+        }.store(in: &subscription)
         self.$crops.sink { [weak self] _ in
             self?.requestNearDisease()
         }.store(in: &subscription)
@@ -60,19 +62,35 @@ final class MapMainVM: ObservableObject{
         } receiveValue: {[weak self] output in
             if let nullableData: [MapDiseaseResponse] = output.data{
                 print(nullableData)
-                self?.diseaseResult = self?.makeDiseaseResult(data: nullableData.filter { response in
+                let nearDiseaseItems = self?.makeDiseaseResult(nullableData.filter { response in
                     let type:DiagnosisType = DiagnosisType(rawValue: response.diseaseCode ?? -1) ?? .none
                     switch type{
                     case .none,.LettuceNormal,.PepperNormal,.TomatoNormal,.StrawberryNormal: return false
                     default: return true
                     }
                 })
-                self?.passthroughDiseaseResult.send(self?.diseaseResult)
+                self?.passthroughNearDiseaseItems.send(nearDiseaseItems)
             }else{
                 print("내부에 데이터 없음!!")
             }
         }.store(in: &subscription)
     }
+    
+    private func makeDiseaseResult(_ responses:[MapDiseaseResponse]) -> [CropType:[MapDiseaseResponse]]{
+        responses.reduce(into: [:]) { partialResult, response in
+            let type: CropType = CropType(rawValue: response.diagnosisRecord.cropType) ?? .none
+            if type != .none {
+                if partialResult.keys.contains(type){
+                    partialResult[type]?.append(response)
+                }else{
+                    partialResult[type] = [response]
+                }
+            }
+        }
+    }
+    
+    
+    //MARK: -- 응답받은 주변 병해 정보를 맵 마커용 데이터로 바꿔주는 메서드
     private func makeDiseaseResult(data: [MapDiseaseResponse])->MapDiseaseResult{
         var returnVal: [CropType:[MapItem]] = CropType.allCases.reduce(into: [:]) { partialResult, type in
             if type != .none { partialResult[type] = [] }

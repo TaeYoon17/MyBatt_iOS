@@ -68,7 +68,6 @@ extension MapFilterVM{
         self.crops = mainVM.crops
         self.selectDate = mainVM.selectDate
         self.durationType = mainVM.durationType
-        self.makeDiseaseCnt(diseaseResult: mainVM.diseaseResult)
         self.$crops.sink {val in
             mainVM.crops = val
         }.store(in: &subscription)
@@ -77,9 +76,6 @@ extension MapFilterVM{
         }.store(in: &subscription)
         self.$durationType.sink { type in
             mainVM.durationType = type
-        }.store(in: &subscription)
-        mainVM.passthroughDiseaseResult.sink {[weak self] result in
-            self?.makeDiseaseCnt(diseaseResult: result)
         }.store(in: &subscription)
     }
 }

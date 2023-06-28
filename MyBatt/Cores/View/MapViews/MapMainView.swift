@@ -12,15 +12,14 @@ import MapKit
 import Combine
 
 struct MapMainView: View {
-    
     @EnvironmentObject var appManager: AppManager
     @StateObject private var vm = MapMainVM()
     @StateObject private var sheetVm = MapSheetVM()
-    //    @StateObject private var mapVM = MapVM<Marker>()
     @State var detent: Detent = .height(70)
     @State var zoomLevel:Int = 1
     @State var isPresent = false
-    @State var isFilter = false
+    @State var isFilter = true
+    @State var isToolbarFilter = true
     @State var offset: CGFloat = 0
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .center, vertical: .bottom)){
@@ -32,36 +31,30 @@ struct MapMainView: View {
                             .environmentObject(vm)
                             .environmentObject(sheetVm)
                     }
-                    .presentationDetents([.large,.height(70)],selection: $detent)
+                    .presentationDetents([.large,.height(68)],selection: $detent)
                     .cornerRadius(16)
                     .presentationDragIndicator(.hidden)
                     .sheetColor(.clear)
                     .edgeAttachedInCompactHeight(true)
                     .scrollingExpandsWhenScrolledToEdge(true)
                     .widthFollowsPreferredContentSizeWhenEdgeAttached(true)
-                    .largestUndimmedDetent(.height(70))
+                    .largestUndimmedDetent(.height(68))
                     .interactiveDismissDisabled(false,
                                                 onWillDismiss: {
                         print("willDismiss")
                     },
                                                 onDidDismiss: {
-                        print("isDismissed")
-                    })
-            NavigationLink(isActive: $isFilter) {
+                        self.vm.isPresent = false
+                    }).zIndex(0)
+            if isFilter{
                 MapFilterView()
-                    .environmentObject(vm)
-                    .onAppear(){
-                        DispatchQueue.main.async{
-                            self.isPresent = false
-                        }
-                    }
-            } label: {
-                EmptyView()
+                .environmentObject(vm)
+                .transition(.move(edge: .bottom))
+                .zIndex(1)
             }
         }
-        .onChange(of: vm.isPresent, perform: { newValue in
-            print(newValue)
-            self.isPresent = newValue
+        .onReceive(vm.$isPresent, perform: { output in
+            self.isPresent = output
         })
         .onAppear(){
             appManager.isTabbarHidden = true
@@ -72,13 +65,20 @@ struct MapMainView: View {
         }
         .onDisappear(){
             print("이게 사라지네...")
-            vm.isPresent = false
             withAnimation(.easeOut(duration: 0.2)) {
                 if !isFilter{
                     appManager.isTabbarHidden = false
                 }
             }
         }
+        .navigationBarBackground({
+//            if isFilter {
+//                Color.clear
+//            }else{
+//                Color.white
+//            }
+            Color.clear
+        })
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -89,25 +89,44 @@ struct MapMainView: View {
                     HStack(spacing:4){
                         Image(systemName: "chevron.left").font(.headline)
                         Text("Back")
-                    }
+                            .font(.system(size:16))
+                    }.padding(.all,8)
+                        .background(isFilter ? .clear : .white)
+                        .cornerRadius(8)
                 }.padding(.horizontal, -8)
+                    .disabled(isFilter)
             }
             ToolbarItem(placement: .principal) {
                 Text("\(vm.locationName)")
+                    .font(.subheadline)
                     .fontWeight(.semibold)
-                    .frame(width: 200,height: 44)
-                //                    .background(Color.blue)
+                    .padding(.horizontal,6)
+                    .padding(.vertical,2)
+                    .frame(width: 200,height: 40)
+                    .background(isFilter ? .clear : .white.opacity(0.8))
+                    .cornerRadius(8)
                     .minimumScaleFactor(0.5)
                     .lineLimit(1)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavTrailingBtn(btnAction: {
                     print("팝업")
-                    self.isFilter = true
-                }, imgName: "line.3.horizontal.decrease.circle", labelName: "필터", textColor: .white, bgColor: .accentColor)
+                    vm.isPresent = self.isFilter
+                    self.isToolbarFilter.toggle()
+                    withAnimation(.linear(duration: 0.25)) {
+                        self.isFilter.toggle()
+                    }
+                }, imgName: isToolbarFilter ? "" : "checklist",
+                               labelName: isToolbarFilter ? "닫기" : "필터",
+                               textColor: isToolbarFilter ? .accentColor :.white,
+                               bgColor: isToolbarFilter ? .clear : .accentColor)
             }
         }
+        .onAppear(){
+            Appearances.navigationBar(color: .blue)
+        }
     }
+    
 }
 
 struct MapMainView_Previews: PreviewProvider {

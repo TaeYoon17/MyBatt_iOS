@@ -17,7 +17,7 @@ final class MapSheetVM:ObservableObject{
     var centerPassthrough = PassthroughSubject<Geo,Never>()
     // 여기 나중에 true로 수정해야함!
     
-    @Published var mapDiseaseResult:MapDiseaseResult?
+    @Published var nearDiseaseItems: [CropType:[MapDiseaseResponse]]?
     var subscription = Set<AnyCancellable>()
     
     lazy var mapQueryDataService: MapQueryDataService = MapQueryDataService()

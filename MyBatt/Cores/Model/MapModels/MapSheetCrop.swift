@@ -8,7 +8,8 @@
 import Foundation
 import SwiftUI
 // 고 - 딸 - 상 - 토
-struct MapSheetCrop:Codable,Equatable{
+struct MapSheetCrop:Codable,Equatable,Identifiable{
+    var id = UUID()
     let cropType: CropType.RawValue
     var cropKorean: String{
         Crop.koreanTable[CropType(rawValue: cropType) ?? .none] ?? "아직 이름 없음"

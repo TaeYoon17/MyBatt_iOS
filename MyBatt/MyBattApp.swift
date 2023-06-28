@@ -20,10 +20,8 @@ struct MyBattApp: App {
                     .environmentObject(userVM)
                     .onAppear(){
                         print("isAlreadyLoggedIn:",userVM.isUserLoggined)
-                        Appearances.navigationBarWhite()
-                        Appearances.tabBarClear()
+//                        Appearances.tabBarClear()
                         userVM.fetchOutbreakList()
-                        
                     }
             }else{
                 OnboardingView()

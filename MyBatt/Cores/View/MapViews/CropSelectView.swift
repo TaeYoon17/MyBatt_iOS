@@ -16,10 +16,10 @@ struct CropSelectView: View {
             Toggle(isOn: $pageSheetCrop.isOn) {
                 VStack{
                     HStack{
-                        Text(pageSheetCrop.cropKorean)
+                        Text("\(pageSheetCrop.cropKorean) \(Crop.iconTable[CropType(rawValue: pageSheetCrop.cropType) ?? .none] ?? "")")
                             .font(.body)
                             .fontWeight(.semibold)
-                            .foregroundColor(pageSheetCrop.cropColor)
+//                            .foregroundColor(pageSheetCrop.cropColor)
                         Spacer()
                         if pageSheetCrop.isOn{
                             Text("최소 정확도: \(Int(acc))%")
@@ -67,7 +67,7 @@ struct CropSelectView: View {
         }
         .padding(.horizontal)
         .padding(.vertical,8)
-        .background(.ultraThinMaterial)
+        .background(.white)
         .cornerRadius(15)
     }
 }
