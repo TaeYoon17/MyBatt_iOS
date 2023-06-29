@@ -13,7 +13,7 @@ extension Date{
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSS"
 
         if let date = dateFormatter.date(from: dateString) {
-            dateFormatter.dateFormat = "yyyy-MM-dd"
+            dateFormatter.dateFormat = "yy년 MM월 dd일"
             let formattedDate = dateFormatter.string(from: date)
             return formattedDate // 출력: 2023-05-26
         } else {

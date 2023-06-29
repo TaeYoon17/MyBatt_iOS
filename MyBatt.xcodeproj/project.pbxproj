@@ -63,6 +63,7 @@
 		6342FAD22A3053D00021B2EC /* PsisInfoVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6342FAD12A3053D00021B2EC /* PsisInfoVM.swift */; };
 		6342FAD42A3055400021B2EC /* PsisInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6342FAD32A3055400021B2EC /* PsisInfoModel.swift */; };
 		6345E9432A0BD7D50023CB4F /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 6345E9422A0BD7D50023CB4F /* Lottie */; };
+		6346902D2A4C7A5D00F64EAD /* MemoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6346902C2A4C7A5D00F64EAD /* MemoListView.swift */; };
 		6347CBFA29F6E325001B99B6 /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6347CBF929F6E325001B99B6 /* AppManager.swift */; };
 		634AE16C2A0B9A86005811FB /* TakenBtnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AE16B2A0B9A86005811FB /* TakenBtnView.swift */; };
 		634DB8FB2A27BB7900DED6D7 /* AlamofireExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634DB8FA2A27BB7900DED6D7 /* AlamofireExtension.swift */; };
@@ -91,6 +92,7 @@
 		638AEF7C29FBF166004BD2BE /* MainManagementBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638AEF7B29FBF166004BD2BE /* MainManagementBtn.swift */; };
 		638AEF7E29FBF433004BD2BE /* MainSearchBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638AEF7D29FBF433004BD2BE /* MainSearchBtn.swift */; };
 		638E119129E3F996005CA2EA /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638E119029E3F996005CA2EA /* MainView.swift */; };
+		638E95AD2A4D5BEA0039F559 /* MemoListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638E95AC2A4D5BEA0039F559 /* MemoListItemView.swift */; };
 		63A0306129ED29C500956BD9 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A0306029ED29C500956BD9 /* UIDevice.swift */; };
 		63A135A72A018CD0003A0C2D /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A135A62A018CD0003A0C2D /* Camera.swift */; };
 		63A366092A307B3500EBEA02 /* CM_Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A366082A307B3500EBEA02 /* CM_Router.swift */; };
@@ -218,6 +220,7 @@
 		6342804B2A321AAE007415AA /* ExpertMsgVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpertMsgVM.swift; sourceTree = "<group>"; };
 		6342FAD12A3053D00021B2EC /* PsisInfoVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PsisInfoVM.swift; sourceTree = "<group>"; };
 		6342FAD32A3055400021B2EC /* PsisInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PsisInfoModel.swift; sourceTree = "<group>"; };
+		6346902C2A4C7A5D00F64EAD /* MemoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListView.swift; sourceTree = "<group>"; };
 		6347CBF929F6E325001B99B6 /* AppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppManager.swift; sourceTree = "<group>"; };
 		634AE16B2A0B9A86005811FB /* TakenBtnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakenBtnView.swift; sourceTree = "<group>"; };
 		634DB8FA2A27BB7900DED6D7 /* AlamofireExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireExtension.swift; sourceTree = "<group>"; };
@@ -247,6 +250,7 @@
 		638AEF7D29FBF433004BD2BE /* MainSearchBtn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSearchBtn.swift; sourceTree = "<group>"; };
 		638E119029E3F996005CA2EA /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		638E119229E3FE77005CA2EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		638E95AC2A4D5BEA0039F559 /* MemoListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListItemView.swift; sourceTree = "<group>"; };
 		63A0306029ED29C500956BD9 /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		63A135A62A018CD0003A0C2D /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		63A366082A307B3500EBEA02 /* CM_Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CM_Router.swift; sourceTree = "<group>"; };
@@ -518,6 +522,15 @@
 				634280462A31ED58007415AA /* ExpertModel.swift */,
 			);
 			path = Expert;
+			sourceTree = "<group>";
+		};
+		6346902B2A4C7A4D00F64EAD /* MemoViews */ = {
+			isa = PBXGroup;
+			children = (
+				6346902C2A4C7A5D00F64EAD /* MemoListView.swift */,
+				638E95AC2A4D5BEA0039F559 /* MemoListItemView.swift */,
+			);
+			path = MemoViews;
 			sourceTree = "<group>";
 		};
 		6347CBF829F6DCA8001B99B6 /* ViewModels */ = {
@@ -910,6 +923,7 @@
 		63F20ACC2A177AD300896597 /* DiagnosisViews */ = {
 			isa = PBXGroup;
 			children = (
+				6346902B2A4C7A4D00F64EAD /* MemoViews */,
 				63B8D93B2A0B35E0004EC7FC /* DiagnosisView.swift */,
 				63027AFF2A2DD31F00630CDC /* DiagnosisResultView.swift */,
 				63F20ACD2A177AEC00896597 /* DiagnosisInfoView.swift */,
@@ -1032,6 +1046,7 @@
 				630500912A1B751C007BF769 /* ImageAppeaerBtnView.swift in Sources */,
 				630500832A1B5EF0007BF769 /* AlbumPickerView.swift in Sources */,
 				63B4492F2A2E3F330010A983 /* ExpertMsgView.swift in Sources */,
+				6346902D2A4C7A5D00F64EAD /* MemoListView.swift in Sources */,
 				63A3660C2A307CC500EBEA02 /* CM_Models.swift in Sources */,
 				63DC15EA29D180ED0062691D /* ContentView.swift in Sources */,
 				63F5D30D2A26D17A00D8BB78 /* SickListResponse.swift in Sources */,
@@ -1079,6 +1094,7 @@
 				63F5D30B2A269EB900D8BB78 /* AlbumPickerVM.swift in Sources */,
 				63861CB22A2A37A900BB769E /* NavTrailingBtn.swift in Sources */,
 				6305008A2A1B5FCF007BF769 /* CropperView.swift in Sources */,
+				638E95AD2A4D5BEA0039F559 /* MemoListItemView.swift in Sources */,
 				6320EAB92A29F70B00558362 /* PesticideListItem.swift in Sources */,
 				63A366092A307B3500EBEA02 /* CM_Router.swift in Sources */,
 				63F097012A135BA2005DA59C /* GroupBoxExtension.swift in Sources */,

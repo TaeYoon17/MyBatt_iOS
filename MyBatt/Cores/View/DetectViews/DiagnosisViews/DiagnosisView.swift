@@ -19,8 +19,8 @@ struct DiagnosisView: View {
     @State var naviStackIdx = 0
     var body: some View {
         ZStack{
-            if isLoading{
-//            if false{
+//            if isLoading{
+            if false{
                 self.loadingView
                     .onReceive(userVM.diagnosisFail) { str in
                         if let str = str{
