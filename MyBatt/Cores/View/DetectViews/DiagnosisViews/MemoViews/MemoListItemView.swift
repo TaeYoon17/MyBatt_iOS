@@ -8,59 +8,66 @@
 import SwiftUI
 
 struct MemoListItemView: View{
+    @Binding var model: MemoModel
+    @Binding var isEditing: Int?
+    @Binding var isDelete: Int?
+    @Binding var isShowMemo: Bool
     @State private var moveX:CGFloat = 0
     @State private var isMove: Bool = false
     @State private var isTapped: Bool = false
+    @State private var isShow: Bool = false
     var body: some View{
         ZStack{
-            HStack{
-                Color.accentColor.frame(width: 100)
-                    .overlay(alignment:.leading) {
-                        Button{
-                            print("수정하기 버튼 클릭")
-                        }label: {
-                            VStack(spacing: 4){
-                                Image(systemName: "note.text")
-                                    .imageScale(.medium)
-                                Text("수정하기")
-                                    .font(.footnote).bold()
-                            }
-                        }.foregroundColor(.white)
+            if isShow{
+                HStack{
+                    Color.accentColor.frame(width: 100)
+                        .overlay(alignment:.leading) {
+                            Button{
+                                isEditing = model.memoId
+                            }label: {
+                                VStack(spacing: 4){
+                                    Image(systemName: "note.text")
+                                        .imageScale(.medium)
+                                    Text("수정하기")
+                                        .font(.footnote).bold()
+                                }
+                            }.foregroundColor(.white)
                             .padding(.leading)
-                    }
-                Spacer()
-                Color.red.frame(width: 100)
-                    .overlay(alignment:.trailing) {
-                        Button{
-                            print("수정하기 버튼 클릭")
-                        }label: {
-                            VStack(spacing: 4){
-                                Image(systemName: "trash")
-                                    .imageScale(.medium)
-                                Text("삭제하기")
-                                    .font(.footnote).bold()
-                            }
-                        }.foregroundColor(.white)
-                            .padding(.trailing)
-                    }
+                        }
+                    Spacer()
+                    Color.red.frame(width: 100)
+                        .overlay(alignment:.trailing) {
+                            Button{
+                                isDelete = model.memoId
+                            }label: {
+                                VStack(spacing: 4){
+                                    Image(systemName: "trash")
+                                        .imageScale(.medium)
+                                    Text("삭제하기")
+                                        .font(.footnote).bold()
+                                }
+                            }.foregroundColor(.white)
+                                .padding(.trailing)
+                        }
+                }
             }
             
             VStack(alignment:.leading,spacing:8){
                 //                HStack{
-                Text("이게 왜 안되는지 모르겠다 진짜로!!")
+//                "이게 왜 안되는지 모르겠다 진짜로!!"
+                Text(model.contents)
                     .font(.callout.weight(.medium))
                     .multilineTextAlignment(.leading)
                     .lineLimit(2)
                     .padding(.horizontal,4)
                 HStack(spacing:4){
                     Spacer()
-                    dateView(dateType: "작성일", dateStr: "20년 12월 18일")
+                    dateView(dateType: "작성일", dateStr: Date.changeDateFormat(dateString: model.regDt))
                     Divider().frame(width: 1,height: 12).background(Color.accentColor)
-                    dateView(dateType: "최근 수정일", dateStr: "21년 5월 21일")
+                    dateView(dateType: "최근 수정일", dateStr: Date.changeDateFormat(dateString: model.updateDt))
                 }.padding(.trailing,4)
             }
             .opacity(isTapped ? 0.1 : 1)
-//            .animation(.easeIn, value: isTapped)
             .padding(.all,8)
             .background(Color.white)
                 .contentShape(Rectangle())
@@ -90,7 +97,9 @@ struct MemoListItemView: View{
                             moveX = 0
                             isMove = false
                         }else{
-                            moveX = isMarkerOn ? 80 : 0
+                            DispatchQueue.main.async {
+                                moveX = isMarkerOn ? 80 : 0
+                            }
                             isMove = isMarkerOn
                         }
                     }else{// 왼쪽으로 이동함
@@ -98,7 +107,9 @@ struct MemoListItemView: View{
                             moveX = 0
                             isMove = false
                         }else{
-                            moveX = isMarkerOn ? -80 : 0
+                            DispatchQueue.main.async {
+                                moveX = isMarkerOn ? -80 : 0
+                            }
                             isMove = isMarkerOn
                         }
                     }
@@ -107,6 +118,16 @@ struct MemoListItemView: View{
                 .clipped()
         }
         .cornerRadius(8)
+        .onChange(of: isShowMemo, perform: { newValue in
+            if newValue == false{
+                isShow.toggle()
+            }
+        })
+        .onAppear(){
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.5){
+                isShow.toggle()
+            }
+        }
     }
     
     @MainActor
@@ -123,6 +144,6 @@ struct MemoListItemView: View{
 
 struct MemoListItemView_Previews: PreviewProvider {
     static var previews: some View {
-        MemoListItemView()
+        MemoListItemView(model: .constant(.init(memoId: 1, diagnosisRecord: nil, regDt: "asfd", updateDt: "asdf", contents: "asdf")), isEditing: .constant(nil),isDelete: .constant(nil), isShowMemo: .constant(true))
     }
 }

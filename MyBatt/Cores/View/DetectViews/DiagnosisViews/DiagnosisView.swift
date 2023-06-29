@@ -19,6 +19,7 @@ struct DiagnosisView: View {
     @State var naviStackIdx = 0
     var body: some View {
         ZStack{
+            //MARK: -- 여기 수정해야함!!
 //            if isLoading{
             if false{
                 self.loadingView

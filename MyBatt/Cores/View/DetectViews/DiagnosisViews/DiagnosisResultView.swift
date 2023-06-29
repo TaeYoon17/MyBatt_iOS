@@ -8,14 +8,20 @@
 import SwiftUI
 import Combine
 import PopupView
+import NativePartialSheet
 struct DiagnosisResultView: View {
     enum ViewType{
         case Management
         case Response
+        
     }
-    enum NextView{
-        case Disease
-        case Memo
+    enum SheetType:String, Identifiable{
+        var id:String{
+            return self.id
+        }
+        case MemoAdd
+        case MemoEdit
+        case Expert
     }
     private let screenWidth = UIScreen.main.bounds.width
     let diagnosisImage: Image
@@ -23,21 +29,37 @@ struct DiagnosisResultView: View {
     let diagnosisResponse: DiagnosisResponse?
     let type: ViewType
     @StateObject var expertSheetVM: ExpertSheetVM = ExpertSheetVM()
+    @StateObject var memoVM: MemoVM
     @State private var expertMessageActive = false
     @State private var goToNextView = false
     @State private var moreInfo:(String,Int)?
     @State private var showMemo: Bool = false
+    @State private var sheetType: SheetType? = nil
+    @State private var detent: Detent = .large
+    @State private var deleteItem: Int? = nil
+    @State private var editItem: Int? = nil
+    @State private var deleteAlert: Bool = false
     init(image: Image,response: DiagnosisResponse?){
         self.diagnosisImage = image
         self.asynImageString = ""
         self.diagnosisResponse = response
         self.type = .Response
+        if let recordId = diagnosisResponse?.diagnosisRecordID{
+            self._memoVM = StateObject(wrappedValue: MemoVM(diagnosisID: recordId))
+        }else{
+            self._memoVM = StateObject(wrappedValue: MemoVM(diagnosisID: -1))
+        }
     }
     init(response:DiagnosisResponse?){
         self.diagnosisImage = Image("logo_demo")
         self.asynImageString = response?.imagePath ?? ""
         self.diagnosisResponse = response
         self.type = .Management
+        if let recordId = diagnosisResponse?.diagnosisRecordID{
+            self._memoVM = StateObject(wrappedValue: MemoVM(diagnosisID: recordId))
+        }else{
+            self._memoVM = StateObject(wrappedValue: MemoVM(diagnosisID: -1))
+        }
     }
     var body: some View{
         ZStack{
@@ -53,7 +75,7 @@ struct DiagnosisResultView: View {
                 EmptyView()
             }
             VStack(spacing:8){
-                ZStack{
+                ZStack{//MARK: -- 이미지 뷰
                     Rectangle()
                         .fill(Color.white)
                         .frame(width: screenWidth - (self.showMemo ? 100 : 0)
@@ -88,7 +110,7 @@ struct DiagnosisResultView: View {
                             }
                         }
                 }
-                HStack(alignment:.center){
+                HStack(alignment:.center){//MARK: -- 인포 라인 뷰
                     Text("\(Crop.koreanTable[CropType(rawValue: self.diagnosisResponse?.cropType ?? -1)!] ?? "진단 실패")"
                     )
                     .font(.headline.bold())
@@ -118,14 +140,14 @@ struct DiagnosisResultView: View {
                         }
                     }.modifier(DiagnosisInfoViewModifier(paddingSize: 8))
                         .background(Color.lightAmbientColor)
-                    
                 }
                 .padding(.horizontal)
                 ScrollView(showsIndicators: false){
                     if showMemo{
                         Divider().frame(height: 2)
                             .padding(.horizontal)
-                        MemoListView()
+                        MemoListView(isShowMemo: $showMemo, deleteItem: $deleteItem, editingItem: $editItem)
+                            .environmentObject(memoVM)
                             .transition(.opacity.animation(.easeInOut))
                             .zIndex(2)
                     }
@@ -142,7 +164,8 @@ struct DiagnosisResultView: View {
         .toolbar(content: {
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavTrailingBtn(btnAction: {
-                    print("Hello world")
+                    self.detent = .medium
+                    sheetType = .MemoAdd
                 }, imgName: "note.text.badge.plus", labelName: "메모 추가", textColor: .white, bgColor: .blue)
             }
         })
@@ -155,11 +178,11 @@ struct DiagnosisResultView: View {
                 .background(Capsule().stroke(lineWidth:3).foregroundColor(.black))
         } customize: {
             $0.type(.floater())
-                .position(.top).dragToDismiss(true).autohideIn(2)
+                .position(.top).dragToDismiss(true)
+                .closeOnTapOutside(true)
+                .autohideIn(2)
         }
-        .navigationBarBackground {
-            Color.white
-        }
+        .navigationBarBackground { Color.white }
     }
     //MARK: -- 진단 결과
     var diagnosisBody: some View{
@@ -186,7 +209,6 @@ struct DiagnosisResultView: View {
                                 if result.id != first.id{
                                     DiagnosisInfoView(accuracy:result.accuracy ?? 0, diagnosisNumber:result.diseaseCode ?? -1,code:result.sickKey ?? "0"){
                                         self.moreInfo = (result.sickKey ?? "",result.diseaseCode ?? -1)
-                                        
                                         self.goToNextView = true
                                     }
                                 }
@@ -197,10 +219,10 @@ struct DiagnosisResultView: View {
             } label: {
                 Text("다른 유사 결과")
             }.bgColor(.white,paddingSize: 4)
-            
             GroupBox{
                 Button{
-                    self.expertMessageActive = true
+                    self.detent = .large
+                    self.sheetType = .Expert
                 }label:{
                     HStack{
                         Image(systemName: "questionmark.circle")
@@ -220,13 +242,48 @@ struct DiagnosisResultView: View {
                     .background(Color.accentColor.opacity(0.08))
                 }.modifier(DiagnosisInfoViewModifier(paddingSize: 0))
             }.bgColor(.white,paddingSize: 4)
-                .sheet(isPresented: self.$expertMessageActive) {
-                    ExpertMailView(diagnosisResponse: self.diagnosisResponse)
-                        .environmentObject(expertSheetVM)
-                        .onDisappear(){
-                            self.expertMessageActive = false
-                        }
+            //MARK: -- 수정 할 메모 아이템 변화 감지
+            .onChange(of: editItem, perform: { newValue in
+                    if newValue != nil{
+                        self.detent = .medium
+                        self.sheetType = .MemoEdit
+                    }
+                })
+            .onChange(of: deleteItem, perform: { newValue in
+                if newValue != nil{
+                    deleteAlert = true
                 }
+            }).alert(isPresented: $deleteAlert, content: {
+                Alert(title: Text("정말로 삭제하시겠습니까?"))
+            })
+            //MARK: -- 띄울 시트
+                .sheet(item: $sheetType) { type in
+                    switch type{
+                    case .Expert:
+                        ExpertMailView(diagnosisResponse: self.diagnosisResponse)
+                            .environmentObject(expertSheetVM)
+                            .onDisappear(){
+                                self.sheetType = nil
+                            }
+                    case .MemoAdd:
+                        MemoWriteView(type: .Add)
+                            .environmentObject(memoVM)
+                            .onDisappear(){
+                            self.sheetType = nil
+                        }
+                    case .MemoEdit:
+                        MemoWriteView(type: .Edit)
+                            .environmentObject(memoVM)
+                            .onDisappear(){
+                                self.editItem = nil
+                                self.sheetType = nil
+                            }
+                    }
+                }.presentationDetents([.medium,.large],selection: $detent)
+                .sheetColor(.white)
+                .edgeAttachedInCompactHeight(true)
+                .scrollingExpandsWhenScrolledToEdge(true)
+                .widthFollowsPreferredContentSizeWhenEdgeAttached(true)
         }
     }
 }
