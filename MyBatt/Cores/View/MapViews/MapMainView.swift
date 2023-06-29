@@ -84,6 +84,7 @@ struct MapMainView: View {
                     appManager.isTabbarHidden = false
                 }
             }
+            print("MapMainView 사라짐!!!")
         }
         .navigationBarBackground({
             Color.clear

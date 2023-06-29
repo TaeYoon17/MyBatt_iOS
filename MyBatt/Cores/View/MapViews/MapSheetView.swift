@@ -80,7 +80,7 @@ struct MapSheetView: View {
                     let cropItem:MapSheetCrop = crops[idx]
                     if cropItem.isOn {
                         let cropType: CropType = CropType(rawValue: cropItem.cropType) ?? .none
-                        self.textInfoView(label: "\(cropItem.cropKorean)-\(vm.nearDiseaseItems?[cropType]?.count ?? 0)개", toggleState: $isToggleCrops[idx]) {
+                        self.textInfoView(label: "\(cropItem.cropKorean)",sublabel:"\(vm.nearDiseaseItems?[cropType]?.count ?? 0)개", toggleState: $isToggleCrops[idx]) {
                             if let items:[MapDiseaseResponse] = vm.nearDiseaseItems?[cropType]{
                                 LazyVStack(spacing: 8){
                                     ForEach(items) { item in
@@ -151,7 +151,7 @@ extension MapSheetVM{
 
 extension MapSheetView{
     @ViewBuilder
-    func textInfoView(label:String,toggleState: Binding<Bool>,
+    func textInfoView(label:String, sublabel:String,toggleState: Binding<Bool>,
                       @ViewBuilder _ view:@escaping (() -> some View))-> some View{
         DisclosureGroup(isExpanded: toggleState) {
             view()
@@ -159,7 +159,8 @@ extension MapSheetView{
             HStack{
                 Text(label)
                     .font(.title2.weight(.semibold))
-                Spacer()
+                 Spacer()
+                 Text("\(sublabel)").font(.headline.weight(.semibold))
             }
         }
         .padding(.all)
@@ -239,7 +240,6 @@ struct MapItemView:View{
         }
         .onChange(of: item, perform: { newValue in
             Task{
-                
                 location = await LocationService.shared.requestAddressAsync(geo: newValue.geo)
             }
         })

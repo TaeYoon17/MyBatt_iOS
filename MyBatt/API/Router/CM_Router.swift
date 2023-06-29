@@ -81,7 +81,6 @@ enum CM_Router: URLRequestConvertible {
             return params
         }
     }
-    
     func asURLRequest() throws -> URLRequest {
         switch self{
         case .CM_GroupCreate,.CM_GroupDelete,.CM_GroupUpdate,.CM_GroupItemChange:
