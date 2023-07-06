@@ -43,5 +43,18 @@ enum AuthApiService {
                 return receivedValue
             }.eraseToAnyPublisher()
     }
-    
+    // 첫 로그인 상황 체크
+    static func tokenCheck()->AnyPublisher<ResponseWrapper<UM>, AFError>{
+        let userToken = UserDefaultsManager.shared.getTokens()
+        print(userToken)
+        let credential = OAuthCredential(accessToken: userToken.accessToken,
+                                         refreshToken: userToken.refreshToken,
+                                         expiration: Date(timeIntervalSinceNow: 60 * 60))
+        let authenticator = OAuthAuthenticator()
+        let authInterceptor = AuthenticationInterceptor(authenticator: authenticator,
+                                                        credential: credential)
+        return ApiClient.shared.session.request(AuthRouter.user,interceptor: authInterceptor)
+            .publishDecodable(type:ResponseWrapper<UM>.self)
+            .value()
+    }
 }

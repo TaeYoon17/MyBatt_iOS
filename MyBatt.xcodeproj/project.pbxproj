@@ -41,6 +41,7 @@
 		632D3FA52A03896800DC1783 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 632D3FA42A03896800DC1783 /* libxml2.tbd */; };
 		632D3FA72A03897200DC1783 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 632D3FA62A03897200DC1783 /* libsqlite3.tbd */; };
 		632D3FA92A03898500DC1783 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 632D3FA82A03898500DC1783 /* SystemConfiguration.framework */; };
+		632E2EA22A4EA5080084AC60 /* DiagnoisisMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632E2EA12A4EA5080084AC60 /* DiagnoisisMapView.swift */; };
 		63325A4929F0EFC000CF3A48 /* CustomSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63325A4829F0EFC000CF3A48 /* CustomSegmentView.swift */; };
 		63325A4B29F0F5E300CF3A48 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63325A4A29F0F5E300CF3A48 /* ViewExtension.swift */; };
 		63325A4D29F0FC7B00CF3A48 /* CornerRoundedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63325A4C29F0FC7B00CF3A48 /* CornerRoundedView.swift */; };
@@ -204,6 +205,7 @@
 		632D3FA42A03896800DC1783 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		632D3FA62A03897200DC1783 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		632D3FA82A03898500DC1783 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		632E2EA12A4EA5080084AC60 /* DiagnoisisMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnoisisMapView.swift; sourceTree = "<group>"; };
 		63325A4829F0EFC000CF3A48 /* CustomSegmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentView.swift; sourceTree = "<group>"; };
 		63325A4A29F0F5E300CF3A48 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		63325A4C29F0FC7B00CF3A48 /* CornerRoundedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CornerRoundedView.swift; sourceTree = "<group>"; };
@@ -946,6 +948,7 @@
 				6346902B2A4C7A4D00F64EAD /* MemoViews */,
 				63B8D93B2A0B35E0004EC7FC /* DiagnosisView.swift */,
 				63027AFF2A2DD31F00630CDC /* DiagnosisResultView.swift */,
+				632E2EA12A4EA5080084AC60 /* DiagnoisisMapView.swift */,
 				63F20ACD2A177AEC00896597 /* DiagnosisInfoView.swift */,
 				63E173D82A220B89006877EC /* DiagMoreInfoView.swift */,
 				633F69652A2288D900FFC891 /* DiagnosisDetailView.swift */,
@@ -1143,6 +1146,7 @@
 				63D8A07C2A026DA300D2FBFD /* PhotoCollection.swift in Sources */,
 				638E119129E3F996005CA2EA /* MainView.swift in Sources */,
 				635D9E322A4DBC4D0083205E /* MemoVM.swift in Sources */,
+				632E2EA22A4EA5080084AC60 /* DiagnoisisMapView.swift in Sources */,
 				632615502A441C650057B474 /* MarkerView.swift in Sources */,
 				63B70A442A1C9FA800527D0D /* BorderModifier.swift in Sources */,
 				63325A5029F1006500CF3A48 /* SearchMainView.swift in Sources */,
@@ -1352,7 +1356,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ii.MyBatt;
+				PRODUCT_BUNDLE_IDENTIFIER = ii.RealitySecond;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1402,7 +1406,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ii.MyBatt;
+				PRODUCT_BUNDLE_IDENTIFIER = ii.RealitySecond;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

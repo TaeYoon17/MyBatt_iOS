@@ -82,7 +82,6 @@ struct CM_CateListView: View {
             .padding(.bottom,120)
             .listStyle(.plain)
         }
-        
         .onReceive(self.vm.changeGroupCompleted, perform: { _ in
             mainVM.getList()
         })
@@ -134,6 +133,48 @@ struct CM_CateListView: View {
                 isMoving.toggle()
             }
         }
+    }
+}
+struct CM_CateListBodyView: View{
+    @StateObject var vm: CM_GroupVM
+    let listName: String
+    let groupDialogItems: [CM_GroupModel]
+    @Binding var isDismiss:Bool
+    @Binding var response:DiagnosisResponse?
+    init(listName: String,id: Int,groupModels: [CM_GroupModel],isDismiss:Binding<Bool>,response: Binding<DiagnosisResponse?>){
+        self.listName = listName
+        self.groupDialogItems = groupModels
+        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor(named: "AccentColor")
+        self._vm = StateObject(wrappedValue: CM_GroupVM(id: id))
+        self._isDismiss = isDismiss
+        self._response = response
+    }
+    var body: some View{
+        List (vm.cm_groupItems){ item in
+            if item.id == 0{
+                Rectangle().fill(Color.clear).frame(height:100)
+            }else{
+                Button{
+                    self.vm.getDiagnosisItem(id: item.id)
+                }label:{
+                    ItemView(item: item)
+                }
+                .listRowSeparator(.hidden)
+                .background(Color.lightGray)
+                .cornerRadius(8)
+            }
+        }.listStyle(.plain)
+        .onReceive(vm.diagnosisResponseCompleted, perform: { _ in
+            self.response = vm.cm_diagnosisItem
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                self.isDismiss = true
+            }
+        })
+        .navigationBarBackground({
+            Color.white
+        })
+        .navigationTitle(self.listName == "unclassified" ? "미분류 그룹" : self.listName)
+        .navigationBarTitleDisplayMode(.large)
     }
 }
 fileprivate struct ItemView:View{

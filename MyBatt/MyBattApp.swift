@@ -19,7 +19,6 @@ struct MyBattApp: App {
                     .environmentObject(appManager)
                     .environmentObject(userVM)
                     .onAppear(){
-                        print("isAlreadyLoggedIn:",userVM.isUserLoggined)
 //                        Appearances.tabBarClear()
                         userVM.fetchOutbreakList()
                     }

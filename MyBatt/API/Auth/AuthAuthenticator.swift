@@ -65,6 +65,7 @@ class AuthAuthenticator : Authenticator {
         print("OAuthAuthenticator - didRequest() called")
         
         // 401 코드가 떨어지면 리프레시 토큰으로 액세스 토큰을 재발행 하라고 요청
+        print("didRequest(_ urlRequest: URLRequest, \(response.statusCode)")
         switch response.statusCode {
             case 401: return true
             default: return false

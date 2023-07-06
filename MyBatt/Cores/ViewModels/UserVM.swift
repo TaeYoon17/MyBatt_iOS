@@ -47,6 +47,9 @@ final class UserVM: ObservableObject{
                 print("UserVM completion: \(completion)")
             } receiveValue: { (receivedUser: RegisterData?) in
 //                self.loggedInUser = receivedUser
+//                guard let receivedUser = receivedUser else { return }
+//                receivedUser.
+//                UserDefaultsManager.shared.setTokens(accessToken: receivedUser.accessToken, refreshToken: receivedUser.refreshToken)
                 self.registrationSuccess.send()
             }.store(in: &subscription)
     }
@@ -59,8 +62,6 @@ final class UserVM: ObservableObject{
                 print("UserVM completion: \(completion)")
             } receiveValue: {[weak self] (receivedUser: LogInResponse) in
                 self?.userModel.userKey = receivedUser.key
-                self?.userModel.token = UserDefaultsManager.shared.getTokens()
-                print(UserDefaultsManager.shared.getTokens())
                 self?.checkToken()
                 self?.loginSuccess.send()
             }.store(in: &subscription)
@@ -73,8 +74,17 @@ final class UserVM: ObservableObject{
     
     func checkToken()
     {
-        guard let userToken = userModel.token else { self.isUserLoggined = false; return}
-        self.isUserLoggined = userToken.accessToken != "" && userToken.refreshToken != ""
+        AuthApiService.tokenCheck().sink { completion in
+                switch completion{
+                case .finished:
+                    break
+                case .failure(let err):
+                    self.isUserLoggined = false
+                    print(err)
+                }
+            } receiveValue: { val in
+                self.isUserLoggined = val.data != nil
+        }.store(in: &subscription)
     }
 }
 extension UserVM{

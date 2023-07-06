@@ -15,6 +15,8 @@ import Combine
 //}
 
 struct MapView: View {
+    
+    
     @EnvironmentObject var mainVM: MapMainVM
     @StateObject private var vm: MapVM<MapItem> = MapVM<MapItem>()
     @State private var isLocation = false

@@ -12,6 +12,8 @@ struct ExpertMailView: View {
     @State private var title = ""
     @State private var isSelected = false
     @State private var diagnosisResponse:DiagnosisResponse?
+    @State private var goNextView: Bool = false
+    @State private var isDismiss:Bool = false
     //외부에 passthroughSubject로 성공 여부를 전송하기 때문
     @EnvironmentObject var vm : ExpertSheetVM
     @Environment(\.dismiss) private var dismiss
@@ -21,6 +23,7 @@ struct ExpertMailView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 8){
+                //MARK: -- 헤더
                 HStack{
                     Text(title == "" ? "새로운 메시지" : title)
                         .minimumScaleFactor(0.5)
@@ -38,9 +41,9 @@ struct ExpertMailView: View {
                 }.font(.system(size: 36,weight: .semibold))
                     .frame(height: 40)
                     .padding(.bottom,8)
-                
                 VStack(spacing:0){
                     Divider().frame(height: 1).background(Color.lightGray)
+                    
                     HStack(spacing: 4){
                         Text("제목: ").foregroundColor(.accentColor)
                             .font(.headline)
@@ -49,7 +52,9 @@ struct ExpertMailView: View {
                             .foregroundColor(.black)
                     }
                     .frame(height: 44)
+                    
                     Divider().frame(height: 1).background(Color.lightGray)
+                    
                     if diagnosisResponse == nil {
                         self.itemSelectView.padding(.vertical,8)
                     }else{
@@ -57,7 +62,6 @@ struct ExpertMailView: View {
                     }
                     Divider().frame(height: 1).background(Color.lightGray)
                 }
-                
                 GeometryReader{ proxy in
                     ScrollView{
                         ZStack(alignment:.center){
@@ -152,32 +156,48 @@ extension ExpertMailView{
         .frame(height: 100)
     }
 }
-//MARK: -- 작물 선택 버튼
+//MARK: -- 작물 선택 버튼 추가 구현해야할 사항
 extension ExpertMailView{
     var itemSelectView: some View{
-        Button{
-        }label:{
-            Spacer()
-            HStack(spacing: 16){
-                Image(systemName: "questionmark.circle").resizable().scaledToFit()
-                Text("진단 요청할 작물을 선택하세요")
-                    .font(.title3)
-                    .fontWeight(.bold)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.leading)
+        ZStack{
+            NavigationLink(isActive: $goNextView) {
+                ExpertCateMainView(isDismiss: $isDismiss, response: $diagnosisResponse)
+                    .environmentObject(CM_MainVM())
+            } label: {
+                EmptyView()
+            }
+            Button{
+                isDismiss = false
+                goNextView = true
+            }label:{
                 Spacer()
+                HStack(spacing: 16){
+                    Image(systemName: "questionmark.circle").resizable().scaledToFit()
+                    Text("진단 요청할 작물을 선택하세요")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
+                    Spacer()
+                }
             }
-            }
-                .padding()
-                .foregroundColor(Color.accentColor)
-                .background(.ultraThinMaterial)
-                .cornerRadius(15)
-                .background(
-                    RoundedRectangle(cornerRadius: 15)
-                        .stroke(lineWidth:8)
-                        .foregroundColor(Color.accentColor)
-                )
+            .padding()
+            .foregroundColor(Color.accentColor)
+            .background(.ultraThinMaterial)
+            .cornerRadius(15)
+            .background(
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(lineWidth:8)
+                    .foregroundColor(Color.accentColor)
+            )
             .frame(height: 100)
+        }
+        .onChange(of: isDismiss) { newValue in
+            if isDismiss == true{
+                goNextView = false
+            }
+        }
+        
     }
 }
 

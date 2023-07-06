@@ -49,6 +49,7 @@ final class MemoVM: ObservableObject{
         .value().sink { completion in
             switch completion{
             case .finished: print("성공적 종료")
+                self.requestMemoList()
             case .failure(let err):
                 print(err)
             }

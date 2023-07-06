@@ -95,11 +95,15 @@ struct ExpertMainView: View {
                                 sheetType = nil
                             }
                     case .Request: ExpertMailView()
+                            .environmentObject(ExpertSheetVM())
                             .onDisappear(){
                                 sheetType = nil
+                                self.vm.getList()
                             }
                     }
                 }
+
+                
         }
         .navigationBarBackground({
             Color.white
@@ -108,14 +112,14 @@ struct ExpertMainView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             //MARK: -- 나중에 추가해야할 추가버튼
-            //            ToolbarItem(placement: .navigationBarTrailing, content: {
-            //                Button{
-            //                    self.sheetType = .Request
-            //                }label: {
-            //                    Image(systemName: "square.and.pencil")
-            //                        .foregroundColor(.blue)
-            //                }
-            //            })
+            ToolbarItem(placement: .navigationBarTrailing, content: {
+                            Button{
+                                self.sheetType = .Request
+                            }label: {
+                                Image(systemName: "square.and.pencil")
+                                    .foregroundColor(.blue)
+                            }
+                        })
         }
         
     }

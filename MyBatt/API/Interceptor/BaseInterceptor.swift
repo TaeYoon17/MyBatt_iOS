@@ -18,7 +18,6 @@ final class BaseInterceptor: RequestInterceptor {
         // 헤더 부분 넣어주기
         request.addValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json; charset=UTF-8", forHTTPHeaderField: "Accept")
-        
         completion(.success(request))
     }
 }

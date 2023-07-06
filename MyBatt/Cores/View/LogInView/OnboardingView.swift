@@ -89,7 +89,7 @@ struct OnboardingView: View {
             isLoggedIn.toggle()
         }
         .alert(isPresented: $isLoggedIn) {
-            Alert(title:Text("IsLoggedIn"))
+            Alert(title:Text("로그인 되었습니다!!"))
         }
         .onAppear(){
             withAnimation{

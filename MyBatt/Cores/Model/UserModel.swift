@@ -15,3 +15,14 @@ struct UserModel{
 }
 
 struct UserCropManage{}
+struct UM:Codable{
+    let name: String
+    let email: String
+    let authLevel: Int
+    enum CodingKeys: String, CodingKey {
+        case name
+        case email
+        case authLevel
+    }
+    
+}

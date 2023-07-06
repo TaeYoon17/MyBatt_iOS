@@ -75,18 +75,7 @@ struct DiagnosisResultView: View {
                         .padding(.horizontal)
                     Group{
                         diagnosisBody
-                        Map(coordinateRegion: .constant(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))), interactionModes: [])
-                            .frame(height: 150)
-                            .overlay(alignment:.topTrailing){
-                                Text("런던시").font(.footnote.bold())
-                                    .padding(.all,6)
-                                    .background(.white.opacity(0.66))
-                                    .cornerRadius(8)
-                                    .padding(.all,6)
-                            }
-                            .onTapGesture {
-                                print("선택됨!!")
-                            }
+                        DiagnoisisMapView(geo: Geo(diagnosisResponse?.userLatitude ?? 0,diagnosisResponse?.userLongitude ?? 0),cropType:diagnosisResponse?.cropType ?? -1)
                             .padding(.horizontal,4)
                             .cornerRadius(8)
                         self.expertView

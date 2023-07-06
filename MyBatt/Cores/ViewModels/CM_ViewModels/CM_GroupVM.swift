@@ -94,6 +94,7 @@ final class CM_GroupVM:NSObject,ObservableObject{
                 }
             }, receiveValue: {[weak self] output in
                 guard let response = output.data else {return}
+                //가져오고 가져온 것을 완료함을 알림
                 self?.cm_diagnosisItem = response
                 self?.diagnosisResponseCompleted.send()
             }).store(in: &subscription)

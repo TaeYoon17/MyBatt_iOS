@@ -22,7 +22,7 @@ final class ExpertMainVM:ObservableObject{
             sub.cancel()
         }
     }
-    private func getList(){
+    func getList(){
         ApiClient.shared.session.request(ExpertRouter.List,
                                          interceptor: AuthAuthenticator.getAuthInterceptor)
         .publishDecodable(type: ResponseWrapper<[ExpertSendModel]>.self)

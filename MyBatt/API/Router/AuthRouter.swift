@@ -15,6 +15,7 @@ enum AuthRouter: URLRequestConvertible {
     case register(name: String, email: String, password: String)
     case login(email: String, password: String)
     case tokenRefresh
+    case user
     
     // 서버 기본 URL
     var baseURL: URL {
@@ -30,8 +31,8 @@ enum AuthRouter: URLRequestConvertible {
             return "member/signIn"
         case .tokenRefresh:
             return "member/refresh"
-        default:
-            return ""
+        case .user:
+            return "member/currentUser"
         }
     }
     
@@ -61,6 +62,8 @@ enum AuthRouter: URLRequestConvertible {
             let tokenData = UserDefaultsManager.shared.getTokens()
             params["refresh_token"] = tokenData.refreshToken
             return params
+        default:
+            return Parameters()
         }
     }
     
@@ -68,11 +71,10 @@ enum AuthRouter: URLRequestConvertible {
         let url = baseURL.appendingPathComponent(endPoint)
         
         var request = URLRequest(url: url)
-        
         request.method = method
-        
-        request.httpBody = try JSONEncoding.default.encode(request, with: parameters).httpBody
-        
+        if method != .get{
+            request.httpBody = try JSONEncoding.default.encode(request, with: parameters).httpBody
+        }
         return request
     }
     
