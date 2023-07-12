@@ -14,7 +14,6 @@ struct MapQueryModel:Codable{
         case meta
     }
 }
-
 struct MapQueryItem:Codable{
     let address: Address?
     let addressName, addressType: String?

@@ -14,7 +14,6 @@ fileprivate enum ExpertSheetType:Identifiable{
     case Request
 }
 struct ExpertMainView: View {
-    @State var users = ["hello","my","name","is","life","good"]
     @State private var toggleStates = [true,true,true,true]
     @State private var isAdd = false
     @State private var sheetType: ExpertSheetType? = nil
@@ -102,8 +101,6 @@ struct ExpertMainView: View {
                             }
                     }
                 }
-
-                
         }
         .navigationBarBackground({
             Color.white
@@ -198,7 +195,7 @@ fileprivate struct ListItem: View{
                 }.padding(.top,4)
                 HStack(alignment:.top){
                     Text("병해:").font(.headline)
-                    Text(Diagnosis.koreanTable[DiagnosisType(rawValue: disesName) ?? .none] ?? "")
+                    Text(DiagDisease.koreanTable[DiagDiseaseType(rawValue: disesName) ?? .none] ?? "")
                         .font(.subheadline)
                     Spacer()
                 }
@@ -206,16 +203,12 @@ fileprivate struct ListItem: View{
                 HStack{
                     Spacer()
                     Text("\(Int(accuracy * 100))%").font(.subheadline)
-                    Text("\(Crop.koreanTable[CropType(rawValue: cropName) ?? .none] ?? "")")
+                    Text("\(DiagCrop.koreanTable[DiagCropType(rawValue: cropName) ?? .none] ?? "")")
                     Text("\(Date.changeDateFormat(dateString: date))")
                 }
                 .font(.footnote)
                 .padding(.trailing,8)
                 .padding(.bottom,4)
-                //                .background(Color.blue)
-                
-                
-                //                Spacer()
             }
             
         }

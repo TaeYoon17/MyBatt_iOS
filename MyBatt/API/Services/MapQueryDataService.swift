@@ -38,8 +38,9 @@ final class MapQueryDataService{
                     throw fatalError("맵 쿼리 요청 오류")
                 }
                 return queryResult
-            }).sink(receiveCompletion: NetworkingManager.handleCompletion(completion:), receiveValue: { [weak self] queryResult in
-                self?.queryResult = queryResult
+            }).sink(receiveCompletion: NetworkingManager.handleCompletion(completion:),
+                    receiveValue: { [weak self] queryResult in
+                    self?.queryResult = queryResult
             })
             .store(in: &subscription)
     }

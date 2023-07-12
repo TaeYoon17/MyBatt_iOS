@@ -14,6 +14,6 @@ struct MapItem:Equatable,Markerable{
 //        lhs.diseaseCode == rhs.diseaseCode && lhs.geo == rhs.geo
         lhs.id == rhs.id
     }
-    let cropType: CropType
-    let diseaseCode: DiagnosisType
+    let cropType: DiagCropType
+    let diseaseCode: DiagDiseaseType
 }

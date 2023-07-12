@@ -15,8 +15,7 @@ struct MapMainView: View {
     @EnvironmentObject var appManager: AppManager
     @StateObject private var vm = MapMainVM()
     @StateObject private var sheetVm = MapSheetVM()
-    @State var detent: Detent = .height(70)
-    @State var zoomLevel:Int = 1
+    @State var detent: Detent = .height(68)
     @State var isPresent = false
     @State var isFilter = true
     @State var isToolbarFilter = true
@@ -73,10 +72,10 @@ struct MapMainView: View {
         })
         .onAppear(){
             appManager.isTabbarHidden = true
-            self.vm.isGPSOn = true
-            DispatchQueue.main.asyncAfter(deadline: .now()+1){
-                self.vm.isGPSOn = false
-            }
+//            self.vm.isGPSOn = true
+//            DispatchQueue.main.asyncAfter(deadline: .now()+1){
+//                self.vm.isGPSOn = false
+//            }
         }
         .onDisappear(){
             withAnimation(.easeOut(duration: 0.2)) {
@@ -86,9 +85,7 @@ struct MapMainView: View {
             }
             print("MapMainView 사라짐!!!")
         }
-        .navigationBarBackground({
-            Color.clear
-        })
+        .navigationBarBackground({ Color.clear })
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -132,9 +129,6 @@ struct MapMainView: View {
                                textColor: isToolbarFilter ? .accentColor :.white,
                                bgColor: isToolbarFilter ? .clear : .accentColor)
             }
-        }
-        .onAppear(){
-            Appearances.navigationBar(color: .blue)
         }
     }
     

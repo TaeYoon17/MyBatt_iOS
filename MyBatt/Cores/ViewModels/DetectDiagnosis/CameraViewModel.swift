@@ -32,14 +32,15 @@ final class CameraViewModel:NSObject,ObservableObject{
     
     override init(){
         super.init()
-        Task{ await handleCameraPreviews() }
-        Task{ await handleCameraPhotos() }
+        Task{[weak self] in await self?.handleCameraPreviews() }
+        Task{[weak self] in await self?.handleCameraPhotos() }
         self.addLocationSubscribers()
     }
     deinit{
         cancellable.forEach { can in
             can.cancel()
         }
+        print("CameraViewModel 사라짐!!")
     }
     private func addLocationSubscribers(){ // 의존성 주입
         let loadingPublisher: Published<Bool>.Publisher = locationService.$isLoading
@@ -57,28 +58,32 @@ final class CameraViewModel:NSObject,ObservableObject{
     }
     
     private func handleCameraPreviews() async{
-        let imageStream = camera.previewStream.map{ $0 }
-        for await image in imageStream{
-            Task{ @MainActor in
-                viewFinderImage = image.image!
-                //                print("view change!!")
+        let imageStream = camera.previewStream.compactMap{ $0 }
+        Task{[weak self] in
+            for await image in imageStream{
+                Task{ @MainActor [weak self, image] in
+                    self?.viewFinderImage = image.image!
+                }
             }
         }
     }
     
     private func handleCameraPhotos() async {
+//      PhotoStream도 weak self로 참조 낮추어야한다... 왜징
         let unpackedPhotoStream = camera.photoStream
-            .compactMap { self.unpackPhoto($0) }
-        for await photoData in unpackedPhotoStream{
-            Task{ @MainActor in
-                //thumbnailImage = photoData.thumbnailImage
-                let ciimage = CIImage(data: photoData.imageData, options: [.applyOrientationProperty: true])!
-                let cropCiImage = ciimage.cropImage
-                print(cropCiImage.description)
-                takenImage = cropCiImage.image!
-                takenCIImage = cropCiImage
+            .compactMap {[weak self] in self?.unpackPhoto($0) }
+        Task{[weak self] in
+            for await photoData in unpackedPhotoStream{
+                Task{ @MainActor [weak self] in
+                    //thumbnailImage = photoData.thumbnailImage
+                    let ciimage = CIImage(data: photoData.imageData, options: [.applyOrientationProperty: true])!
+                    let cropCiImage = ciimage.cropImage
+                    print(cropCiImage.description)
+                    self?.takenImage = cropCiImage.image!
+                    self?.takenCIImage = cropCiImage
+                }
+                //            savePhoto(imageData: photoData.imageData)
             }
-            //            savePhoto(imageData: photoData.imageData)
         }
     }
     // Device Camera에서 가져온 AVCapturePhoto를 Image로 바꾸기
@@ -101,12 +106,6 @@ final class CameraViewModel:NSObject,ObservableObject{
         
         return PhotoData(thumbnailImage: thumbnailImage, thumbnailSize: thumbnailSize, imageData: imageData, imageSize: imageSize)
     }
-    
-    //MARK: -- 사진첩 썸내일을 로드하는 함수
-    func loadThumbnail() async{ }
-    
-    //MARK: -- 사진첩을 누르면 사진 로드하기
-    func loadPhotos() async{}
     
     //MARK: -- 사진 저장하기
     func saveImageToAlbum() {
@@ -159,20 +158,20 @@ final class CameraViewModel:NSObject,ObservableObject{
 
 //MARK: -- FetchImage 저장 된 곳
 extension CameraViewModel{
-    func fetchToRequestImage(cropType: CropType,completion:@escaping ((CropType,CLLocationCoordinate2D,UIImage)->Void)){
+    func fetchToRequestImage(cropType: DiagCropType,completion:@escaping ((DiagCropType,CLLocationCoordinate2D,UIImage)->Void)){
         let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier!], options: nil)
         let size = 1280
 //        let size = 360
         print("가져올 데이터 사이즈 \(size)")
         if let asset = fetchResult.firstObject {
-            PHImageManager.default().requestImage(for: asset, targetSize: CGSize(width: size, height: size), contentMode: .aspectFit, options: nil) { (image, info) in
+            PHImageManager.default().requestImage(for: asset, targetSize: CGSize(width: size, height: size), contentMode: .aspectFit, options: nil) {[weak self] (image, info) in
                 // 가져온 이미지를 사용
                 if let image = image {
                     // 이미지 사용 코드 작성
 //                    returnImage = image
 //                    semaphore.signal()
                     print("이미지 전송 시작")
-                    completion(cropType,self.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0),image)
+                    completion(cropType,self?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0),image)
                 }
             }
         }

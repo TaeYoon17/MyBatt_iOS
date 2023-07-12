@@ -147,6 +147,9 @@ struct ExpertCateMainView: View{
             self.nextViewGroup = output
             self.goNextView = true
         })
+        .onDisappear(){
+            vm.cleanAllSubscription()
+        }
     }
 }
 

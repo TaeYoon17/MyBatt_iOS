@@ -16,19 +16,23 @@ final class CM_MainVM: ObservableObject{
     var goToNextView = PassthroughSubject<(String,Int),Never>()
     var goEditView = PassthroughSubject<GroupSettingType,Never>()
     var subscription = Set<AnyCancellable>()
+    var networkSubscription: AnyCancellable?
     init(){
         self.getList()
     }
     deinit{
-        self.subscription.forEach { can in
-            can.cancel()
-        }
+        self.cleanAllSubscription()
+    }
+    func cleanAllSubscription(){
+        self.networkSubscription?.cancel()
+        self.subscription.forEach { can in can.cancel() }
+        print("CM_MainVM cleanAllSubscription")
     }
     func getList(){
-        ApiClient.shared.session.request(CM_Router.CM_List,interceptor: AuthAuthenticator.getAuthInterceptor)
+        self.networkSubscription = ApiClient.shared.session.request(CM_Router.CM_List,interceptor: AuthAuthenticator.getAuthInterceptor)
             .publishDecodable(type: ResponseWrapper<[CM_GroupListItem]>.self)
             .value()
-            .sink(receiveCompletion: { completion in
+            .sink(receiveCompletion: {[weak self] completion in
                 switch completion{
                 case .finished:
                     print("가져오기 성공")
@@ -36,6 +40,7 @@ final class CM_MainVM: ObservableObject{
                     print("가져오기 실패")
                     print(error.localizedDescription)
                 }
+                self?.networkSubscription?.cancel()
             }, receiveValue: {[weak self] output in
                 guard let response: [CM_GroupListItem] = output.data else { return }
                 self?.cm_GroupList = response.filter { item in
@@ -45,7 +50,8 @@ final class CM_MainVM: ObservableObject{
                     }
                     return true
                 }
-            }).store(in: &subscription)
+            })
+//            .store(in: &subscription)
     }
     func addGroup(name: String,memo:String){
         ApiClient.shared.session.request(CM_Router.CM_GroupCreate(name: name),

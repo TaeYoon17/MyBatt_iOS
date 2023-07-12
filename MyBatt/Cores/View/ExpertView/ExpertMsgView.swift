@@ -122,7 +122,7 @@ fileprivate struct MsgItemView:View{
             }
             VStack(alignment: .leading,spacing: 4){
                 HStack{
-                    Text("\(Crop.koreanTable[CropType(rawValue: cropName) ?? .none] ?? "")")
+                    Text("\(DiagCrop.koreanTable[DiagCropType(rawValue: cropName) ?? .none] ?? "")")
                         .font(.headline)
                     Text("\(Date.changeDateFormat(dateString: date))")
                         .font(.subheadline)
@@ -130,7 +130,7 @@ fileprivate struct MsgItemView:View{
                 }
                 HStack(alignment:.top){
                     Text("병해:").font(.headline)
-                    Text("\(Diagnosis.koreanTable[DiagnosisType(rawValue: disesName) ?? .none] ?? "") \(Int(accuracy * 100))%")
+                    Text("\(DiagDisease.koreanTable[DiagDiseaseType(rawValue: disesName) ?? .none] ?? "") \(Int(accuracy * 100))%")
                         .font(.subheadline)
                     Spacer()
                 }

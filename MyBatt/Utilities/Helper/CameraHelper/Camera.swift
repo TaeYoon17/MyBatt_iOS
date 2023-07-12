@@ -7,7 +7,7 @@ import CoreImage
 import UIKit
 import os.log
 
-class Camera: NSObject {
+final class Camera: NSObject {
     // 변수
     private let captureSession = AVCaptureSession()
     private var isCaptureSessionConfigured = false
@@ -22,13 +22,11 @@ class Camera: NSObject {
     }
     
     private var frontCaptureDevices: [AVCaptureDevice] {
-        allCaptureDevices
-            .filter { $0.position == .front }
+        allCaptureDevices.filter { $0.position == .front }
     }
     
     private var backCaptureDevices: [AVCaptureDevice] {
-        allCaptureDevices
-            .filter { $0.position == .back }
+        allCaptureDevices.filter { $0.position == .back }
     }
     
     private var captureDevices: [AVCaptureDevice] {
@@ -56,8 +54,8 @@ class Camera: NSObject {
         didSet {
             guard let captureDevice = captureDevice else { return }
             logger.debug("Using capture device: \(captureDevice.localizedName)")
-            sessionQueue.async {
-                self.updateSessionForCaptureDevice(captureDevice)
+            sessionQueue.async { [weak self] in
+                self?.updateSessionForCaptureDevice(captureDevice)
             }
         }
     }
@@ -84,9 +82,9 @@ class Camera: NSObject {
     var isPreviewPaused = false
     
     lazy var previewStream: AsyncStream<CIImage> = {
-        AsyncStream { continuation in
-            addToPreviewStream = { ciImage in
-                if !self.isPreviewPaused {
+        AsyncStream {[weak self] continuation in
+            self?.addToPreviewStream = { ciImage in
+                if !(self?.isPreviewPaused ?? false) {
 //                    print("isYield addToPreviewStream")
                     continuation.yield(ciImage)
                 }
@@ -104,8 +102,8 @@ class Camera: NSObject {
 //        }()
     
     lazy var photoStream: AsyncStream<AVCapturePhoto> = {
-        AsyncStream { continuation in
-            addToPhotoStream = { photo in
+        AsyncStream { [weak self] continuation in
+            self?.addToPhotoStream = { photo in
                 continuation.yield(photo)
             }
         }
@@ -115,12 +113,15 @@ class Camera: NSObject {
         super.init()
         initialize()
     }
-    
+    deinit{
+        
+        print("Camera가 사라짐!!")
+        
+    }
     private func initialize() {
         sessionQueue = DispatchQueue(label: "session queue")
         
         captureDevice = availableCaptureDevices.first ?? AVCaptureDevice.default(for: .video)
-        
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         NotificationCenter.default.addObserver(self, selector: #selector(updateForDeviceOrientation), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
@@ -234,14 +235,12 @@ class Camera: NSObject {
         updateVideoOutputConnection()
         zoom()
         
-        
     }
     
     private func updateVideoOutputConnection() {
         if let videoOutput = videoOutput, let videoOutputConnection = videoOutput.connection(with: .video) {
             if videoOutputConnection.isVideoMirroringSupported {
                 videoOutputConnection.isVideoMirrored = isUsingFrontCaptureDevice
-
             }
         }
     }
@@ -255,8 +254,8 @@ class Camera: NSObject {
         
         if isCaptureSessionConfigured {
             if !captureSession.isRunning {
-                sessionQueue.async { [self] in
-                    self.captureSession.startRunning()
+                sessionQueue.async { [weak self] in
+                    self?.captureSession.startRunning()
                 }
             }
             return
@@ -264,10 +263,10 @@ class Camera: NSObject {
             print("isCaptureSessionConfigured not")
         }
         
-        sessionQueue.async { [self] in
-            self.configureCaptureSession { success in
+        sessionQueue.async { [weak self] in
+            self?.configureCaptureSession { success in
                 guard success else { print("configureCaptureSession not success"); return }
-                self.captureSession.startRunning()
+                self?.captureSession.startRunning()
             }
         }
     }
@@ -276,8 +275,8 @@ class Camera: NSObject {
         guard isCaptureSessionConfigured else { return }
         
         if captureSession.isRunning {
-            sessionQueue.async {
-                self.captureSession.stopRunning()
+            sessionQueue.async { [weak self] in
+                self?.captureSession.stopRunning()
             }
         }
     }
@@ -316,9 +315,9 @@ class Camera: NSObject {
     
     func takePhoto() {
         guard let photoOutput = self.photoOutput else { return }
-        
-        sessionQueue.async {
-        
+//        여기는 다른 작업 처리 Queue에 입력을 주기 때문에 weak self 할 필요 없을껄..?
+        sessionQueue.async {[weak self] in
+            guard let self = self else { return }
             var photoSettings = AVCapturePhotoSettings()
 
             if photoOutput.availablePhotoCodecTypes.contains(.hevc) {

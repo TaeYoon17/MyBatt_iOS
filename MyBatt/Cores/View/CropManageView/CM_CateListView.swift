@@ -203,14 +203,14 @@ fileprivate struct ItemView:View{
             }
             VStack(alignment: .leading,spacing: 4){
                 HStack{
-                    Text(Crop.koreanTable[item.cropType] ?? "").font(.headline)
+                    Text(DiagCrop.koreanTable[item.cropType] ?? "").font(.headline)
                     Text(item.regDate).font(.subheadline)
                     Spacer()
                 }
                 .padding(.top,12)
                 HStack{
                     Text("병해:").font(.headline)
-                    Text("\(Diagnosis.koreanTable[item.diseaseType] ?? "") (\(Int(item.accuracy*100))%)").font(.subheadline)
+                    Text("\(DiagDisease.koreanTable[item.diseaseType] ?? "") (\(Int(item.accuracy*100))%)").font(.subheadline)
                     Spacer()
                 }
                 if true{

@@ -15,28 +15,31 @@ final class MapMainVM: ObservableObject{
     @Published var center: Geo = Geo(0,0)
     @Published var isGPSOn = false
     @Published var locationName = ""
-    @Published var nearDiseaseItems: [CropType:[MapDiseaseResponse]]?
+    @Published var nearDiseaseItems: [DiagCropType:[MapDiseaseResponse]]?
     @Published var tappedItem: (any Markerable)? = nil
-    @Published var crops: [MapSheetCrop] = CropType.allCases.map { type in
-        MapSheetCrop(cropType: type.rawValue, accuracy: MapMainVM.accRange.start > 80.0 ? MapMainVM.accRange.start : 80,isOn: false)
+    @Published var crops: [MapSheetCrop] = DiagCropType.allCases.map { type in
+        MapSheetCrop(cropType: type.rawValue,
+                     accuracy: MapMainVM.accRange.start > 80.0 ? MapMainVM.accRange.start : 80
+                     ,isOn: false)
     }
     @Published var durationType: DurationType = .week
     @Published var selectDate:Date = Date.weekAgo
     // sheetvm에서 mapvm으로 전달해줌 -> 단방향
     var passthroughCenter = PassthroughSubject<Geo,Never>()
     var passthroughIsGPSOn = PassthroughSubject<Bool,Never>()
-    var passthroughNearDiseaseItems = PassthroughSubject<[CropType:[MapDiseaseResponse]]?,Never>()
-    var subscription = Set<AnyCancellable>()
+    var passthroughNearDiseaseItems = PassthroughSubject<[DiagCropType:[MapDiseaseResponse]]?,Never>()
+    private var subscription = Set<AnyCancellable>()
     
-    init(){
-        addSubscriber()
+    init(){ addSubscriber() }
+    deinit{
+        subscription.forEach{$0.cancel()}
+        print("MapMainVM 메모리 해제")
     }
-    
     func addSubscriber(){
         self.$center.delay(for: 0.2, scheduler: DispatchQueue.global())
             .sink { [weak self] _ in
-            self?.requestNearDisease()
-        }.store(in: &subscription)
+                self?.requestNearDisease()
+            }.store(in: &subscription)
         self.$crops.delay(for: 0.2, scheduler: DispatchQueue.global())
             .sink { [weak self] _ in self?.requestNearDisease()}
             .store(in: &subscription)
@@ -62,56 +65,55 @@ final class MapMainVM: ObservableObject{
                 print("requestNearDisease 가져오기 실패 \(error.localizedDescription)")
             }
         } receiveValue: {[weak self] output in
-            if let nullableData: [MapDiseaseResponse] = output.data{
-                print(nullableData)
-                let nearDiseaseItems = self?.makeDiseaseResult(nullableData.filter { response in
-                    let diseasetype:DiagnosisType = DiagnosisType(rawValue: response.diseaseCode ?? -1) ?? .none
-                    let cropType: CropType = CropType(rawValue:response.diagnosisRecord.cropType) ?? .none
-                    switch (diseasetype, cropType) {
-                    case (.none,_), (.LettuceNormal,_), (.PepperNormal,_), (.TomatoNormal,_) ,(.StrawberryNormal,_):
-                        return false
-                    case (.TomatoLeafFungus, .Tomato), (.TomatoYellowLeafRoll, .Tomato),
-                         (.LettuceMycosis, .Lettuce), (.LettuceDownyMildew, .Lettuce),
-                         (.StrawberryGrayMold, .StrawBerry), (.StrawberryPowderyMildew, .StrawBerry),
-                         (.PepperSpot, .Pepper), (.PepperMildMotle, .Pepper):
-                        return true
-                    default:
-                        return false
-                    }
+            guard let self = self else { return }
+            if let diseaseResponses: [MapDiseaseResponse] = output.data{
+                print(diseaseResponses)
+                let nearDiseaseItems = self.makeDiseaseResult(
+                    diseaseResponses.filter { response in
+                    let diseasetype = DiagDiseaseType(rawValue: response.diseaseCode ?? -1) ?? .none
+                    let cropType = DiagCropType(rawValue:response.diagnosisRecord.cropType) ?? .none
+                    return self.cropDiseaseMatchTable(diseasetype: diseasetype, cropType: cropType)
                 })
-                self?.passthroughNearDiseaseItems.send(nearDiseaseItems)
+                self.passthroughNearDiseaseItems.send(nearDiseaseItems)
             }else{
                 print("내부에 데이터 없음!!")
             }
         }.store(in: &subscription)
     }
-    
-    private func makeDiseaseResult(_ responses:[MapDiseaseResponse]) -> [CropType:[MapDiseaseResponse]]{
+    private func makeDiseaseResult(_ responses:[MapDiseaseResponse]) -> [DiagCropType:[MapDiseaseResponse]]{
         responses.reduce(into: [:]) { partialResult, response in
-            let type: CropType = CropType(rawValue: response.diagnosisRecord.cropType) ?? .none
-            if type != .none {
-                if partialResult.keys.contains(type){
-                    partialResult[type]?.append(response)
-                }else{
-                    partialResult[type] = [response]
-                }
+            let type = DiagCropType(rawValue: response.diagnosisRecord.cropType) ?? .none
+            guard type != .none else { return }
+            if partialResult.keys.contains(type){
+                partialResult[type]?.append(response)
+            }else{
+                partialResult[type] = [response]
             }
         }
     }
     
-    
-    //MARK: -- 응답받은 주변 병해 정보를 맵 마커용 데이터로 바꿔주는 메서드
-//    private func makeDiseaseResult(data: [MapDiseaseResponse])->MapDiseaseResult{
-//        var returnVal: [CropType:[MapItem]] = CropType.allCases.reduce(into: [:]) { partialResult, type in
-//            if type != .none { partialResult[type] = [] }
-//        }
-//        data.forEach { res in
-//            guard let cropType:CropType = CropType(rawValue: res.diagnosisRecord.cropType ) else {return}
-//            guard let diseaseCode:DiagnosisType = DiagnosisType(rawValue: res.diseaseCode ?? -2) else {return}
-//            let geo = Geo(res.diagnosisRecord.userLatitude,res.diagnosisRecord.userLongitude)
-//            returnVal[cropType]?.append(MapItem(id: res.id,geo: geo, cropType: cropType, diseaseCode: diseaseCode))
-//        }
-//        return MapDiseaseResult(results: returnVal)
-//    }
 }
 
+extension MapMainVM{
+    private func cropDiseaseMatchTable(diseasetype:DiagDiseaseType,cropType:DiagCropType)->Bool{
+        if let res = DiagCrop.diseaseMatchTable[cropType]?.contains(diseasetype), res == true{
+            return true
+        }else{
+            return false
+        }
+    }
+}
+/// Legacy Code
+//
+//        switch (diseasetype, cropType) {
+//        case (_,.none): return false
+//        case (.none,_), (.LettuceNormal,_), (.PepperNormal,_), (.TomatoNormal,_) ,(.StrawberryNormal,_):
+//            return false
+//        case (.TomatoLeafFungus, .Tomato), (.TomatoYellowLeafRoll, .Tomato),
+//            (.LettuceMycosis, .Lettuce), (.LettuceDownyMildew, .Lettuce),
+//            (.StrawberryGrayMold, .StrawBerry), (.StrawberryPowderyMildew, .StrawBerry),
+//            (.PepperSpot, .Pepper), (.PepperMildMotle, .Pepper):
+//            return true
+//        default:
+//            return false
+//        }

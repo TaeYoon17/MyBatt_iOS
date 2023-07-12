@@ -8,7 +8,7 @@
 import SwiftUI
 struct CropSelectView: View {
     @Binding var pageSheetCrop:MapSheetCrop
-    @Binding var myDiagnosis: [DiagnosisType:Int]?
+    @Binding var myDiagnosis: [DiagDiseaseType:Int]?
     @State private var acc: Double = 50
     let accRange: AccRange = MapFilterVM.accRange
     var body: some View {
@@ -16,7 +16,7 @@ struct CropSelectView: View {
             Toggle(isOn: $pageSheetCrop.isOn) {
                 VStack{
                     HStack{
-                        Text("\(pageSheetCrop.cropKorean) \(Crop.iconTable[CropType(rawValue: pageSheetCrop.cropType) ?? .none] ?? "")")
+                        Text("\(pageSheetCrop.cropKorean) \(DiagCrop.iconTable[DiagCropType(rawValue: pageSheetCrop.cropType) ?? .none] ?? "")")
                             .font(.body)
                             .fontWeight(.semibold)
 //                            .foregroundColor(pageSheetCrop.cropColor)
@@ -53,7 +53,7 @@ struct CropSelectView: View {
                             })),id:\.self){ key in
                                 HStack{
                                     (
-                                        Text("\(Diagnosis.koreanTable[key] ?? "") 개수: ")
+                                        Text("\(DiagDisease.koreanTable[key] ?? "") 개수: ")
                                         .font(.footnote).fontWeight(.semibold)
                                     + Text("\(myDiagnosis[key] ?? 0)").font(.footnote)
                                      )
@@ -74,6 +74,6 @@ struct CropSelectView: View {
 
 struct CropSelectView_Previews: PreviewProvider {
     static var previews: some View {
-        CropSelectView(pageSheetCrop: .constant(MapSheetCrop(cropType: CropType.Lettuce.rawValue, accuracy: 85,isOn: false)), myDiagnosis: .constant([:]))
+        CropSelectView(pageSheetCrop: .constant(MapSheetCrop(cropType: DiagCropType.Lettuce.rawValue, accuracy: 85,isOn: false)), myDiagnosis: .constant([:]))
     }
 }

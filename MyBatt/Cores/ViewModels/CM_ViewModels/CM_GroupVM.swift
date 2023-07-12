@@ -18,8 +18,8 @@ struct CM_GroupItem:Identifiable,Equatable{
     let imgPath:String
     var address:String
     let regDate:String
-    let cropType: CropType
-    let diseaseType: DiagnosisType
+    let cropType: DiagCropType
+    let diseaseType: DiagDiseaseType
     let accuracy:Double
     var geo: Geo
 }
@@ -73,8 +73,8 @@ final class CM_GroupVM:NSObject,ObservableObject{
                                         imgPath: item.imagePath,
                                         address: "주소를 찾을 수 없습니다.",
                                         regDate:regDate,
-                                        cropType: CropType(rawValue: item.cropType) ?? .none,
-                                        diseaseType: DiagnosisType(rawValue: wrapper.diagnosisResultList?[0].diseaseCode ?? -1) ?? .none,
+                                        cropType: DiagCropType(rawValue: item.cropType) ?? .none,
+                                        diseaseType: DiagDiseaseType(rawValue: wrapper.diagnosisResultList?[0].diseaseCode ?? -1) ?? .none,
                                         accuracy:wrapper.diagnosisResultList?[0].accuracy ?? 0, geo: (item.userLatitude,item.userLongitude))
                 }
             }).store(in: &subscription)

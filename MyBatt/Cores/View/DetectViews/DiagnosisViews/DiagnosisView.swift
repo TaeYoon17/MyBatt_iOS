@@ -20,8 +20,8 @@ struct DiagnosisView: View {
     var body: some View {
         ZStack{
             //MARK: -- 여기 수정해야함!!
-//            if isLoading{
-            if false{
+            if isLoading{
+//            if false{
                 self.loadingView
                     .onReceive(userVM.diagnosisFail) { str in
                         if let str = str{

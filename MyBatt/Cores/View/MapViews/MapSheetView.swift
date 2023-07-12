@@ -79,7 +79,7 @@ struct MapSheetView: View {
                 ForEach(crops.indices, id: \.self){ idx in
                     let cropItem:MapSheetCrop = crops[idx]
                     if cropItem.isOn {
-                        let cropType: CropType = CropType(rawValue: cropItem.cropType) ?? .none
+                        let cropType = DiagCropType(rawValue: cropItem.cropType) ?? .none
                         self.textInfoView(label: "\(cropItem.cropKorean)",sublabel:"\(vm.nearDiseaseItems?[cropType]?.count ?? 0)개", toggleState: $isToggleCrops[idx]) {
                             if let items:[MapDiseaseResponse] = vm.nearDiseaseItems?[cropType]{
                                 LazyVStack(spacing: 8){
@@ -90,7 +90,7 @@ struct MapSheetView: View {
                                                                        address: "",
                                                                        regDate: date,
                                                                        cropType: cropType,
-                                                                       diseaseType: DiagnosisType(rawValue: item.diseaseCode ?? -1) ?? DiagnosisType.none,
+                                                                       diseaseType: DiagDiseaseType(rawValue: item.diseaseCode ?? -1) ?? DiagDiseaseType.none,
                                                                        accuracy: item.accuracy,
                                                                        geo: (item.diagnosisRecord.userLatitude,item.diagnosisRecord.userLongitude)
                                                                       ))
@@ -211,13 +211,13 @@ struct MapItemView:View{
             }
             VStack(alignment: .leading,spacing: 4){
                 HStack{
-                    Text(Crop.koreanTable[item.cropType] ?? "").font(.headline)
+                    Text(DiagCrop.koreanTable[item.cropType] ?? "").font(.headline)
                     Text(item.regDate).font(.subheadline)
                     Spacer()
                 }.padding(.top,4)
                 HStack{
                     Text("병해:").font(.headline)
-                    Text("\(Diagnosis.koreanTable[item.diseaseType] ?? "")").font(.subheadline)
+                    Text("\(DiagDisease.koreanTable[item.diseaseType] ?? "")").font(.subheadline)
                         .multilineTextAlignment(.leading)
                         .lineLimit(2)
                     Spacer()

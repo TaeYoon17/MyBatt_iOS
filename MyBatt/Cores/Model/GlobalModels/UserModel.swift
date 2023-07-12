@@ -24,5 +24,4 @@ struct UM:Codable{
         case email
         case authLevel
     }
-    
 }

@@ -37,10 +37,11 @@ struct CameraView: View {
         }
         .background(Color.white)
         .onAppear(){
-            Appearances.navigationBar(color: .black)
+//            Appearances.navigationBar(color: .black)
         }.onDisappear(){
-            Appearances.navigationBar(color:.white)
+//            Appearances.navigationBar(color:.white)
             model.camera.stop()
+            print("CameraView onDisappear")
         }
     }
     private var cameraView: some View{
@@ -62,8 +63,7 @@ struct CameraView: View {
                     .frame(height: proxy.size.height * (1 - (Self.barHeightFactor * 2)))
                     .accessibilityElement()
                     .accessibilityLabel("View Finder")
-                    .accessibilityAddTraits([.isImage])
-                         ,alignment: .center)
+                    .accessibilityAddTraits([.isImage]) ,alignment: .center)
                 .background(Color.black)
             
         }

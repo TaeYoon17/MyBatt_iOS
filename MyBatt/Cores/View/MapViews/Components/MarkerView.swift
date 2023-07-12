@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MarkerView: View {
-    let cropType: CropType
+    let cropType: DiagCropType
     var body: some View {
         VStack(spacing:0){
             Image(systemName: "circle.fill")
@@ -21,7 +21,7 @@ struct MarkerView: View {
                 .background(Color.accentColor)
                 .clipShape(Circle())
                 .overlay(alignment:.center) {
-                    Text(Crop.iconTable[cropType]!).font(.footnote)
+                    Text(DiagCrop.iconTable[cropType]!).font(.footnote)
                 }
             Image(systemName: "triangle.fill")
                 .resizable()

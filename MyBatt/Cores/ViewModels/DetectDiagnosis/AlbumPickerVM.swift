@@ -41,7 +41,7 @@ final class AlbumPickerVM:ObservableObject{
         })
     }
     
-    func fetchToRequestImage(cropType: CropType,completion:@escaping ((CropType,CLLocationCoordinate2D,UIImage)->Void)){
+    func fetchToRequestImage(cropType: DiagCropType,completion:@escaping ((DiagCropType,CLLocationCoordinate2D,UIImage)->Void)){
         let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier!], options: nil)
         let size = 1280
 //        let size = 360

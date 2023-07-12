@@ -8,18 +8,18 @@
 import Foundation
 
 final class TakenPhotoVM:ObservableObject{
-    let crops:[CropSelect] = CropType.allCases.compactMap{ cropType in
-        guard let korean = Crop.koreanTable[cropType],let icon = Crop.iconTable[cropType] else { return nil }
+    let crops:[CropSelect] = DiagCropType.allCases.compactMap{ cropType in
+        guard let korean = DiagCrop.koreanTable[cropType],let icon = DiagCrop.iconTable[cropType] else { return nil }
         return CropSelect(cropType: cropType, name: korean, icon: icon)
     }
-    @Published var selectedCropType: CropType = .Lettuce
+    @Published var selectedCropType: DiagCropType = .Lettuce
     struct CropSelect:Identifiable,Hashable{
         var id = UUID()
-        let cropType:CropType
+        let cropType:DiagCropType
         let name:String
         let icon:String
     }
-    init(lastCropType: CropType) {
+    init(lastCropType: DiagCropType) {
         selectedCropType = lastCropType
     }
 }

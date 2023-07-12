@@ -14,7 +14,6 @@ final class UserDefaultsManager {
     static let shared: UserDefaultsManager = {
         return UserDefaultsManager()
     }()
-    
     // 저장된 모든 데이터 지우기
     func clearAll(){
         print("UserDefaultsManager - clearAll() called")

@@ -7,6 +7,6 @@
 
 import Foundation
 
-enum SickKeyType:String{
-    case strawberrywow = "D00000189"
-}
+//enum SickKeyType:String{
+//    case strawberrywow = "D00000189"
+//}

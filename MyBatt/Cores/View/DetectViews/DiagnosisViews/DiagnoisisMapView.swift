@@ -11,14 +11,14 @@ struct DiagnoisisMapView: View {
     private struct Ann:Identifiable{
         var id = UUID()
         let geo:Geo
-        let type:CropType
+        let type:DiagCropType
     }
     let geo:Geo
     @State private var annoItem: [Ann]
     @State private var isAppear = false
     init(geo: Geo,cropType: Int) {
         self.geo = geo
-        let type = CropType(rawValue: cropType) ?? .none
+        let type = DiagCropType(rawValue: cropType) ?? .none
         self._annoItem = State(wrappedValue: [Ann(geo: geo,type: type)])
     }
     @State private var location = ""
@@ -54,7 +54,7 @@ struct DiagnoisisMapView: View {
             }
     }
     @MainActor
-    func marker(type:CropType)-> some View{
+    func marker(type:DiagCropType)-> some View{
         VStack(spacing:0){
             Image(systemName: "circle.fill")
                 .resizable()
@@ -65,7 +65,7 @@ struct DiagnoisisMapView: View {
                 .background(Color.accentColor)
                 .clipShape(Circle())
                 .overlay(alignment:.center) {
-                    Text(Crop.iconTable[type] ?? "").font(.footnote)
+                    Text(DiagCrop.iconTable[type] ?? "").font(.footnote)
                 }
             Image(systemName: "triangle.fill")
                 .resizable()

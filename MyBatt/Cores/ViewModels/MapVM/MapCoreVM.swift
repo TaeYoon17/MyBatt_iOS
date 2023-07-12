@@ -17,7 +17,7 @@ final class MapVM<T:Markerable>:NSObject, ObservableObject{
     var items: [T] = []
     @Published var tappedItem: T? = nil
     @Published var isGPSOn = false
-    @Published var center: Geo = (37.596464,127.085972)
+    @Published var center: Geo = (37.5508,127.0758)
     @Published var region: MKCoordinateRegion = MKCoordinateRegion(center: .init(latitude: 37.596464, longitude: 127.085972), span: .init(latitudeDelta: 0.001, longitudeDelta: 0.001))
     @Published var locationName: String = ""
     var subscription = Set<AnyCancellable>()
@@ -34,6 +34,7 @@ final class MapVM<T:Markerable>:NSObject, ObservableObject{
         self.subscription.forEach { can in
             can.cancel()
         }
+        print("MapCoreVM 메모리 해제")
     }
     func centerOnMarker(_ locationCoordinate: T){
         let loc = locationCoordinate.geo
@@ -74,7 +75,6 @@ fileprivate extension MapVM{
     }
     private func isDistanceGreaterThanOrEqualTo500m(lat1: Double, lon1: Double, lat2: Double, lon2: Double) -> Bool {
         let R = 6371.0 // 지구의 반지름 (단위: km)
-
         let lat1Rad = lat1 * .pi / 180.0
         let lon1Rad = lon1 * .pi / 180.0
         let lat2Rad = lat2 * .pi / 180.0

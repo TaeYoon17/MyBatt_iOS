@@ -18,7 +18,7 @@ struct DiagnosisInfoView: View {
         HStack{
             VStack(alignment: .leading,spacing:8){
                 Text("병명: ").bold()+Text(
-                    Diagnosis.koreanTable[DiagnosisType(rawValue: diagnosisNumber) ?? .PepperNormal] ?? "알 수 없는 질병"
+                    DiagDisease.koreanTable[DiagDiseaseType(rawValue: diagnosisNumber) ?? .PepperNormal] ?? "알 수 없는 질병"
                 )
                 Text("일치율: ").bold()+Text("\(Int(accuracy*100))%")
             }

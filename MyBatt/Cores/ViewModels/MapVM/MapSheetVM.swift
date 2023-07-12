@@ -4,7 +4,6 @@
 //
 //  Created by 김태윤 on 2023/05/16.
 //
-
 import Foundation
 import SwiftUI
 import Alamofire
@@ -16,16 +15,13 @@ final class MapSheetVM:ObservableObject{
     // 검색 결과 좌표 반환을 위한 Passthrough
     var centerPassthrough = PassthroughSubject<Geo,Never>()
     // 여기 나중에 true로 수정해야함!
-    
-    @Published var nearDiseaseItems: [CropType:[MapDiseaseResponse]]?
+    @Published var nearDiseaseItems: [DiagCropType:[MapDiseaseResponse]]?
     var subscription = Set<AnyCancellable>()
-    
     lazy var mapQueryDataService: MapQueryDataService = MapQueryDataService()
     init(){}
     deinit{
-        subscription.forEach { can in
-            can.cancel()
-        }
+        subscription.forEach { can in can.cancel() }
+        print("MapSheetVM 메모리 해제")
     }
 }
 //MARK: -- 검색어 좌표 변환

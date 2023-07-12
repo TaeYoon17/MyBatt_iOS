@@ -37,5 +37,5 @@ struct MapDiseaseResult:Identifiable,Equatable{
         lhs.id == rhs.id && lhs.results == rhs.results
     }
     let id = UUID()
-    var results: [CropType:[MapItem]]
+    var results: [DiagCropType:[MapItem]]
 }

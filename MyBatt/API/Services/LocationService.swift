@@ -11,7 +11,13 @@ import Combine
 final class LocationService: NSObject, ObservableObject, CLLocationManagerDelegate{
     static let shared = LocationService()
     private let locationManager = CLLocationManager()
-    @Published var isLoading = false
+    @Published var isLoading = false{
+        didSet{
+            if isLoading == false{
+                locationManager.stopUpdatingLocation()
+            }
+        }
+    }
 //    @Published var address: String? = nil
     lazy var locationPassthrough = PassthroughSubject<Geo,Never>()
     lazy var addressPasthrough = PassthroughSubject<String?,Never>()
@@ -34,8 +40,9 @@ final class LocationService: NSObject, ObservableObject, CLLocationManagerDelega
         isLoading = true
         print("request start!!")
         locationManager.requestLocation()
-        DispatchQueue.main.asyncAfter(deadline: .now()+3){
-            self.isLoading = false
+//      메모리 즉시 해제가 가능하게 함
+        DispatchQueue.main.asyncAfter(deadline: .now()+3){ [weak self] in
+            self?.isLoading = false
         }
     }
     func startUpdatingLocation(){
@@ -64,8 +71,14 @@ final class LocationService: NSObject, ObservableObject, CLLocationManagerDelega
         }
         isLoading = false
     }
+//  위치 좌표를 통한 한국어 주소 반환
     func requestAddress(geo:Geo){
-        CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: geo.0,longitude: geo.1)) { marks, error in
+        guard (33.0 <= geo.latitude && geo.latitude <= 43) || (124.0 <= geo.longtitude && geo.longtitude <= 132) else {
+            self.addressPasthrough.send("위치를 찾을 수 없습니다")
+            return
+        }
+        CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: geo.0,longitude: geo.1)) {[weak self] marks, error in
+            guard let self = self else {return}
             if let pm: CLPlacemark = marks?.first{
                 let address: String = "\(pm.locality ?? "") \(pm.name ?? "")"
                 self.addressPasthrough.send(address)
@@ -75,6 +88,9 @@ final class LocationService: NSObject, ObservableObject, CLLocationManagerDelega
         }
     }
     func requestAddressAsync(geo:Geo) async -> String{
+        guard (33.0 <= geo.latitude && geo.latitude <= 43) || (124.0 <= geo.longtitude && geo.longtitude <= 132) else {
+            return "위치를 찾을 수 없습니다"
+        }
         let s:[CLPlacemark]? = try? await CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: geo.0,longitude: geo.1))
         if let pm = s?.first{
             return "\(pm.locality ?? "") \(pm.name ?? "")"

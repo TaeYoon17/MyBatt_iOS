@@ -14,20 +14,22 @@ final class ExpertSheetVM:NSObject,ObservableObject{
     @Published var location: String? = nil
     var subscription = Set<AnyCancellable>()
     override init(){
+        print("전문가 진단 찾기 시트")
         super.init()
     }
     deinit{
         subscription.forEach { sub in
             sub.cancel()
         }
+        print("ExpertSheetVM 사라짐")
     }
     func getLocation(latitude: Double,longtitude: Double){
-        CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: latitude,longitude: longtitude)) { marks, error in
+        CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: latitude,longitude: longtitude)) {[weak self] marks, error in
             if let pm: CLPlacemark = marks?.first{
                 let address: String = "\(pm.locality ?? "") \(pm.name ?? "")"
-                self.location = address
+                self?.location = address
             }else{
-                self.location = "찾는 위치가 없습니다."
+                self?.location = "찾는 위치가 없습니다."
                 print("찾는 위치가 없습니다.")
             }
         }

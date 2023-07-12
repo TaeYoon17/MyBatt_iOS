@@ -19,7 +19,7 @@ final class MapFilterVM:ObservableObject{
     @Published var durationType: DurationType = .week
     @Published var selectDate:Date = Date.weekAgo
     // 작물 종류 - 진단 타입 - 계수
-    @Published var mapDiseaseCnt: [CropType:[DiagnosisType:Int]] = [:]
+    @Published var mapDiseaseCnt: [DiagCropType:[DiagDiseaseType:Int]] = [:]
     var subscription = Set<AnyCancellable>()
     var isInit = true
     var dateRange: ClosedRange<Date>{
@@ -33,26 +33,12 @@ final class MapFilterVM:ObservableObject{
         subscription.forEach { can in
             can.cancel()
         }
+        print("MapFilterVM 메모리 해제")
     }
     func makeDiseaseCnt(diseaseResult: MapDiseaseResult?){
-        var mapDiseaseCnt: [CropType:[DiagnosisType:Int]] = [
-            .Lettuce: [
-                .LettuceDownyMildew : 0,
-                .LettuceMycosis : 0
-            ],
-            .Pepper:[
-                .PepperSpot: 0,
-                .PepperMildMotle: 0
-            ],
-            .StrawBerry:[
-                .StrawberryPowderyMildew: 0,
-                .StrawberryGrayMold:0,
-            ],
-            .Tomato:[
-                .TomatoLeafFungus:0,
-                .TomatoYellowLeafRoll:0
-            ]
-        ]
+        var mapDiseaseCnt:[DiagCropType:[DiagDiseaseType:Int]] = DiagCrop.diseaseMatchTable.reduce(into: [:]) {
+            $0[$1.key] = $1.value.reduce(into: [:], { $0[$1] = 0 })
+        }
         diseaseResult?.results.forEach({ (key,val) in
             val.forEach { item in
                 mapDiseaseCnt[key]![item.diseaseCode]? += 1

@@ -127,6 +127,9 @@ struct MainView: View {
             case .CropManage:
                 CM_MainView()
                     .environmentObject(cm_mainVM)
+                    .onDisappear(){
+                        cm_mainVM.cleanAllSubscription()
+                    }
             case .Camera:
                 Text("EmptyView")
             case .Search:

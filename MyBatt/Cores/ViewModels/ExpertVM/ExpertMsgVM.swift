@@ -19,6 +19,7 @@ final class ExpertMsgVM:ObservableObject{
         subscription.forEach { sub in
             sub.cancel()
         }
+        print("ExpertMsgVM 사라짐")
     }
     func getReply(id:Int){
         ApiClient.shared.session.request(ExpertRouter.Reply(id: id),

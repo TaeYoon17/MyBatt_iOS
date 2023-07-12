@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 final class AppManager:ObservableObject{
-    lazy var lastCropType: CropType = .Lettuce
+    lazy var lastCropType: DiagCropType = .Lettuce
     @Published var navigationBarColor: UIColor = .blue
     @Published private var viewStacks:[Bool] = []{
         didSet{

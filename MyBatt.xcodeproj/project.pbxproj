@@ -72,6 +72,7 @@
 		6351AAD42A1E0FFB00B7A370 /* OAuthCredential.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6351AAD32A1E0FFB00B7A370 /* OAuthCredential.swift */; };
 		6351AAD62A1E100C00B7A370 /* OAuthAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6351AAD52A1E100C00B7A370 /* OAuthAuthenticator.swift */; };
 		6351AAD82A1E258A00B7A370 /* ResponseWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6351AAD72A1E258A00B7A370 /* ResponseWrapper.swift */; };
+		635292CB2A5EABE30028B64D /* DiagDiseaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635292CA2A5EABE30028B64D /* DiagDiseaseModel.swift */; };
 		6354344029E850830037D6CD /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6354343F29E850830037D6CD /* LottieView.swift */; };
 		6354344629E8552D0037D6CD /* LottieMap.json in Resources */ = {isa = PBXBuildFile; fileRef = 6354344529E8552D0037D6CD /* LottieMap.json */; };
 		6356A85C29E95E1B0085206C /* MainMapBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6356A85B29E95E1B0085206C /* MainMapBtn.swift */; };
@@ -118,7 +119,7 @@
 		63B8D9402A0B3B7D004EC7FC /* DiagnosisModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B8D93F2A0B3B7D004EC7FC /* DiagnosisModel.swift */; };
 		63CC701C2A29164E0050589E /* SearchItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CC701B2A29164E0050589E /* SearchItemView.swift */; };
 		63CC701F2A291D1B0050589E /* DiseaseInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CC701E2A291D1B0050589E /* DiseaseInfoView.swift */; };
-		63D02A882A46BCCA007101A9 /* MapVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D02A872A46BCCA007101A9 /* MapVM.swift */; };
+		63D02A882A46BCCA007101A9 /* MapCoreVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D02A872A46BCCA007101A9 /* MapCoreVM.swift */; };
 		63D02A8A2A46BDBF007101A9 /* CLLocationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D02A892A46BDBF007101A9 /* CLLocationExtension.swift */; };
 		63D02A8C2A46C9CF007101A9 /* MapFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D02A8B2A46C9CF007101A9 /* MapFilterView.swift */; };
 		63D02A8E2A46D451007101A9 /* MapFilterVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D02A8D2A46D451007101A9 /* MapFilterVM.swift */; };
@@ -234,6 +235,7 @@
 		6351AAD32A1E0FFB00B7A370 /* OAuthCredential.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthCredential.swift; sourceTree = "<group>"; };
 		6351AAD52A1E100C00B7A370 /* OAuthAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthAuthenticator.swift; sourceTree = "<group>"; };
 		6351AAD72A1E258A00B7A370 /* ResponseWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseWrapper.swift; sourceTree = "<group>"; };
+		635292CA2A5EABE30028B64D /* DiagDiseaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagDiseaseModel.swift; sourceTree = "<group>"; };
 		6354343F29E850830037D6CD /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
 		6354344529E8552D0037D6CD /* LottieMap.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = LottieMap.json; path = Resources/LottieMap.json; sourceTree = SOURCE_ROOT; };
 		6356A85B29E95E1B0085206C /* MainMapBtn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapBtn.swift; sourceTree = "<group>"; };
@@ -281,7 +283,7 @@
 		63B8D93F2A0B3B7D004EC7FC /* DiagnosisModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosisModel.swift; sourceTree = "<group>"; };
 		63CC701B2A29164E0050589E /* SearchItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchItemView.swift; sourceTree = "<group>"; };
 		63CC701E2A291D1B0050589E /* DiseaseInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiseaseInfoView.swift; sourceTree = "<group>"; };
-		63D02A872A46BCCA007101A9 /* MapVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVM.swift; sourceTree = "<group>"; };
+		63D02A872A46BCCA007101A9 /* MapCoreVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCoreVM.swift; sourceTree = "<group>"; };
 		63D02A892A46BDBF007101A9 /* CLLocationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationExtension.swift; sourceTree = "<group>"; };
 		63D02A8B2A46C9CF007101A9 /* MapFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFilterView.swift; sourceTree = "<group>"; };
 		63D02A8D2A46D451007101A9 /* MapFilterVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFilterVM.swift; sourceTree = "<group>"; };
@@ -444,12 +446,10 @@
 		63325A4E29F1004C00CF3A48 /* MapViews */ = {
 			isa = PBXGroup;
 			children = (
+				635292CC2A5EB67E0028B64D /* Components */,
 				632D3F532A03870800DC1783 /* MapMainView.swift */,
 				633E65102A12446E00E50EC5 /* MapSheetView.swift */,
-				63F096F82A135B1A005DA59C /* CropSelectView.swift */,
-				63F096FA2A135B37005DA59C /* CropDurationView.swift */,
 				6326154D2A441AD50057B474 /* MapView.swift */,
-				6326154F2A441C650057B474 /* MarkerView.swift */,
 				6357ECDD2A4604B900A24D29 /* BottomSheet.swift */,
 				63D02A8B2A46C9CF007101A9 /* MapFilterView.swift */,
 			);
@@ -567,6 +567,27 @@
 				6351AAD52A1E100C00B7A370 /* OAuthAuthenticator.swift */,
 			);
 			path = OAuth;
+			sourceTree = "<group>";
+		};
+		635292C92A5EAA440028B64D /* GlobalModels */ = {
+			isa = PBXGroup;
+			children = (
+				637F5AB72A1CE3B100D0A5C2 /* UserModel.swift */,
+				63B8D93F2A0B3B7D004EC7FC /* DiagnosisModel.swift */,
+				63A4BABB2A13E8A40018E891 /* CropModel.swift */,
+				635292CA2A5EABE30028B64D /* DiagDiseaseModel.swift */,
+			);
+			path = GlobalModels;
+			sourceTree = "<group>";
+		};
+		635292CC2A5EB67E0028B64D /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				6326154F2A441C650057B474 /* MarkerView.swift */,
+				63F096F82A135B1A005DA59C /* CropSelectView.swift */,
+				63F096FA2A135B37005DA59C /* CropDurationView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		6354344429E851E30037D6CD /* LottieFiles */ = {
@@ -689,15 +710,14 @@
 		638E118D29E3F8A9005CA2EA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				635292C92A5EAA440028B64D /* GlobalModels */,
+				63F20AC12A1764DF00896597 /* AuthModel */,
 				635D9E2C2A4DB1EA0083205E /* MemoModel */,
 				634280482A31ED5D007415AA /* Expert */,
 				63A3660A2A307CAA00EBEA02 /* CM_Models */,
 				633F695F2A227F9A00FFC891 /* SearchModels */,
 				63E173DE2A2216F0006877EC /* MapModels */,
 				6357C6FD2A2066980094162C /* OutbreakModel */,
-				637F5AB72A1CE3B100D0A5C2 /* UserModel.swift */,
-				63F20AC12A1764DF00896597 /* AuthModel */,
-				63B8D93F2A0B3B7D004EC7FC /* DiagnosisModel.swift */,
 				63127C472A24E89D00D2962C /* SickType.swift */,
 			);
 			path = Model;
@@ -789,7 +809,7 @@
 				63D02A8F2A46D7EC007101A9 /* MapMainVM.swift */,
 				63D02A8D2A46D451007101A9 /* MapFilterVM.swift */,
 				63F096FC2A135B52005DA59C /* MapSheetVM.swift */,
-				63D02A872A46BCCA007101A9 /* MapVM.swift */,
+				63D02A872A46BCCA007101A9 /* MapCoreVM.swift */,
 			);
 			path = MapVM;
 			sourceTree = "<group>";
@@ -842,7 +862,6 @@
 			isa = PBXGroup;
 			children = (
 				63F096FE2A135B82005DA59C /* MapModel.swift */,
-				63A4BABB2A13E8A40018E891 /* CropModel.swift */,
 				63E173DC2A220F24006877EC /* MapSheetCrop.swift */,
 				63E173DF2A221713006877EC /* MapDiseaseResponse.swift */,
 				63127C452A24E80A00D2962C /* MapItem.swift */,
@@ -1122,6 +1141,7 @@
 				6320EAB92A29F70B00558362 /* PesticideListItem.swift in Sources */,
 				63A366092A307B3500EBEA02 /* CM_Router.swift in Sources */,
 				63F097012A135BA2005DA59C /* GroupBoxExtension.swift in Sources */,
+				635292CB2A5EABE30028B64D /* DiagDiseaseModel.swift in Sources */,
 				6357C6FF2A2066A80094162C /* OutbreakItem.swift in Sources */,
 				6351AAD42A1E0FFB00B7A370 /* OAuthCredential.swift in Sources */,
 				63A3660F2A307E5A00EBEA02 /* CM_MainVM.swift in Sources */,
@@ -1181,7 +1201,7 @@
 				63B2D0B62A30E79E00F4FA04 /* CM_RecordModels.swift in Sources */,
 				6351AAD82A1E258A00B7A370 /* ResponseWrapper.swift in Sources */,
 				63DC15F629D180FC0062691D /* UploadImageView.swift in Sources */,
-				63D02A882A46BCCA007101A9 /* MapVM.swift in Sources */,
+				63D02A882A46BCCA007101A9 /* MapCoreVM.swift in Sources */,
 				6357ECDE2A4604B900A24D29 /* BottomSheet.swift in Sources */,
 				6354344029E850830037D6CD /* LottieView.swift in Sources */,
 				634280402A31B512007415AA /* DiagnosisRouter.swift in Sources */,

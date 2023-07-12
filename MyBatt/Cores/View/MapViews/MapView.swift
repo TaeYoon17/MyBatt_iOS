@@ -15,8 +15,6 @@ import Combine
 //}
 
 struct MapView: View {
-    
-    
     @EnvironmentObject var mainVM: MapMainVM
     @StateObject private var vm: MapVM<MapItem> = MapVM<MapItem>()
     @State private var isLocation = false
@@ -87,12 +85,12 @@ extension MapVM{
                 mainVM.tappedItem = output
             }.store(in: &subscription)
     }
-    func setMapItems(nearDiseaseItems:[CropType:[MapDiseaseResponse]]){
+    func setMapItems(nearDiseaseItems:[DiagCropType:[MapDiseaseResponse]]){
         let wow : [T] = nearDiseaseItems.reduce(into: []) { (partialResult, arg1) in
             let (key, value) = arg1
             let items: [T] = value.map{
                 _ = $0.diagnosisRecord
-                let diseaseType = DiagnosisType(rawValue: $0.diseaseCode ?? -1) ?? .none
+                let diseaseType = DiagDiseaseType(rawValue: $0.diseaseCode ?? -1) ?? .none
                 let dateStr = Date.changeDateFormat(dateString: $0.diagnosisRecord.regDate)
                 let geo = Geo($0.diagnosisRecord.userLatitude,$0.diagnosisRecord.userLongitude)
                 let info = CM_GroupItem(id: $0.id, imgPath: $0.diagnosisRecord.imagePath, address: "", regDate: dateStr, cropType: key, diseaseType: diseaseType, accuracy: $0.accuracy,geo: geo)

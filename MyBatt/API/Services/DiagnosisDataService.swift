@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 
 final class DiagnosisDataService{
+    typealias CropType = DiagCropType
     @Published var diagnosisResponse: DiagnosisResponse?
     @Published var diagnosisCode: String?
     var diagnosisSubscription: AnyCancellable?

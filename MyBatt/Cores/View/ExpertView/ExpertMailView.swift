@@ -132,7 +132,7 @@ extension ExpertMailView{
 
             VStack(alignment: .leading,spacing: 4){
                 HStack{
-                    Text("\(Crop.koreanTable[CropType(rawValue:self.diagnosisResponse?.cropType ?? -1) ?? .none] ?? "")")
+                    Text("\(DiagCrop.koreanTable[DiagCropType(rawValue:self.diagnosisResponse?.cropType ?? -1) ?? .none] ?? "")")
                         .font(.headline)
                     Text(Date.changeDateFormat(dateString: self.diagnosisResponse?.regDate ?? "날짜 정보 없슴")).font(.subheadline)
                     Spacer()
@@ -140,7 +140,7 @@ extension ExpertMailView{
                 .padding(.top,12)
                 HStack{
                     Text("병해:").font(.headline)
-                    Text("\(Diagnosis.koreanTable[DiagnosisType(rawValue: self.diagnosisResponse?.diagnosisResults?[0].diseaseCode ?? -1) ?? .none] ?? "") (\(Int((self.diagnosisResponse?.diagnosisResults?[0].accuracy ?? 0) * 100))%)")
+                    Text("\(DiagDisease.koreanTable[DiagDiseaseType(rawValue: self.diagnosisResponse?.diagnosisResults?[0].diseaseCode ?? -1) ?? .none] ?? "") (\(Int((self.diagnosisResponse?.diagnosisResults?[0].accuracy ?? 0) * 100))%)")
                         .font(.subheadline)
                     Spacer()
                 }

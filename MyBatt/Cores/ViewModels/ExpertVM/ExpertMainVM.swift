@@ -21,6 +21,7 @@ final class ExpertMainVM:ObservableObject{
         subscription.forEach { sub in
             sub.cancel()
         }
+        print("ExpertMainVM 사라짐")
     }
     func getList(){
         ApiClient.shared.session.request(ExpertRouter.List,
@@ -83,7 +84,7 @@ final class ExpertMainVM:ObservableObject{
                     print("가져오기 실패")
                     print(error.localizedDescription)
                 }
-            }, receiveValue: { output in
+            }, receiveValue: {[weak self] output in
                 guard let response: DiagnosisResponse = output.data else {
                     return
                 }

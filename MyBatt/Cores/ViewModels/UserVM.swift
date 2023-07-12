@@ -21,6 +21,7 @@ final class UserVM: ObservableObject{
     
     private let diagnosisDataService: DiagnosisDataService
     var subscription = Set<AnyCancellable>()
+    var outbreakSubscription: AnyCancellable?
     // 회원가입 완료 이벤트
     var registrationSuccess = PassthroughSubject<(), Never>()
     // 로그인 완료 이벤트
@@ -37,6 +38,7 @@ final class UserVM: ObservableObject{
         subscription.forEach { can in
             can.cancel()
         }
+        self.outbreakSubscription?.cancel()
     }
     /// 회원가입 하기
     func register(name: String, email: String, password: String){
@@ -90,6 +92,7 @@ final class UserVM: ObservableObject{
 extension UserVM{
     func fetchOutbreakList(){
         if outbreakModel != nil { return }
+        
                 print("AuthApiService - fetchCurrentUserInfo() called")
                 let storedTokenData = UserDefaultsManager.shared.getTokens()
         
@@ -101,11 +104,11 @@ extension UserVM{
                 let authInterceptor = AuthenticationInterceptor(authenticator: authenticator,
                                                                 credential: credential)
     
-            ApiClient.shared.session
+        self.outbreakSubscription = ApiClient.shared.session
             .request(CropInfoRouter.NoticeList, interceptor: authInterceptor)
                     .publishDecodable(type: ResponseWrapper<OutbreakModel>.self)
                     .value()
-                    .sink(receiveCompletion: { completion in
+                    .sink(receiveCompletion: {[weak self] completion in
                         switch completion{
                         case .finished:
                             print("가져오기 성공")
@@ -113,9 +116,10 @@ extension UserVM{
                             print("가져오기 실패")
                             print(error.localizedDescription)
                         }
+                        self?.outbreakSubscription?.cancel()
                     }, receiveValue: { output in
                         self.outbreakModel = output.data
-                    }).store(in: &subscription)
+                    })
     }
 }
 
@@ -136,7 +140,7 @@ extension UserVM{
         .store(in: &subscription)
     }
     
-    func requestImage( cropType:CropType,geo:CLLocationCoordinate2D,image: UIImage)->Void{
+    func requestImage( cropType:DiagCropType,geo:CLLocationCoordinate2D,image: UIImage)->Void{
         self.diagnosisDataService.getDiagnosis(urlString: UserVM.baseURL+"crop/diagnosis",
                                       geo: Geo(Double(geo.latitude),Double(geo.longitude)),
                                       cropType: cropType, image: image)

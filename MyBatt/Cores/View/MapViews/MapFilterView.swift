@@ -26,7 +26,7 @@ struct MapFilterView: View {
                 LazyVStack(spacing:8){
                     ForEach(vm.crops.indices,id:\.self){ idx in
                         if idx != vm.crops.endIndex-1{
-                            CropSelectView(pageSheetCrop: $vm.crops[idx], myDiagnosis: $vm.mapDiseaseCnt[CropType(rawValue: vm.crops[idx].cropType) ?? .none])
+                            CropSelectView(pageSheetCrop: $vm.crops[idx], myDiagnosis: $vm.mapDiseaseCnt[DiagCropType(rawValue: vm.crops[idx].cropType) ?? .none])
                         }
                     }
                 }.padding(.vertical,12)

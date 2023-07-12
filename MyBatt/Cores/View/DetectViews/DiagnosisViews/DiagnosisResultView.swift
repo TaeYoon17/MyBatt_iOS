@@ -157,11 +157,11 @@ extension DiagnosisResultView{
         NavigationLink(isActive: $goToNextView) {
             DiseaseInfoView(sickKey: self.moreInfo?.0 ?? "",
                             sickName:
-                                Diagnosis.koreanTable[
-                                    DiagnosisType(rawValue: self.moreInfo?.1 ?? -1) ?? .none
+                                DiagDisease.koreanTable[
+                                    DiagDiseaseType(rawValue: self.moreInfo?.1 ?? -1) ?? .none
                                 ] ?? ""
                             ,
-                            cropName: Crop.koreanTable[CropType(rawValue: diagnosisResponse?.cropType ?? -1) ?? .none] ?? "")
+                            cropName: DiagCrop.koreanTable[DiagCropType(rawValue: diagnosisResponse?.cropType ?? -1) ?? .none] ?? "")
         } label: {
             EmptyView()
         }
@@ -211,7 +211,7 @@ extension DiagnosisResultView{
 extension DiagnosisResultView{
     var infoLineView: some View{
         HStack(alignment:.center){
-            Text("\(Crop.koreanTable[CropType(rawValue: self.diagnosisResponse?.cropType ?? -1)!] ?? "진단 실패")"
+            Text("\(DiagCrop.koreanTable[DiagCropType(rawValue: self.diagnosisResponse?.cropType ?? -1)!] ?? "진단 실패")"
             )
             .font(.headline.bold())
             .padding(.horizontal,8)
