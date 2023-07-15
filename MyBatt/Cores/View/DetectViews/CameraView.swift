@@ -16,6 +16,9 @@ struct CameraView: View {
         NavigationView {
             cameraView
                 .navigationBarTitleDisplayMode(.inline)
+                .navigationBarBackground({
+                    Color.black
+                })
                 .toolbar(content: {
                     ToolbarItem(id: "BackButton",placement: .navigationBarLeading) {
                         //여기 폰트 수정
@@ -37,9 +40,7 @@ struct CameraView: View {
         }
         .background(Color.white)
         .onAppear(){
-//            Appearances.navigationBar(color: .black)
         }.onDisappear(){
-//            Appearances.navigationBar(color:.white)
             model.camera.stop()
             print("CameraView onDisappear")
         }
@@ -74,8 +75,8 @@ struct CameraView: View {
             Spacer()
             //MARK: -- 사진첩
             Button{
-                appManager.isCameraActive = false
                 appManager.isAlbumActive = true
+                appManager.isCameraActive = false
             } label:{
                 Label {
                     Text("Gallery")
@@ -93,11 +94,6 @@ struct CameraView: View {
             NavigationLink(isActive:$isPhotoTaken) {
                 TakenPhotoView(takenView: $isPhotoTaken)
                     .environmentObject(model)
-                    .onAppear(){
-                        //                        model.camera.isPreviewPaused = true
-                    }.onDisappear(){
-                        //                        model.camera.isPreviewPaused = false
-                    }
             } label: {
                 Button {
                     model.camera.takePhoto()

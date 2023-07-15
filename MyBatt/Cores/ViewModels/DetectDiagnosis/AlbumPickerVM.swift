@@ -11,6 +11,9 @@ import Photos
 final class AlbumPickerVM:ObservableObject{
     @Published var uiimage:UIImage? = nil
     var localIdentifier: String?
+    deinit{
+        print("AlbumPickerVM 사라짐!!")
+    }
     func saveImageToAlbum() {
         // 이미지 저장을 요청하기 전에 이미지 이름을 설정합니다.
         PHPhotoLibrary.requestAuthorization { (state) in
@@ -20,12 +23,12 @@ final class AlbumPickerVM:ObservableObject{
         //이미지 저장 타입(jpeg)을 줘야한다!!
         guard let image:UIImage = self.uiimage else { return }
         var savedAssetID: String?
-        PHPhotoLibrary.shared().performChanges({
+        PHPhotoLibrary.shared().performChanges({[weak self] in
             let request = PHAssetChangeRequest.creationRequestForAsset(from: image)
             request.creationDate = Date()
             request.location = CLLocation()
             savedAssetID = request.placeholderForCreatedAsset?.localIdentifier
-            self.localIdentifier = savedAssetID!
+            self?.localIdentifier = savedAssetID!
         }, completionHandler: { success, error in
             if success, let assetID = savedAssetID {
                 // 이미지가 성공적으로 저장되었을 때의 처리

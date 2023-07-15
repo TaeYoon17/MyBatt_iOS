@@ -17,7 +17,7 @@ struct AlbumPickerView: View {
     @StateObject var vm: AlbumPickerVM = AlbumPickerVM()
     @State private var uiimage:UIImage? = nil
     @State private var image : Image? = Image("")
-    @State private var selectStep: SelectStep?
+    @State private var selectStep: SelectStep? = .Pick
     var body: some View {
         ZStack{
             VStack{
@@ -51,10 +51,9 @@ struct AlbumPickerView: View {
                 }
                 
             }
-            
         }
         .onAppear(){
-            selectStep = .Pick
+            appManager.isTabbarHidden = true
         }
         .onDisappear(){
             appManager.isAlbumActive = false
@@ -72,8 +71,12 @@ struct AlbumPickerView: View {
                     })
                     .onDisappear(){
                         selectStep = nil
-                        userVM.diagnosisImage = self.image
-                        vm.saveImageToAlbum()
+                        if let image = image{ // 잘라낸 것이 존재한다.
+                            userVM.diagnosisImage = image
+                            vm.saveImageToAlbum()
+                        }else{// 잘라낸 것이 없다.
+                            appManager.goRootView()
+                        }
                     }
                     .edgesIgnoringSafeArea(.bottom)
             case .Pick:
@@ -83,6 +86,7 @@ struct AlbumPickerView: View {
                         if uiimage != nil{
                             selectStep = .Crop
                         }else{
+                            selectStep = nil
                             appManager.goRootView()
                         }
                 }

@@ -18,7 +18,7 @@ import UIKit
 import Combine
 final class CameraViewModel:NSObject,ObservableObject{
     let camera = Camera()
-    lazy var locationService = LocationService.shared
+    let locationService = LocationService.shared
     @Published var viewFinderImage: Image?
     @Published var thumbnailImage: Image?
     @Published var takenImage: Image?
@@ -44,16 +44,16 @@ final class CameraViewModel:NSObject,ObservableObject{
     }
     private func addLocationSubscribers(){ // 의존성 주입
         let loadingPublisher: Published<Bool>.Publisher = locationService.$isLoading
+        locationService.addressPasthrough.sink { [weak self] output in
+            self?.address = output
+        }.store(in: &cancellable)
         locationService.locationPassthrough.sink{[weak self] output in
             print("locationService.$coordinate \(output)")
             self?.coordinate = CLLocationCoordinate2D(geo: output)
+            self?.locationService.requestAddress(geo: output) // 출력된 결과로 다시 한국어 주소를 요청해야한다.
         }.store(in: &cancellable)
         loadingPublisher.sink { [weak self] output in
             self?.isLocated = output
-        }.store(in: &cancellable)
-        locationService.addressPasthrough.sink { [weak self] output in
-            print("locationService.$address \(output)")
-            self?.address = output
         }.store(in: &cancellable)
     }
     
@@ -164,7 +164,8 @@ extension CameraViewModel{
 //        let size = 360
         print("가져올 데이터 사이즈 \(size)")
         if let asset = fetchResult.firstObject {
-            PHImageManager.default().requestImage(for: asset, targetSize: CGSize(width: size, height: size), contentMode: .aspectFit, options: nil) {[weak self] (image, info) in
+            PHImageManager.default().requestImage(for: asset, targetSize: CGSize(width: size, height: size),
+                                                  contentMode: .aspectFit, options: nil) {[weak self] (image, info) in
                 // 가져온 이미지를 사용
                 if let image = image {
                     // 이미지 사용 코드 작성
@@ -181,8 +182,7 @@ extension CameraViewModel{
 
 
 //MARK: -- Thumbnail 관련
-extension CameraViewModel{
-}
+extension CameraViewModel{ }
 
 
 // MARK: -- AVCaputureVideo 데이터 형식에서 추출한 사용할 데이터 들

@@ -41,19 +41,19 @@ struct PHPickerView: UIViewControllerRepresentable{
         }
 //        canc
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-            picker.dismiss(animated: true)
             let itemProvider = results.first?.itemProvider
             if let itemProvider: NSItemProvider = itemProvider,itemProvider.canLoadObject(ofClass: UIImage.self){
                 itemProvider.loadObject(ofClass: UIImage.self) { image, error in
                     DispatchQueue.main.async {
                         if let image:UIImage = image as? UIImage{
-                            
                             self.uiimage = self.resizeImage(image: image, targetSize: CGSize(width: 1280, height: 1280))
                         }
+                        picker.dismiss(animated: true)
                     }
                 }
             }else{
              print("No one picked!!")
+            picker.dismiss(animated: true)
             }
         }
         func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage? {

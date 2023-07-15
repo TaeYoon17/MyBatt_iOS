@@ -45,13 +45,19 @@ struct CropperView: UIViewControllerRepresentable{
 //            self._showImagePicker = showImagePicker
         }
         func cropViewController(_ cropViewController: CropViewController, didFinishCancelled cancelled: Bool) {
-            cropViewController.dismiss(animated: true)
+            if cancelled{
+                self.image = nil
+                self.uiImage = nil
+                cropViewController.dismiss(animated: true)
+            }
         }
         func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
-            cropViewController.dismiss(animated: true)
             print("Did Crop")
-            self.uiImage = image
-            self.image = Image(uiImage: image)
+            DispatchQueue.main.async {
+                self.uiImage = image
+                self.image = Image(uiImage: image)
+                cropViewController.dismiss(animated: true)
+            }
         }
     }
 }
