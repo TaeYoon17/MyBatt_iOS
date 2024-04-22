@@ -87,7 +87,7 @@ final class AppManager:ObservableObject{
 > [!IMPORTANT]
 > Combine과 MapKit을 활용한 기능
 + 사용자가 지도 위치를 바꾸는 것을 1초마다 Debounce 해서 좌표를 가져옴
-+ 가장 최근에 정보를 가져온 위치와 반경 500가 차이나는지 비교 후, 현재 위치 값을 변경
++ 가장 최근에 정보를 가져온 위치와 반경 500m가 차이나는지 비교 후, 현재 위치 값을 변경
 + 현재 위치가 바뀌면 위치에 대한 주소 값, 주변 병해 정보를 요청하는 통신 수행
 ~~~swift
 self.$region.debounce(for: .seconds(1), scheduler: DispatchQueue.main)
