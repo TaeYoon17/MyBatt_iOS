@@ -33,7 +33,7 @@
 + 촬영 request 후, **AVCapturePhotoCaptureDelegate**의 photoOutput을 통해 AVCapturePhoto 정보를 가져옴
 + AVCaputrePhoto는 이미지의 메타 데이터 등, 위에서 받는 CMSampleBuffer 보다 여러 정보를 포함함
 
-### 3. iOS 15.1 SwiftUI goToRootView 기능
+### 2. iOS 15.1 SwiftUI goToRootView 기능
 > [!IMPORTANT]
 > NavigationView 컴포넌트에서 미지원하는 루트뷰로 바로 이동하는 기능
 + 네비게이션 링크 화면 표시를 담당하는 Bool 값들을 앱 매니저의 viewStacks에서 관리함
