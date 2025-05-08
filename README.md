@@ -2,8 +2,8 @@
 <img src="https://github.com/TaeYoon17/MyBatt_iOS/assets/46375289/aab29552-cb09-47e7-8e82-9d69c563b557.png" width="80" height="80"/><br>
 # 내 밭을 부탁해
 > [!NOTE]
-> 작물 병해 진단의 어려움를 해결하기 위한 서비스입니다.
-> 병해 검출과 주변 병해 정보, 병해 대처법 제공, 작물 관리를 도와주는 앱입니다.
+> 작물 병해 진단의 어려움를 해결하기 위한 서비스입니다.<br/>
+> CNN을 이용해 병해 검출과 주변 병해 정보, 병해 대처법 제공, 작물 관리를 도와주는 앱입니다.
 #### [서비스 설명 영상](https://youtu.be/RTHg8laviaM?feature=shared)
 ## 주요 사용 기술
 #### iOS 타겟 버전 - 15.1
